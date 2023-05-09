@@ -1,8 +1,17 @@
 package com.capstone.smutaxi.auth;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface MemberRepository {
 
-    Member findById(String id);
+    Optional<Member> findById(String id);
 
-    void save(Member member);
+    Member save(Member member);
+
+    List<Member> findAll();
+
+    Optional<Member> findByName(String name);
+
+
 }
