@@ -1,9 +1,11 @@
 package com.capstone.smutaxi.auth;
 
-public interface MemberService {
-    void join(Member member);
+import java.util.Optional;
 
-    Member findMember(String id);
+public interface MemberService {
+
+
+    void join(Member member);
 
     boolean login(String id, String pw);
 }

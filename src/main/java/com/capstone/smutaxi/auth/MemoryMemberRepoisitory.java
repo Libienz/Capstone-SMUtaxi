@@ -21,14 +21,18 @@ public class MemoryMemberRepoisitory implements MemberRepository {
 
     @Override
     public List<Member> findAll() {
-        return null;
+        return new ArrayList<>(store.values());
     }
 
     @Override
     public Optional<Member> findByName(String name) {
         return store.values().stream() //store 도는 루프
                 .filter(member -> member.getName().equals(name)) //람다 조건에 맞는 member filtering
-                .findAny(); //하나라도 찾으면 반환 없으면 null
+                .findAny(); //하나라도 찾으면 Optional로 반환 없으면 null
+    }
+
+    public void clearStore() {
+        store.clear();
     }
 
 }
