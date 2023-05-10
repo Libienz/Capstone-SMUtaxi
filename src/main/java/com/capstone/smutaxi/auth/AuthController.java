@@ -1,11 +1,18 @@
 package com.capstone.smutaxi.auth;
 
-import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/auth") //리소스 계층화
 @RestController
 public class AuthController {
+
+    private final UserService userService;
+
+    @Autowired
+    public AuthController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * @ResponseBody
