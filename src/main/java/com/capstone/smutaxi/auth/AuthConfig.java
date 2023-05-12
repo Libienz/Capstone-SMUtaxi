@@ -7,13 +7,13 @@ import org.springframework.context.annotation.Configuration;
 public class AuthConfig {
 
     @Bean
-    public UserService memberService() {
-        return new BasicUserService(memberRepository());
+    public UserService userService() {
+        return new BasicUserService(userRepository());
     }
 
     @Bean
-    public UserRepository memberRepository() {
-        return new MemoryUserRepoisitory();
+    public UserRepository userRepository() {
+        return new JpaUserRepository();
     }
 
 

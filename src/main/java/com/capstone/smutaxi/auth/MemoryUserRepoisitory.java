@@ -10,13 +10,13 @@ public class MemoryUserRepoisitory implements UserRepository {
 
     @Override
     public User save(User user) {
-        store.put(user.getId(), user);
+        store.put(user.getEmail(), user);
         return user;
     }
 
     @Override
-    public Optional<User> findById(String id) {
-        return Optional.ofNullable(store.get(id));
+    public Optional<User> findByEmail(String email) {
+        return Optional.ofNullable(store.get(email));
     }
 
     @Override

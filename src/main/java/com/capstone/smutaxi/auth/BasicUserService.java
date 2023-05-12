@@ -9,6 +9,7 @@ import java.util.Optional;
 @Service
 public class BasicUserService implements UserService {
 
+
     private final UserRepository userRepository;
 
     @Autowired
@@ -27,8 +28,13 @@ public class BasicUserService implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public boolean login(String id, String pw) {
+        return false;
+    }
+
     private void validateDuplicateMember(User user) {
-        userRepository.findById(user.getId())
+        userRepository.findByEmail(user.getEmail())
                 .ifPresent(m -> {
                     throw new IllegalStateException("이미 존재하는 회원입니다");
                 });
@@ -42,23 +48,12 @@ public class BasicUserService implements UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> findOne(String memberId) {
-        return userRepository.findById(memberId);
+    public Optional<User> findOne(String Email) {
+        return userRepository.findByEmail(Email);
     }
 
 
-    @Override
-    public boolean login(String id, String pw) {
-        Optional<User> user = userRepository.findById(id);
-        if (user == null){ //아이디 존재하지 않음
-            return false;
-        } else{
-            if (pw.equals(user.get().getPassword())) {
-                return true;
-            } else {
-                return false; //비밀번호 틀림
-            }
-        }
 
-    }
+
+
 }
