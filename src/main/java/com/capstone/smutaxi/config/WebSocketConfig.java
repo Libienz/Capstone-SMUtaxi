@@ -1,5 +1,6 @@
-package com.capstone.smutaxi.chat;
+package com.capstone.smutaxi.config;
 
+import com.capstone.smutaxi.chat.ChatWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
