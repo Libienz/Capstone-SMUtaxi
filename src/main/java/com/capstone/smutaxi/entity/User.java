@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.auth;
+package com.capstone.smutaxi.entity;
 
 
 import lombok.*;

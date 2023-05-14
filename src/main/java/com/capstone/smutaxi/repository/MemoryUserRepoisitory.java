@@ -1,4 +1,5 @@
-package com.capstone.smutaxi.auth;
+package com.capstone.smutaxi.repository;
+import com.capstone.smutaxi.entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

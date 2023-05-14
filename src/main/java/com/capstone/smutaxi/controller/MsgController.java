@@ -1,6 +1,8 @@
-package com.capstone.smutaxi.chat;
+package com.capstone.smutaxi.controller;
 
 
+import com.capstone.smutaxi.chat.MsgRoom;
+import com.capstone.smutaxi.chat.MsgService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

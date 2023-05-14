@@ -1,5 +1,6 @@
-package com.capstone.smutaxi.auth;
+package com.capstone.smutaxi.repository;
 
+import com.capstone.smutaxi.entity.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class JpaUserRepository implements UserRepository{
+public class JpaUserRepository implements UserRepository {
 
     @PersistenceContext
     private EntityManager em;

@@ -1,4 +1,6 @@
-package com.capstone.smutaxi.auth;
+package com.capstone.smutaxi.repository;
+
+import com.capstone.smutaxi.entity.User;
 
 import java.util.List;
 import java.util.Optional;

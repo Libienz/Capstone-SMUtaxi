@@ -1,5 +1,7 @@
-package com.capstone.smutaxi.auth;
+package com.capstone.smutaxi.service;
 
+import com.capstone.smutaxi.entity.User;
+import com.capstone.smutaxi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

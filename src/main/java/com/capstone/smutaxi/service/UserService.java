@@ -1,5 +1,7 @@
-package com.capstone.smutaxi.auth;
+package com.capstone.smutaxi.service;
 
+
+import com.capstone.smutaxi.entity.User;
 
 public interface UserService {
 

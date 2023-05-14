@@ -1,5 +1,7 @@
 package com.capstone.smutaxi.auth;
 
+import com.capstone.smutaxi.entity.User;
+import com.capstone.smutaxi.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,21 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static org.junit.Assert.*;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Rollback(false)
 public class JpaUserRepositoryTest {
 
-    @Autowired UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     @Transactional
     public void testUser() throws Exception {
         //given
         User user = new User();
-        user.setEmail("yellow717171@gmail.com");
+        user.setEmail("yellow@gmail.com");
         userRepository.save(user);
         //when
         Optional<User> foundUser = userRepository.findByEmail(user.getEmail());
