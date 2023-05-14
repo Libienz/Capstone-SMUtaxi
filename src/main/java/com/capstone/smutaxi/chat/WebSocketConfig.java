@@ -17,7 +17,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
     /**
      * WebSocket에 접속하기 위한 endpoint를 "ws/chat"으로 설정하고
      * 도메인이 다른서버에서도 접속가능하도록 .setAllowedOrigins("*") 설정에 추가.
-     * 다만 이렇게만하면 채팅방이 하나뿐인 채팅서버. 다음에 고도화
      * 참고로 스프링 시큐리티 켜져있으면 simple web socket client (크롬 확장프로그램) 이거로 테스트가 안되어서 일단 빌드에서 주석처리하고 진행함
      */
 
