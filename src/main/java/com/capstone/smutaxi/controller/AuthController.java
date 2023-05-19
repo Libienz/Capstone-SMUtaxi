@@ -1,19 +1,29 @@
 package com.capstone.smutaxi.controller;
 
-import com.capstone.smutaxi.service.UserService;
+import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
+import com.capstone.smutaxi.dto.UserDto;
+import com.capstone.smutaxi.service.auth.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RequestMapping("/auth") //리소스 계층화
 @RestController
 public class AuthController {
 
     private final UserService userService;
+    private final AuthenticationManager authenticationManager; //스프링 시큐리티 authentication manager
+    private final JwtTokenProvider jwtTokenProvider;
+
 
 
     @Autowired
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     /**
@@ -25,13 +35,13 @@ public class AuthController {
      */
     @GetMapping("login")
     @ResponseBody
-    public String login() {
-        return "ok";
+    public String login(@RequestBody UserDto userDto) {
+        return userService.login(userDto);
     }
 
     @PostMapping("join")
     @ResponseBody
-    public String join() {
-        return "ok";
+    public String join(@Valid @RequestBody UserDto userDto) {
+        return userService.join(userDto);
     }
 }
