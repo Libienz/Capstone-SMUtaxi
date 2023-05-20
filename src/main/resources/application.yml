@@ -1,4 +1,7 @@
 spring:
+  h2:
+    console:
+      enabled: true
   datasource:
     url: jdbc:h2:tcp://localhost/~/smutaxi
     username: sa
@@ -12,6 +15,14 @@ spring:
       hibernate:
 #        show_sql: true
         format_sql: true
+
+  security:
+    jwt:
+      token:
+        secret-key: webfirewood
+        expire-length: 3600000
+
+
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace #??? ?? 2.x, hibernate5
