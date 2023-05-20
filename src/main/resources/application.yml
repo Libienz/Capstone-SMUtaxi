@@ -16,11 +16,11 @@ spring:
 #        show_sql: true
         format_sql: true
 
-  security:
-    jwt:
-      token:
-        secret-key: webfirewood
-        expire-length: 3600000
+security:
+  jwt:
+    token:
+      secret-key: MySuperSecretKey123!MySuperSecretKey123!MySuperSecretKey123!
+      expire-length: 3600000
 
 
 logging.level:

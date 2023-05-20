@@ -6,10 +6,12 @@ import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
 
+@Service
 public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
