@@ -3,6 +3,7 @@ package com.capstone.smutaxi.service.auth;
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
 import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.entity.User;
+import com.capstone.smutaxi.exception.auth.IdDuplicateException;
 import com.capstone.smutaxi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -26,13 +28,21 @@ public class UserService {
 
     @Transactional
     public String join(UserDto userDto){
-        User user = User.builder()
-                .email(userDto.getEmail())
-                .password(passwordEncoder.encode(userDto.getPassword()))  //비밀번호 인코딩
-                .roles(Collections.singletonList("USER"))         //roles는 최초 USER로 설정
-                .build();
+        //중복된 아이디가 있는 지 검증
+        Optional<User> findEmail = userRepository.findByEmail(userDto.getEmail());
+        if (findEmail.get() != null) {
+            throw new IdDuplicateException("이미 존재하는 Id 입니다");
+        } else {
 
-        return userRepository.save(user).getEmail();
+            User user = User.builder()
+                    .email(userDto.getEmail())
+                    .password(passwordEncoder.encode(userDto.getPassword()))  //비밀번호 인코딩
+                    .roles(Collections.singletonList("USER"))         //roles는 최초 USER로 설정
+                    .build();
+
+            return userRepository.save(user).getEmail();
+        }
+
     }
 
     @Transactional

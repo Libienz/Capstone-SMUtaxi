@@ -66,35 +66,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
     }
 
-/*
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
-*/
-/*
-
-    //jdbc를 이용한 authentication
-    //스프링이 자동으로 data source(db)에서 정보를 가져와 인증 처리를 하도록 함
-    //여기서 어떤 자원을 가져와서 인증을 처리할지 customize하는 config
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.jdbcAuthentication() //데이터베이스를 통한 인증 설정
-                .dataSource(dataSource) //data source 주입
-                .passwordEncoder(passwordEncoder()) //비밀번호 암호화 인코더 설정
-                .usersByUsernameQuery("select email,password,enabled " //?은 자동으로 채워짐
-                        + "from users "
-                        + "where email = ?")
-                .authoritiesByUsernameQuery("select email,authority "
-                        + "from authorities "
-                        + "where email = ?");
-
-    }
-
-*/
-
-
-
 
 }
