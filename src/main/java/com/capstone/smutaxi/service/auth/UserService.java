@@ -30,7 +30,7 @@ public class UserService {
     public String join(UserDto userDto){
         //중복된 아이디가 있는 지 검증
         Optional<User> findEmail = userRepository.findByEmail(userDto.getEmail());
-        if (findEmail.get() != null) {
+        if (findEmail.isPresent()) {
             throw new IdDuplicateException("이미 존재하는 Id 입니다");
         } else {
 

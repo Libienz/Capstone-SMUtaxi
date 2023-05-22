@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class User implements UserDetails {
 
     //email ID primary key
@@ -37,11 +38,11 @@ public class User implements UserDetails {
     //프로필 사진 경로
     @Column(name = "img_path")
     private String imgPath;
-//
-//    //성별
-//    @Column(name = "gender")
-//    private Gender gender;
-//
+
+    //성별
+    @Column(name = "gender")
+    private Gender gender;
+
 //    //현재 위치: 위도, 경도
 //    @Embedded
 //    @Column(name = "location")
