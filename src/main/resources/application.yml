@@ -28,4 +28,5 @@ matching:
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace #??? ?? 2.x, hibernate5
+  org.springframework.messaging.simp: DEBUG #stomp 로그때문에 넣음
 # org.hibernate.orm.jdbc.bind: trace #??? ?? 3.x, hibernate6
