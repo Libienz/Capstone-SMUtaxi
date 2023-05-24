@@ -22,6 +22,8 @@ security:
       secret-key: MySuperSecretKey123!MySuperSecretKey123!MySuperSecretKey123!
       expire-length: 3600000
 
+matching:
+  pool-size: 200
 
 logging.level:
   org.hibernate.SQL: debug
