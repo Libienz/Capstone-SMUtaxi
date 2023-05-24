@@ -9,5 +9,4 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class TaxiPoolCondition {
     private boolean heteroSexPossible; //동승자 이성가능
-    private int minimumNumberOfPool; //최소 인원
 }
