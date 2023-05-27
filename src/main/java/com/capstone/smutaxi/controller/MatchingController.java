@@ -37,10 +37,11 @@ public class MatchingController {
         Logger logger = LoggerFactory.getLogger(MatchingController.class);
         logger.info("libienz: " + user.toString());
         //매칭 요청
-        matchingDispatcher.handleMatchingRequest(user.getEmail(), matchingRequestDto);
+        Long chatRoomId = matchingDispatcher.handleMatchingRequest(user.getEmail(), matchingRequestDto);
 
-        //매칭 성공 시 채팅방 참여 혹은 생성으로 redirect
-        return "libienz";
+
+        //채팅방 ID를 반환 -> 클라이언트가 chatRoomID를 구독하는 요청을 보내는 것
+        return chatRoomId.toString();
     }
 
 }

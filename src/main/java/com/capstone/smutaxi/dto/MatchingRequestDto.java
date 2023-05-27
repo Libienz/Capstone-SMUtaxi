@@ -1,5 +1,6 @@
 package com.capstone.smutaxi.dto;
 
+import com.capstone.smutaxi.chat.domain.GenderRestriction;
 import lombok.Getter;
 
 import javax.validation.constraints.NotNull;
@@ -12,5 +13,6 @@ public class MatchingRequestDto {
     @NotNull
     private double longitude;
     @NotNull
-    private boolean allowSameGender;
+    private GenderRestriction genderRestriction;
+
 }

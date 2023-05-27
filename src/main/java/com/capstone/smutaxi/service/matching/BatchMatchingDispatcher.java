@@ -13,7 +13,8 @@ public class BatchMatchingDispatcher implements MatchingDispatcher {
      * cons : Bad한 사용자 경험 (안잡히면 3초 기다리니까 기다리는 시간이 긴 것 처럼 느껴짐)
      */
     @Override
-    public void handleMatchingRequest(String userEmail, MatchingRequestDto matchingRequestDto) {
+    public Long handleMatchingRequest(String userEmail, MatchingRequestDto matchingRequestDto) {
 
+        return 0L;
     }
 }

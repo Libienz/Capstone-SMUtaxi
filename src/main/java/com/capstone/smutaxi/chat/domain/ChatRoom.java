@@ -3,17 +3,20 @@ package com.capstone.smutaxi.chat.domain;
 
 import com.capstone.smutaxi.entity.Location;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
 
 @Getter
+@Setter
 @Entity
 @Table(name = "chat_room")
-public class ChatRoom {
+public class ChatRoom implements Comparable<ChatRoom> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +26,7 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     private List<Message> messageList = new ArrayList<>();
 
-    private GenderCheck genderCheck;
+    private GenderRestriction genderRestriction;
 
     private Location location;
 
@@ -35,10 +38,19 @@ public class ChatRoom {
     @ElementCollection
     private List<String> userIdList;
 
+
     public static ChatRoom create(String name) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.name = name;
         return  chatRoom;
     }
 
+    @Override
+    public int compareTo(ChatRoom o) {
+        int thisSize = this.userIdList.size();
+        int otherSize = o.userIdList.size();
+
+        // 내림차순 정렬을
+        return Integer.compare(otherSize, thisSize);
+    }
 }
