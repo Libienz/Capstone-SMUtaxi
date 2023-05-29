@@ -44,6 +44,12 @@ public class ChatRoom implements Comparable<ChatRoom> {
         chatRoom.name = name;
         return  chatRoom;
     }
+    public static ChatRoom create(String name,GenderRestriction genderRestriction) {
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.name = name;
+        chatRoom.genderRestriction =genderRestriction;
+        return  chatRoom;
+    }
 
     @Override
     public int compareTo(ChatRoom o) {

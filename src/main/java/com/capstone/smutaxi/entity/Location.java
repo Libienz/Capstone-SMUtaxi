@@ -12,8 +12,9 @@ import javax.persistence.Embeddable;
 @AllArgsConstructor
 public class Location {
 
-    private double latitude; //위도
-    private double longitude; //경도
+    //double에서 Double로 바꾼 이유는 double은 null을 허용하지 않아서
+    private Double latitude; //위도
+    private Double longitude; //경도
 
     public static double calculateDistance(Location userLocation, Location chatRoomLocation) {
         // 위도 경도를 이용한 거리 계산 알고리즘 구현

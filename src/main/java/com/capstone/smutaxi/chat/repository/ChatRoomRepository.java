@@ -15,6 +15,7 @@ import java.util.Optional;
 public class ChatRoomRepository {
     private final EntityManager em;
 
+    @Transactional
     public Long save(ChatRoom chatRoom) {
         em.persist(chatRoom);
         return chatRoom.getId();
@@ -39,7 +40,15 @@ public class ChatRoomRepository {
             em.flush(); // 변경 사항을 DB에 즉시 반영
         }
     }
-
+    //@Transactional
+    @Transactional
+    public void removeUser(Long chatRoomId, String userId) {
+        ChatRoom chatRoom = em.find(ChatRoom.class, chatRoomId);
+        if (chatRoom != null) {
+            chatRoom.getUserIdList().remove(userId);
+            em.flush(); // 변경 사항을 DB에 즉시 반영
+        }
+    }
     @Transactional
     public void initLocation(Long chatRoomId, Location location) {
         ChatRoom chatRoom = em.find(ChatRoom.class, chatRoomId);
