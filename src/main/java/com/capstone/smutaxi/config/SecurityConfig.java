@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 //URL 관리
                 .authorizeRequests()
-                .antMatchers("/", "/auth/join", "/auth/login","/auth/idCheck", "/h2-console/**","/ws/**","/chat/**").permitAll()
+                .antMatchers("/", "/auth/join", "/auth/login","/auth/idCheck","/mail", "/h2-console/**","/ws/**","/chat/**").permitAll()
 
                 .anyRequest().authenticated()
                 .and()
