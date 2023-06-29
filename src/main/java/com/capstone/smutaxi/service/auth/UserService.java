@@ -25,6 +25,14 @@ public class UserService {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
     }
+    @Transactional
+    public boolean duplicateCheck(UserDto userDto){
+        Optional<User> findEmail = userRepository.findByEmail(userDto.getEmail());
+        if(findEmail.isPresent())
+            return true;
+        else
+            return false;
+    }
 
     @Transactional
     public String join(UserDto userDto){

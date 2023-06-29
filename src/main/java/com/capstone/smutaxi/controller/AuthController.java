@@ -61,4 +61,14 @@ public class AuthController {
         }
 
     }
+
+    @GetMapping("idCheck")
+    @ResponseBody
+    public ResponseEntity<String> idCheck(@RequestBody UserDto userDto) {
+        boolean duplicateCheck = userService.duplicateCheck(userDto);
+        if(duplicateCheck)
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 있는 아이디입니다.");
+        else
+            return ResponseEntity.ok().body("생성가능한 아이디입니다.");
+    }
 }
