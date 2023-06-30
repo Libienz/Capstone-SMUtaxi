@@ -15,4 +15,8 @@ public class UserDto {
     @NotNull
     @Size(min = 8, max = 300)
     private String password;
+
+    @NotNull
+    @Size(min = 3, max = 100)
+    private String name;
 }

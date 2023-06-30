@@ -3,6 +3,7 @@ package com.capstone.smutaxi.controller;
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
 import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.exception.auth.IdDuplicateException;
+import com.capstone.smutaxi.service.auth.MailService;
 import com.capstone.smutaxi.service.auth.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 @RestController
 public class AuthController {
 
+    private final MailService mailService;
     private final UserService userService;
     private final AuthenticationManager authenticationManager; //스프링 시큐리티 authentication manager
     private final JwtTokenProvider jwtTokenProvider;
@@ -23,7 +25,8 @@ public class AuthController {
 
 
     @Autowired
-    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+    public AuthController(MailService mailService, UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+        this.mailService = mailService;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -65,10 +68,17 @@ public class AuthController {
     @GetMapping("idCheck")
     @ResponseBody
     public ResponseEntity<String> idCheck(@RequestBody UserDto userDto) {
-        boolean duplicateCheck = userService.duplicateCheck(userDto);
-        if(duplicateCheck)
+        boolean emailDuplicateCheck = userService.emailDuplicateCheck(userDto);
+        if(emailDuplicateCheck)
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 있는 아이디입니다.");
         else
             return ResponseEntity.ok().body("생성가능한 아이디입니다.");
+    }
+
+    @PostMapping("/mail")
+    public ResponseEntity<Integer> MailSend(@RequestParam String mail){
+        int number = mailService.sendMail(mail);
+
+        return ResponseEntity.ok().body(number);
     }
 }

@@ -26,7 +26,20 @@ public class UserService {
         this.userRepository = userRepository;
     }
     @Transactional
-    public boolean duplicateCheck(UserDto userDto){
+    public void updateUser(UserDto userDto){
+        User user = userRepository.findByEmail(userDto.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+        String email = userDto.getEmail();
+        String password = userDto.getPassword();
+        String name = userDto.getName();
+
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setName(name);
+    }
+
+    @Transactional
+    public boolean emailDuplicateCheck(UserDto userDto){
         Optional<User> findEmail = userRepository.findByEmail(userDto.getEmail());
         if(findEmail.isPresent())
             return true;
@@ -45,6 +58,7 @@ public class UserService {
             User user = User.builder()
                     .email(userDto.getEmail())
                     .password(passwordEncoder.encode(userDto.getPassword()))  //비밀번호 인코딩
+                    .name(userDto.getName())
                     .roles(Collections.singletonList("USER"))         //roles는 최초 USER로 설정
                     .build();
 

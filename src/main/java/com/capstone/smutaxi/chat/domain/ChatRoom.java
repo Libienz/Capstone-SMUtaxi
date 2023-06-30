@@ -26,7 +26,7 @@ public class ChatRoom implements Comparable<ChatRoom> {
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     private List<Message> messageList = new ArrayList<>();
 
-    private GenderRestriction genderRestriction;
+    private GenderRestriction genderRestriction; //일단 제외
 
     private Location location;
 
