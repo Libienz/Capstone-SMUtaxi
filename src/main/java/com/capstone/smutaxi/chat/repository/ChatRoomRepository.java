@@ -32,23 +32,23 @@ public class ChatRoomRepository {
 
     //add user Error Handling 필요할 듯
     //채팅방에 인원이 꽉 찼는데 넣을려고 했다거나 등등
-    @Transactional
+/*    @Transactional
     public void addUser(Long chatRoomId, String userId) {
         ChatRoom chatRoom = em.find(ChatRoom.class, chatRoomId);
         if (chatRoom != null) {
             chatRoom.getUserIdList().add(userId);
             em.flush(); // 변경 사항을 DB에 즉시 반영
         }
-    }
-    //@Transactional
-    @Transactional
+    }*/
+
+/*    @Transactional
     public void removeUser(Long chatRoomId, String userId) {
         ChatRoom chatRoom = em.find(ChatRoom.class, chatRoomId);
         if (chatRoom != null) {
             chatRoom.getUserIdList().remove(userId);
             em.flush(); // 변경 사항을 DB에 즉시 반영
         }
-    }
+    }*/
     @Transactional
     public void initLocation(Long chatRoomId, Location location) {
         ChatRoom chatRoom = em.find(ChatRoom.class, chatRoomId);

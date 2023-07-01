@@ -1,11 +1,16 @@
 package com.capstone.smutaxi.chat.service;
 
 import com.capstone.smutaxi.chat.domain.ChatRoom;
+import com.capstone.smutaxi.chat.domain.ChatRoomUser;
 import com.capstone.smutaxi.chat.repository.ChatRoomRepository;
+import com.capstone.smutaxi.entity.User;
+import com.capstone.smutaxi.repository.UserRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public ChatRoom joinChatRoom(Long id){
@@ -21,6 +27,22 @@ public class ChatRoomService {
             return byId.get();
         }
         return null;
+    }
+
+    @Transactional
+    public List<ChatRoom> getChatRoomsByUserEmail(String userEmail) {
+        User user = userRepository.findByEmail(userEmail).get();
+        List<ChatRoom> chatRooms = new ArrayList<>();
+
+        if (user != null) {
+            List<ChatRoomUser> chatRoomUsers = user.getChatRoomUsers();
+
+            for (ChatRoomUser chatRoomUser : chatRoomUsers) {
+                chatRooms.add(chatRoomUser.getChatRoom());
+            }
+        }
+
+        return chatRooms;
     }
 
     @Transactional

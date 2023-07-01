@@ -1,6 +1,8 @@
 package com.capstone.smutaxi.entity;
 
 
+import com.capstone.smutaxi.chat.domain.ChatRoomUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,6 +45,10 @@ public class User implements UserDetails {
     @Column(name = "gender")
     private Gender gender;
 
+    //채팅방 중간테이블
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ChatRoomUser> chatRoomUsers = new ArrayList<>();
 //    //현재 위치: 위도, 경도
 //    @Embedded
 //    @Column(name = "location")
@@ -56,6 +62,11 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER) //roles 컬렉션
     @Builder.Default
     private List<String> roles = new ArrayList<>();
+
+    public void addChatRoomUser(ChatRoomUser chatRoomUser) {
+        chatRoomUsers.add(chatRoomUser);
+        chatRoomUser.setUser(this);
+    }
 
     @Override   //사용자의 권한 목록 리턴
     public Collection<? extends GrantedAuthority> getAuthorities() {

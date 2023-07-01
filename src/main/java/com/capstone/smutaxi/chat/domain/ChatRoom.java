@@ -2,6 +2,7 @@ package com.capstone.smutaxi.chat.domain;
 
 
 import com.capstone.smutaxi.entity.Location;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,9 +35,11 @@ public class ChatRoom implements Comparable<ChatRoom> {
      * 고민인점
      * @ElementCollection을 쓸것이냐 User하고 @OneToMany / @ManyToOne 관계를 맺을것이냐...
      * https://prohannah.tistory.com/133
+     * 결론적으로 중간 테이블을 이용한 다대다 관계 적용
      */
-    @ElementCollection
-    private List<String> userIdList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    private List<ChatRoomUser> chatRoomUsers = new ArrayList<>();
 
 
     public static ChatRoom create(String name) {
@@ -51,12 +54,18 @@ public class ChatRoom implements Comparable<ChatRoom> {
         return  chatRoom;
     }
 
+    public void addChatRoomUser(ChatRoomUser chatRoomUser) {
+        chatRoomUsers.add(chatRoomUser);
+        chatRoomUser.setChatRoom(this);
+    }
+
     @Override
     public int compareTo(ChatRoom o) {
-        int thisSize = this.userIdList.size();
-        int otherSize = o.userIdList.size();
+        int thisSize = this.chatRoomUsers.size();
+        int otherSize = o.chatRoomUsers.size();
 
         // 내림차순 정렬을
         return Integer.compare(otherSize, thisSize);
     }
+
 }

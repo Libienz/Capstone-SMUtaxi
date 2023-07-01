@@ -3,10 +3,9 @@ package com.capstone.smutaxi.service.matching;
 import com.capstone.smutaxi.chat.domain.ChatRoom;
 import com.capstone.smutaxi.chat.domain.GenderRestriction;
 import com.capstone.smutaxi.chat.repository.ChatRoomRepository;
+import com.capstone.smutaxi.chat.service.ChatRoomUserService;
 import com.capstone.smutaxi.dto.MatchingRequestDto;
-import com.capstone.smutaxi.entity.Gender;
 import com.capstone.smutaxi.entity.Location;
-import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.repository.UserRepository;
 import lombok.AllArgsConstructor;
 
@@ -28,6 +27,10 @@ public class IndividualMatchingDispatcher implements MatchingDispatcher{
 
     private ChatRoomRepository chatRoomRepository;
     private UserRepository userRepository;
+    private ChatRoomUserService chatRoomUserService;
+
+    public IndividualMatchingDispatcher(ChatRoomRepository chatRoomRepository, UserRepository userRepository) {
+    }
 
 
     @Override
@@ -63,7 +66,8 @@ public class IndividualMatchingDispatcher implements MatchingDispatcher{
                     chatRoomRepository.initLocation(chatRoom.getId(), copiedLocation);
                 }
                 // 채팅방 정보 update(addUser): 채팅방에 참가중인 유저를 추가한다.
-                chatRoomRepository.addUser(chatRoom.getId(), userEmail);
+                //chatRoomRepository.addUser(chatRoom.getId(), userEmail);
+                chatRoomUserService.addChatRoomUser(userEmail,chatRoom.getId());
 
                 //채팅방 id 반환
                 return chatRoom.getId();
