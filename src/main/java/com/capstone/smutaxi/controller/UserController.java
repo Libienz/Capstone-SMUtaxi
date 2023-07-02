@@ -27,15 +27,10 @@ public class UserController {
         this.chatRoomService = chatRoomService;
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<String> updateUser(@RequestBody UserDto userDto){
-        userService.updateUser(userDto);
-        return ResponseEntity.ok().body(userDto.toString());
-    }
 
     @GetMapping("/chatRooms")
     public List<ChatRoom> getUserChatRooms(@RequestParam String email){
-
+        //어째서 무환 순환 참조가?? 일단은 @JsonIgnore로 틀어 막았음.
         List<ChatRoom> chatRoomsByUserEmail = chatRoomService.getChatRoomsByUserEmail(email);
         return chatRoomsByUserEmail;
 

@@ -50,4 +50,12 @@ public class ChatController {
         }
     }
 
+    @GetMapping("/chat/chatRooms")
+    public List<ChatRoom> getUserChatRooms(@RequestParam String email){
+        //어째서 무환 순환 참조가?? 일단은 @JsonIgnore로 틀어 막았음.
+        List<ChatRoom> chatRoomsByUserEmail = chatRoomService.getChatRoomsByUserEmail(email);
+        return chatRoomsByUserEmail;
+
+    }
+
 }

@@ -81,4 +81,10 @@ public class AuthController {
 
         return ResponseEntity.ok().body(number);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<String> updateUser(@RequestBody UserDto userDto){
+        userService.updateUser(userDto);
+        return ResponseEntity.ok().body(userDto.toString());
+    }
 }
