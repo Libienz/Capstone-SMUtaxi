@@ -1,14 +1,18 @@
 package com.capstone.smutaxi.config;
 
+import com.capstone.smutaxi.utils.StompHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    private final StompHandler stompHandler;
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/sub"); //메시지 브로커가 /sub으로 시작하는 주소를 구독한 Subscriber들에게 메시지를 전달
@@ -38,4 +42,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOriginPatterns("*");//sockJs 안쓰고 연결하려면 /websocket을 추가해야되는듯함
     }
 
+    /**
+     * 클라이언트로부터 들어오는 STOMP 메시지를 처리하는 인바운드 채널에 인터셉터를 등록하는 역할
+     * 인바운드채널: client로부터 서버로 수신된 메세지 처리채널
+     * 인터셉터: 메시지 전송 또는 메시지 수신 과정에서 실행되는 코드로, 메시지를 가로채고 처리
+     * @param registration
+     */
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(stompHandler);
+    }
 }

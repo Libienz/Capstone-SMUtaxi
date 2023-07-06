@@ -1,5 +1,6 @@
 package com.capstone.smutaxi.entity;
 
+import com.capstone.smutaxi.utils.Location;
 import lombok.Getter;
 import lombok.Setter;
 

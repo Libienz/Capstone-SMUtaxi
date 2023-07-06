@@ -1,6 +1,6 @@
-package com.capstone.smutaxi.chat.repository;
+package com.capstone.smutaxi.repository;
 
-import com.capstone.smutaxi.chat.domain.Message;
+import com.capstone.smutaxi.entity.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

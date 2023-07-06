@@ -1,6 +1,8 @@
 package com.capstone.smutaxi.entity;
 
 
+import com.capstone.smutaxi.enums.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,7 +32,6 @@ public class User implements UserDetails {
     @Column(length = 300, nullable = false)
     private String password;
 
-
     //닉네임
     @Column(name = "name")
     private String name;
@@ -43,19 +44,12 @@ public class User implements UserDetails {
     @Column(name = "gender")
     private Gender gender;
 
-//    //현재 위치: 위도, 경도
-//    @Embedded
-//    @Column(name = "location")
-//    private Location location;
-//
-//    //택시 합승의 조건: 동성 가능, 최소 출발 인원, 근데 이거 끼면 로직 복잡해질 듯?
-//    @Embedded
-//    @Column(name = "condition")
-//    private TaxiPoolCondition taxiPoolCondition;
-
+    //역할기반제어를 위한 roles필드 (Spring Security)
     @ElementCollection(fetch = FetchType.EAGER) //roles 컬렉션
     @Builder.Default
     private List<String> roles = new ArrayList<>();
+
+
 
     @Override   //사용자의 권한 목록 리턴
     public Collection<? extends GrantedAuthority> getAuthorities() {
