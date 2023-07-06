@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.entity;
+package com.capstone.smutaxi.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,8 +19,7 @@ public class Location {
     public static double calculateDistance(Location userLocation, Location chatRoomLocation) {
         // 위도 경도를 이용한 거리 계산 알고리즘 구현
         // Haversine formula를 사용: 오차는 일반적으로 0.1% 이내로 유지되며 1km기준으로 약 1m의 오차 있음
-        // 더 정확한 알고리즘으로는 Vincenty's formulae등이 있지만 사용하진 않을 듯?
-
+        // 더 정확한 알고리즘으로는 Vincenty's formulae등이 있지만 무겁기에 사용하지 않음
         //chatRoomLocation이 null이면 아무도 들어있지 않은 채팅방 거리를 0으로 return 해서 매칭이 성사되도록 한다.
         if (chatRoomLocation == null) {
             return 0;

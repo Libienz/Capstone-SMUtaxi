@@ -1,9 +1,9 @@
 package com.capstone.smutaxi.chat;
 
-import com.capstone.smutaxi.chat.domain.ChatRoom;
-import com.capstone.smutaxi.chat.repository.ChatRoomRepository;
-import com.capstone.smutaxi.chat.service.ChatRoomService;
-import com.capstone.smutaxi.chat.service.MessageService;
+import com.capstone.smutaxi.entity.ChatRoom;
+import com.capstone.smutaxi.repository.ChatRoomRepository;
+import com.capstone.smutaxi.service.ChatRoomService;
+import com.capstone.smutaxi.service.MessageService;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;

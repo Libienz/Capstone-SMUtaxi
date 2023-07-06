@@ -1,7 +1,7 @@
-package com.capstone.smutaxi.chat.service;
+package com.capstone.smutaxi.service;
 
-import com.capstone.smutaxi.chat.domain.Message;
-import com.capstone.smutaxi.chat.repository.MessageRepository;
+import com.capstone.smutaxi.entity.Message;
+import com.capstone.smutaxi.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

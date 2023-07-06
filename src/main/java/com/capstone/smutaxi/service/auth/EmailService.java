@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
-public class MailService {
+public class EmailService {
 
     private final JavaMailSender javaMailSender;
 
@@ -43,7 +43,7 @@ public class MailService {
         return message;
     }
 
-    public int sendMail(String mail){
+    public int sendVerificationEmail(String mail){
 
         MimeMessage message = CreateMail(mail);
 

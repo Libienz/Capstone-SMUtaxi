@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.chat.domain;
+package com.capstone.smutaxi.entity;
 
 
 import lombok.Getter;

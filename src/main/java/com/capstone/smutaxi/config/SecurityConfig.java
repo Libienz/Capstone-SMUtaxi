@@ -58,7 +58,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 //URL 관리
                 .authorizeRequests()
-                .antMatchers("/", "/auth/join", "/auth/login","/auth/idCheck","/mail","/demoImageURL","/users/update","/chat/addUser","/users/chatRooms", "/h2-console/**","/ws/**","/chat/**").permitAll()
+                .antMatchers("/",
+                        "/api/auth/join",
+                        "/api/auth/login",
+//                        "/api/auth/users/{userEmail}",
+                        "/api/auth/email-verification",
+                        "/api/auth/check-duplicate/{email}",
+
+//                        "/demoImageURL",
+//                        "/users/update",
+                        "/api/chat/add-user",
+                        "/api/chat/user/chatRooms",
+                        "/h2-console/**",
+                        "/ws/**",
+                        "/chat/**").permitAll()
 
                 .anyRequest().authenticated()
                 .and()

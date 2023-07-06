@@ -7,12 +7,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AuthConfig {
-
-
     @Bean
     public UserRepository userRepository() {
         return new JpaUserRepository();
     }
-
 
 }

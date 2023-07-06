@@ -1,8 +1,8 @@
-package com.capstone.smutaxi.chat;
+package com.capstone.smutaxi.utils;
 
-import com.capstone.smutaxi.chat.domain.ChatRoom;
-import com.capstone.smutaxi.chat.domain.GenderRestriction;
-import com.capstone.smutaxi.chat.repository.ChatRoomRepository;
+import com.capstone.smutaxi.entity.ChatRoom;
+import com.capstone.smutaxi.enums.GenderRestriction;
+import com.capstone.smutaxi.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -28,17 +28,7 @@ public class ChatRoomInitializer implements ApplicationRunner {
     private void createPredefinedChatRooms() {
         for (int i = 1; i <= 300; i++) {
             String chatRoomName = "ChatRoom " + i;
-            GenderRestriction genderRestriction;
-
-            if (i <= 100) {
-                genderRestriction = GenderRestriction.F_ONLY;
-            } else if (i <= 200) {
-                genderRestriction = GenderRestriction.M_ONLY;
-            } else {
-                genderRestriction = GenderRestriction.ANY;
-            }
-
-            ChatRoom chatRoom = ChatRoom.create(chatRoomName, genderRestriction);
+            ChatRoom chatRoom = ChatRoom.create(chatRoomName);
             chatRoomRepository.save(chatRoom);
         }
     }

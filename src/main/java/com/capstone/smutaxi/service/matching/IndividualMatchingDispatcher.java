@@ -1,17 +1,15 @@
 package com.capstone.smutaxi.service.matching;
 
-import com.capstone.smutaxi.chat.domain.ChatRoom;
-import com.capstone.smutaxi.chat.domain.GenderRestriction;
-import com.capstone.smutaxi.chat.repository.ChatRoomRepository;
-import com.capstone.smutaxi.chat.service.ChatRoomUserService;
+import com.capstone.smutaxi.entity.ChatRoom;
+import com.capstone.smutaxi.repository.ChatRoomRepository;
 import com.capstone.smutaxi.dto.MatchingRequestDto;
-import com.capstone.smutaxi.entity.Location;
+import com.capstone.smutaxi.service.ChatRoomService;
+import com.capstone.smutaxi.utils.Location;
 import com.capstone.smutaxi.repository.UserRepository;
 import lombok.AllArgsConstructor;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class IndividualMatchingDispatcher implements MatchingDispatcher{
@@ -25,41 +23,39 @@ public class IndividualMatchingDispatcher implements MatchingDispatcher{
      * cons : 잦은 DB 요청
      */
 
-    private ChatRoomRepository chatRoomRepository;
-    private UserRepository userRepository;
-    private ChatRoomUserService chatRoomUserService;
+    private final ChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
+    private final ChatRoomService chatRoomService;
 
-    public IndividualMatchingDispatcher(ChatRoomRepository chatRoomRepository, UserRepository userRepository) {
-    }
+//    private ChatRoomUserService chatRoomUserService;
+
+
 
 
     @Override
     public Long handleMatchingRequest(String userEmail, MatchingRequestDto matchingRequestDto) {
 
-        GenderRestriction userGenderRestriction = matchingRequestDto.getGenderRestriction();
         //채팅방 리스트 받아온다.
         List<ChatRoom> chatRooms = chatRoomRepository.findAll();
-        //성별 제약조건이 user의 요청과 같은 chatRoom들을 filtering
-        List<ChatRoom> genderfilteredChatRooms = chatRooms.stream()
-                .filter(chatRoom -> chatRoom.getGenderRestriction().equals(userGenderRestriction))
-                .collect(Collectors.toList());
 
-        //채팅방 인원 수 내림차순 정렬: chatRoom Comparable
-        Collections.sort(genderfilteredChatRooms);
-
-        //유저 위치정보 생성
+        //유저 위치정보
         double latitude = matchingRequestDto.getLatitude();
         double longitude = matchingRequestDto.getLongitude();
         Location userLocation = new Location(latitude, longitude);
 
-        for (ChatRoom chatRoom : genderfilteredChatRooms) {
+        for (ChatRoom chatRoom : chatRooms) {
 
+            //채팅방 인원이 4명보다 많다면 패스
+            Long chatRoomId = chatRoom.getId();
+            int participantCount = chatRoomService.getParticipantCount(chatRoomId);
+            if (participantCount >= 4) {
+                continue;
+            }
+            //채팅방 인원이 4명보다 채팅방의 대표 위치를 받아온다.
             Location chatRoomLocation = chatRoom.getLocation();
             //채팅방 대표위치와 나의 위치 비교
             double distance = Location.calculateDistance(userLocation, chatRoomLocation); //채팅방 대표위치와 유저 위치간의 거리 (단위:m)
-            if (distance <= 500) {
-                // 성별 조건도 맞고 위치 조건도 맞으면 채팅방에 유저 추가
-
+            if (distance <= 500) { //위치가 500m이내라면 매칭 가능
                 // 채팅방 정보 update(initLocation): 빈 채팅방과 매칭된 경우는 chatRoom의 대표 위치를 초기화 한다.
                 if (chatRoom.getLocation() == null) {
                     Location copiedLocation = new Location(latitude, longitude); //깊은 복사
@@ -67,7 +63,7 @@ public class IndividualMatchingDispatcher implements MatchingDispatcher{
                 }
                 // 채팅방 정보 update(addUser): 채팅방에 참가중인 유저를 추가한다.
                 //chatRoomRepository.addUser(chatRoom.getId(), userEmail);
-                chatRoomUserService.addChatRoomUser(userEmail,chatRoom.getId());
+                chatRoomService.addUserToChatRoom(chatRoom.getId(), userEmail);
 
                 //채팅방 id 반환
                 return chatRoom.getId();

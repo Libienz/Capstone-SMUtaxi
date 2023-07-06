@@ -1,7 +1,7 @@
-package com.capstone.smutaxi.chat.repository;
+package com.capstone.smutaxi.repository;
 
-import com.capstone.smutaxi.chat.domain.ChatRoom;
-import com.capstone.smutaxi.entity.Location;
+import com.capstone.smutaxi.entity.ChatRoom;
+import com.capstone.smutaxi.utils.Location;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

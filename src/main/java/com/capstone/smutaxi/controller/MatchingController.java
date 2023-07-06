@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+@RequestMapping("/api/match")
 @RestController
 public class MatchingController {
 
@@ -27,7 +28,7 @@ public class MatchingController {
     }
 
     @ResponseBody
-    @PostMapping("/matching")
+    @PostMapping("/request")
     public String matching(HttpServletRequest request, MatchingRequestDto matchingRequestDto) {
 
         //헤더로부터 토큰 받아와서 유저 식별
@@ -40,7 +41,7 @@ public class MatchingController {
         Long chatRoomId = matchingDispatcher.handleMatchingRequest(user.getEmail(), matchingRequestDto);
 
 
-        //채팅방 ID를 반환 -> 클라이언트가 chatRoomID를 구독하는 요청을 보내는 것
+        //채팅방 ID를 반환 -> 후에 클라이언트는 chatRoomID를 구독하는 요청을 보내게 됨
         return chatRoomId.toString();
     }
 
