@@ -2,13 +2,12 @@ package com.capstone.smutaxi.service.matching;
 
 import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.repository.ChatRoomRepository;
-import com.capstone.smutaxi.dto.MatchingRequestDto;
+import com.capstone.smutaxi.dto.requests.MatchingRequest;
 import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.utils.Location;
 import com.capstone.smutaxi.repository.UserRepository;
 import lombok.AllArgsConstructor;
 
-import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
@@ -33,14 +32,14 @@ public class IndividualMatchingDispatcher implements MatchingDispatcher{
 
 
     @Override
-    public Long handleMatchingRequest(String userEmail, MatchingRequestDto matchingRequestDto) {
+    public Long handleMatchingRequest(String userEmail, MatchingRequest matchingRequest) {
 
         //채팅방 리스트 받아온다.
         List<ChatRoom> chatRooms = chatRoomRepository.findAll();
 
         //유저 위치정보
-        double latitude = matchingRequestDto.getLatitude();
-        double longitude = matchingRequestDto.getLongitude();
+        double latitude = matchingRequest.getLatitude();
+        double longitude = matchingRequest.getLongitude();
         Location userLocation = new Location(latitude, longitude);
 
         for (ChatRoom chatRoom : chatRooms) {

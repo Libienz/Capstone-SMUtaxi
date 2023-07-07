@@ -1,7 +1,7 @@
 package com.capstone.smutaxi.controller;
 
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
-import com.capstone.smutaxi.dto.MatchingRequestDto;
+import com.capstone.smutaxi.dto.requests.MatchingRequest;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.service.matching.MatchingDispatcher;
@@ -29,7 +29,7 @@ public class MatchingController {
 
     @ResponseBody
     @PostMapping("/request")
-    public String matching(HttpServletRequest request, MatchingRequestDto matchingRequestDto) {
+    public String matching(HttpServletRequest request, MatchingRequest matchingRequest) {
 
         //헤더로부터 토큰 받아와서 유저 식별
         String token = jwtTokenProvider.resolveToken(request);
@@ -38,7 +38,7 @@ public class MatchingController {
         Logger logger = LoggerFactory.getLogger(MatchingController.class);
         logger.info("libienz: " + user.toString());
         //매칭 요청
-        Long chatRoomId = matchingDispatcher.handleMatchingRequest(user.getEmail(), matchingRequestDto);
+        Long chatRoomId = matchingDispatcher.handleMatchingRequest(user.getEmail(), matchingRequest);
 
 
         //채팅방 ID를 반환 -> 후에 클라이언트는 chatRoomID를 구독하는 요청을 보내게 됨

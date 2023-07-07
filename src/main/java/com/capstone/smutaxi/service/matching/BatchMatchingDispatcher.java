@@ -1,8 +1,6 @@
 package com.capstone.smutaxi.service.matching;
 
-import com.capstone.smutaxi.dto.MatchingRequestDto;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import com.capstone.smutaxi.dto.requests.MatchingRequest;
 
 public class BatchMatchingDispatcher implements MatchingDispatcher {
     /**
@@ -13,7 +11,7 @@ public class BatchMatchingDispatcher implements MatchingDispatcher {
      * cons : Bad한 사용자 경험 (안잡히면 3초 기다리니까 기다리는 시간이 긴 것 처럼 느껴짐)
      */
     @Override
-    public Long handleMatchingRequest(String userEmail, MatchingRequestDto matchingRequestDto) {
+    public Long handleMatchingRequest(String userEmail, MatchingRequest matchingRequest) {
 
         return 0L;
     }
