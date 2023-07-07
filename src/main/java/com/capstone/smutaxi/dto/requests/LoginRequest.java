@@ -1,12 +1,9 @@
-package com.capstone.smutaxi.dto;
+package com.capstone.smutaxi.dto.requests;
 
 import lombok.Getter;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 @Getter
-public class LoginDto {
+public class LoginRequest {
 
 //    @NotNull
 //    @Size(min = 3, max = 100)

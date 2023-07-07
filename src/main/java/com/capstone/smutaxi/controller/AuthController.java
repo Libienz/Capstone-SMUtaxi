@@ -1,9 +1,13 @@
 package com.capstone.smutaxi.controller;
 
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
-import com.capstone.smutaxi.dto.JoinDto;
-import com.capstone.smutaxi.dto.LoginDto;
+import com.capstone.smutaxi.dto.requests.JoinRequest;
+import com.capstone.smutaxi.dto.requests.LoginRequest;
+import com.capstone.smutaxi.dto.responses.LoginResponse;
+import com.capstone.smutaxi.dto.UserDto;
+import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.exception.auth.IdDuplicateException;
+import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.service.auth.EmailService;
 import com.capstone.smutaxi.service.auth.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +24,19 @@ public class AuthController {
 
     private final EmailService emailService;
     private final UserService userService;
+    private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager; //스프링 시큐리티 authentication manager
     private final JwtTokenProvider jwtTokenProvider;
 
 
 
     @Autowired
-    public AuthController(EmailService emailService, UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+    public AuthController(EmailService emailService, UserService userService, UserRepository userRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.emailService = emailService;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userRepository = userRepository;
     }
 
 
@@ -38,24 +44,42 @@ public class AuthController {
     //로그인 API
     @PostMapping("/login")
     @ResponseBody
-    public ResponseEntity<String> login(@Valid @RequestBody LoginDto loginDto) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             // 인증 수행 및 JWT 토큰 생성
-            String jwtToken = userService.login(loginDto);
-            // 로그인 성공 응답: JWT 토큰 반환
-            return ResponseEntity.ok(jwtToken);
+            User user = userService.login(loginRequest);
+            String token = jwtTokenProvider.createToken(user.getEmail(), user.getRoles());
+
+            // 로그인에 성공하면 전송용 객체인 유저 DTO 만다 (직렬화 위해)
+            UserDto userDto = UserDto.builder().
+                    email(user.getEmail()).
+                    password(user.getPassword()).
+                    gender(user.getGender()).
+                    imgUri(/*user.getImgPath()*/ null).
+                    name(user.getName()).
+                    build();
+            // 로그인 성공 응답 build
+            LoginResponse response = LoginResponse.builder().
+                    token(token).
+                    userDto(userDto).
+                    error(null)
+                    .build();
+            return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
-            // 로그인 실패 응답: 상태 코드와 에러 메시지 반환
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.toString());
+            // 로그인 실패 응답 build
+            LoginResponse errorResponse = LoginResponse.builder().
+                    error(e.toString()).
+                    build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
     }
 
     //회원가입 API
     @PostMapping("/join")
     @ResponseBody
-    public ResponseEntity<String> join(@Valid @RequestBody JoinDto joinDto) {
+    public ResponseEntity<String> join(@Valid @RequestBody JoinRequest joinRequest) {
         try {
-            String joinedEmail = userService.join(joinDto);
+            String joinedEmail = userService.join(joinRequest);
             return ResponseEntity.ok(joinedEmail);
         } catch (IdDuplicateException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.toString());
@@ -83,7 +107,7 @@ public class AuthController {
 
     //유저 업데이트 API
     @PutMapping("/users/{userEmail}")
-    public ResponseEntity<String> updateUser(@RequestBody JoinDto updateDto){ //UpdateDto와 JoinDto 구조 같음 -> 재활용
+    public ResponseEntity<String> updateUser(@RequestBody JoinRequest updateDto){ //UpdateDto와 JoinRequest 구조 같음 -> 재활용
         userService.updateUser(updateDto);
         return ResponseEntity.ok().body(updateDto.toString());
     }

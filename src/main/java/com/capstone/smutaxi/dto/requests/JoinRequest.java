@@ -1,10 +1,10 @@
-package com.capstone.smutaxi.dto;
+package com.capstone.smutaxi.dto.requests;
 
 import com.capstone.smutaxi.enums.Gender;
 import lombok.Getter;
 
 @Getter
-public class JoinDto {
+public class JoinRequest {
 
     private String email;
     private String password;
