@@ -65,7 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/auth/email-verification",
                         "/api/auth/check-duplicate/{email}",
 
-//                        "/demoImageURL",
+                        "/api/rally-info",
+                        "/api/rally-info/create",
 //                        "/users/update",
                         "/api/chat/add-user",
                         "/api/chat/user/chatRooms",
