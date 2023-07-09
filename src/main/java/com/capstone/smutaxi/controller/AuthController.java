@@ -5,6 +5,7 @@ import com.capstone.smutaxi.dto.requests.JoinRequest;
 import com.capstone.smutaxi.dto.requests.LoginRequest;
 import com.capstone.smutaxi.dto.responses.LoginResponse;
 import com.capstone.smutaxi.dto.UserDto;
+import com.capstone.smutaxi.dto.responses.VerificationResponse;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.exception.auth.IdDuplicateException;
 import com.capstone.smutaxi.repository.UserRepository;
@@ -53,7 +54,7 @@ public class AuthController {
             // 로그인에 성공하면 전송용 객체인 유저 DTO 만다 (직렬화 위해)
             UserDto userDto = UserDto.builder().
                     email(user.getEmail()).
-                    password(user.getPassword()).
+                    password(loginRequest.getPassword()).
                     gender(user.getGender()).
                     imgUri(/*user.getImgPath()*/ null).
                     name(user.getName()).
@@ -90,19 +91,19 @@ public class AuthController {
     //이메일 중복 확인 API
     @GetMapping("/check-duplicate/{email}")
     @ResponseBody
-    public ResponseEntity<String> checkEmailDuplicate(@PathVariable("email") String email) {
+    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable("email") String email) {
         boolean emailDuplicate = userService.emailDuplicateCheck(email);
         if(emailDuplicate)
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 있는 아이디입니다.");
+            return ResponseEntity.ok().body(Boolean.TRUE);
         else
-            return ResponseEntity.ok().body("생성가능한 아이디입니다.");
+            return ResponseEntity.ok().body(Boolean.FALSE);
     }
 
     //인증메일 발송 API
-    @PostMapping("/email-verification")
-    public ResponseEntity<Integer> emailVerification(@RequestParam String email){
-        int verificationNumber = emailService.sendVerificationEmail(email);
-        return ResponseEntity.ok().body(verificationNumber);
+    @GetMapping("/email-verification")
+    public ResponseEntity<VerificationResponse> emailVerification(@RequestParam String email){
+        VerificationResponse verificationResponse = emailService.sendVerificationEmail(email);
+        return ResponseEntity.ok().body(verificationResponse);
     }
 
     //유저 업데이트 API
