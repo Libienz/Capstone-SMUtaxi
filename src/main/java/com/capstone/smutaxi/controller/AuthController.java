@@ -1,10 +1,10 @@
 package com.capstone.smutaxi.controller;
 
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
-import com.capstone.smutaxi.dto.requests.JoinRequest;
 import com.capstone.smutaxi.dto.requests.LoginRequest;
 import com.capstone.smutaxi.dto.responses.LoginResponse;
 import com.capstone.smutaxi.dto.UserDto;
+import com.capstone.smutaxi.dto.responses.UserSaveResponse;
 import com.capstone.smutaxi.dto.responses.VerificationResponse;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.exception.auth.IdDuplicateException;
@@ -48,24 +48,8 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             // 인증 수행 및 JWT 토큰 생성
-            User user = userService.login(loginRequest);
-            String token = jwtTokenProvider.createToken(user.getEmail(), user.getRoles());
-
-            // 로그인에 성공하면 전송용 객체인 유저 DTO 만다 (직렬화 위해)
-            UserDto userDto = UserDto.builder().
-                    email(user.getEmail()).
-                    password(loginRequest.getPassword()).
-                    gender(user.getGender()).
-                    imgUri(/*user.getImgPath()*/ null).
-                    name(user.getName()).
-                    build();
-            // 로그인 성공 응답 build
-            LoginResponse response = LoginResponse.builder().
-                    token(token).
-                    userDto(userDto).
-                    error(null)
-                    .build();
-            return ResponseEntity.ok(response);
+            LoginResponse loginResponse = userService.login(loginRequest);
+            return ResponseEntity.ok(loginResponse);
         } catch (IllegalArgumentException e) {
             // 로그인 실패 응답 build
             LoginResponse errorResponse = LoginResponse.builder().
@@ -78,9 +62,9 @@ public class AuthController {
     //회원가입 API
     @PostMapping("/join")
     @ResponseBody
-    public ResponseEntity<String> join(@Valid @RequestBody JoinRequest joinRequest) {
+    public ResponseEntity<String> join(@Valid @RequestBody UserDto joinDto) {
         try {
-            String joinedEmail = userService.join(joinRequest);
+            String joinedEmail = userService.join(joinDto);
             return ResponseEntity.ok(joinedEmail);
         } catch (IdDuplicateException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.toString());
@@ -107,9 +91,38 @@ public class AuthController {
     }
 
     //유저 업데이트 API
-    @PutMapping("/users/{userEmail}")
-    public ResponseEntity<String> updateUser(@RequestBody JoinRequest updateDto){ //UpdateDto와 JoinRequest 구조 같음 -> 재활용
-        userService.updateUser(updateDto);
-        return ResponseEntity.ok().body(updateDto.toString());
+    @PutMapping("/users/{email}")
+    public ResponseEntity<UserSaveResponse> updateUser(@PathVariable("email") String email, @RequestBody UserDto updateDto) {
+
+        try {
+            UserSaveResponse userSaveResponse = userService.updateUser(email, updateDto);
+            return ResponseEntity.ok().body(userSaveResponse);
+        } catch (IllegalArgumentException e) {
+            UserSaveResponse userSaveResponse = UserSaveResponse.builder()
+                    .success(Boolean.FALSE)
+                    .message(e.toString())
+                    .build();
+            return ResponseEntity.ok().body(userSaveResponse);
+        }
+
+
     }
+
+    //유저 비밀번호 변경 API
+    @PutMapping("/users/{email}/password")
+    public ResponseEntity<UserSaveResponse> updateUserPassword(@PathVariable("email") String email, @RequestBody UserDto updateDto) {
+
+        try {
+            UserSaveResponse userSaveResponse = userService.updateUserPassword(email, updateDto);
+            return ResponseEntity.ok().body(userSaveResponse);
+        } catch (IllegalArgumentException e) {
+            UserSaveResponse userSaveResponse = UserSaveResponse.builder()
+                    .success(Boolean.FALSE)
+                    .message(e.toString())
+                    .build();
+            return ResponseEntity.ok().body(userSaveResponse);
+        }
+    }
+
+
 }

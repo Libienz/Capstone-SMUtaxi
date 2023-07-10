@@ -61,7 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/",
                         "/api/auth/join",
                         "/api/auth/login",
-//                        "/api/auth/users/{userEmail}",
+                        "/api/auth/users/{email}",
+                        "/api/auth/users/{email}/password",
                         "/api/auth/email-verification",
                         "/api/auth/check-duplicate/{email}",
 
