@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/rally-info")
 @RequiredArgsConstructor
@@ -23,15 +25,43 @@ public class RallyInfoController {
      */
 
     @PostMapping("/create")
-    public ResponseEntity<RallyInfo> createRallyInfo(@RequestBody RallyInfoDto rallyInfoDto) {
+    public ResponseEntity<RallyInfoDto> createRallyInfo(@RequestBody RallyInfoDto rallyInfoDto) {
         // 집회정보를 반환
         RallyInfo rallyInfo = rallyInfoService.createRallyInfo(rallyInfoDto);
-        return ResponseEntity.ok(rallyInfo);
+        RallyInfoDto rallyResponse = RallyInfoDto.builder()
+                                            .date(rallyInfo.getDate())
+                                            .rallyDetailsDtoList(rallyInfo.getRallyDetailsList().stream()
+                                            .map(rallyDetails -> {
+                                                RallyInfoDto.RallyDetailsDto rallyDetailDto = new RallyInfoDto.RallyDetailsDto();
+                                                rallyDetailDto.setStartTime(rallyDetails.getStartTime());
+                                                rallyDetailDto.setEndTime(rallyDetails.getEndTime());
+                                                rallyDetailDto.setLocation(rallyDetails.getLocation());
+                                                rallyDetailDto.setRallyAttendance(rallyDetails.getRallyAttendance());
+                                                rallyDetailDto.setPoliceStation(rallyDetails.getPoliceStation());
+                                                return rallyDetailDto;
+                                            }).collect(Collectors.toList()))
+                                            .build();
+
+        return ResponseEntity.ok(rallyResponse);
     }
 
     @GetMapping
-    public ResponseEntity<RallyInfo> getRallyInfo(){
+    public ResponseEntity<RallyInfoDto> getRallyInfo(){
         RallyInfo recentRallyInfo = rallyInfoRepository.getRecentRallyInfo();
-        return ResponseEntity.ok(recentRallyInfo);
+
+        RallyInfoDto rallyResponse = RallyInfoDto.builder()
+                .date(recentRallyInfo.getDate())
+                .rallyDetailsDtoList(recentRallyInfo.getRallyDetailsList().stream()
+                        .map(rallyDetails -> {
+                            RallyInfoDto.RallyDetailsDto rallyDetailDto = new RallyInfoDto.RallyDetailsDto();
+                            rallyDetailDto.setStartTime(rallyDetails.getStartTime());
+                            rallyDetailDto.setEndTime(rallyDetails.getEndTime());
+                            rallyDetailDto.setLocation(rallyDetails.getLocation());
+                            rallyDetailDto.setRallyAttendance(rallyDetails.getRallyAttendance());
+                            rallyDetailDto.setPoliceStation(rallyDetails.getPoliceStation());
+                            return rallyDetailDto;
+                        }).collect(Collectors.toList()))
+                .build();
+        return ResponseEntity.ok(rallyResponse);
     }
 }

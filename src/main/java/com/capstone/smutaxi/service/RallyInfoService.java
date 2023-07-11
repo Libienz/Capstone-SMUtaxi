@@ -28,17 +28,17 @@ public class RallyInfoService {
 
         RallyInfo savedRallyInfo = rallyInfoRepository.save(rallyInfo);
 
-        System.out.println("잘 되고있니");
         for (RallyInfoDto.RallyDetailsDto rallyDetailsDto : rallyInfoDto.getRallyDetailsDtoList()) {
             RallyDetails rallyDetails = new RallyDetails();
             rallyDetails.setStartTime(rallyDetailsDto.getStartTime());
             rallyDetails.setEndTime(rallyDetailsDto.getEndTime());
             rallyDetails.setLocation(rallyDetailsDto.getLocation());
+            rallyDetails.setRallyAttendance(rallyDetailsDto.getRallyAttendance());
+            rallyDetails.setPoliceStation(rallyDetailsDto.getPoliceStation());
             rallyDetails.setRallyInfo(savedRallyInfo);
 
             rallyDetailsRepository.save(rallyDetails);
             rallyDetailsRepository.flush();
-            System.out.println("디테일 = " + rallyDetails);
 
         }
 

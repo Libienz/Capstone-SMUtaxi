@@ -25,6 +25,10 @@ public class RallyDetails {
 
     private String location;
 
+    private String rallyAttendance;
+
+    private String policeStation;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn
