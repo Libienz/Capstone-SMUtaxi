@@ -178,7 +178,7 @@ public class UserService {
     //유저 프로필사진 업로드 후 img url 반환
     public String updateUserProfileImage(MultipartFile file) throws IOException {
         // 저장할 파일 이름 생성
-        String fileName = FileNameGenerator.generateFileName() + file.getOriginalFilename(); //email
+        String fileName = FileNameGenerator.generateFileName(); //email
 
         // 파일 저장 경로 생성
         String filePath = uploadDirectory + "/" + fileName;
