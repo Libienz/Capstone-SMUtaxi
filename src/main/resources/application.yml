@@ -38,6 +38,10 @@ security:
 matching:
   pool-size: 200
 
+server:
+  baseUrl: http://localhost:8080
+  upload:
+    directory: C:\spoot-taxi-profile-imgs
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace #??? ?? 2.x, hibernate5

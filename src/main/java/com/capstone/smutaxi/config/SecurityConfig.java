@@ -61,11 +61,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/",
                         "/api/auth/join",
                         "/api/auth/login",
-//                        "/api/auth/users/{userEmail}",
-                        "/api/auth/email-verification",
+                        "/api/auth/users/{email}",
+                        "/api/auth/users/{email}/password",
+                        "/api/auth/join/email-verification",
+                        "/api/auth/update/email-verification",
                         "/api/auth/check-duplicate/{email}",
 
+                        "/api/images/profile-image/upload",
+                        "/api/images/profile-image/{fileName}",
 //                        "/demoImageURL",
+
+
+                        "/api/rally-info",
+                        "/api/rally-info/create",
+
 //                        "/users/update",
                         "/api/chat/add-user",
                         "/api/chat/user/chatRooms",
