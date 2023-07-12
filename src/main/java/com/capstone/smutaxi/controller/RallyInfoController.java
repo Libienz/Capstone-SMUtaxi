@@ -1,13 +1,16 @@
 package com.capstone.smutaxi.controller;
 
+import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
 import com.capstone.smutaxi.dto.RallyInfoDto;
 import com.capstone.smutaxi.entity.RallyInfo;
 import com.capstone.smutaxi.repository.RallyInfoRepository;
 import com.capstone.smutaxi.service.RallyInfoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Collectors;
 
 @RestController
@@ -15,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RallyInfoController {
 
+    private final JwtTokenProvider jwtTokenProvider;
     private final RallyInfoService rallyInfoService;
     private final RallyInfoRepository rallyInfoRepository;
 
@@ -25,8 +29,17 @@ public class RallyInfoController {
      */
 
     @PostMapping("/create")
-    public ResponseEntity<RallyInfoDto> createRallyInfo(@RequestBody RallyInfoDto rallyInfoDto) {
+    public ResponseEntity<RallyInfoDto> createRallyInfo(HttpServletRequest request,@RequestBody RallyInfoDto rallyInfoDto) {
         // 집회정보를 반환
+        String token = jwtTokenProvider.resolveToken(request);
+        String userRole = jwtTokenProvider.getUserRole(token);
+        System.out.println("userRole = " + userRole);
+
+        if (!"ADMIN".equals(userRole)) {
+            // userRole이 ADMIN이 아닌 경우 접근 거부
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         RallyInfo rallyInfo = rallyInfoService.createRallyInfo(rallyInfoDto);
         RallyInfoDto rallyResponse = RallyInfoDto.builder()
                                             .date(rallyInfo.getDate())
