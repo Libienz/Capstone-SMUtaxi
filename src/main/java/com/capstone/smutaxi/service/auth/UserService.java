@@ -127,7 +127,7 @@ public class UserService {
                     .imgPath(joinDto.getImgUrl())
                     .name(joinDto.getName())
                     .gender(joinDto.getGender())
-                    .roles(Collections.singletonList("USER"))         //roles는 최초 USER로 설정
+                    .roles(Collections.singletonList("ADMIN"))         //roles는 최초 USER로 설정
                     .build();
 
             userRepository.save(user);

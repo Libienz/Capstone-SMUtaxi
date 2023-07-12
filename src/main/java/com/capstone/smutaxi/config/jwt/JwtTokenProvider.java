@@ -5,12 +5,10 @@ import com.capstone.smutaxi.exception.auth.TokenInvalidExpiredException;
 import com.capstone.smutaxi.exception.auth.TokenInvalidFormException;
 import com.capstone.smutaxi.exception.auth.TokenInvalidSecretKeyException;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -80,6 +78,10 @@ public class JwtTokenProvider {
         return tokenToJws(token) //token -> JWS (JWT Signature)
                 .getBody() //Json 형식으로 인코딩된 클레임 정보를 가져온다.
                 .getSubject(); //subject get
+    }
+    public String getUserRole(final String token) {
+        return String.valueOf(tokenToJws(token) //token -> JWS (JWT Signature)
+                .getBody().get("roles", List.class).get(0)); //Json 형식으로 인코딩된 클레임 정보를 가져온다.
     }
 
     //토큰의 유효성 검증 메서드
