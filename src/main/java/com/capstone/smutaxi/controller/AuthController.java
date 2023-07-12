@@ -2,11 +2,11 @@ package com.capstone.smutaxi.controller;
 
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
 import com.capstone.smutaxi.dto.requests.LoginRequest;
+import com.capstone.smutaxi.dto.responses.JoinResponse;
 import com.capstone.smutaxi.dto.responses.LoginResponse;
 import com.capstone.smutaxi.dto.UserDto;
-import com.capstone.smutaxi.dto.responses.UserSaveResponse;
+import com.capstone.smutaxi.dto.responses.UserUpdateResponse;
 import com.capstone.smutaxi.dto.responses.VerificationResponse;
-import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.exception.auth.IdDuplicateException;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.service.auth.EmailService;
@@ -62,12 +62,12 @@ public class AuthController {
     //회원가입 API
     @PostMapping("/join")
     @ResponseBody
-    public ResponseEntity<String> join(@Valid @RequestBody UserDto joinDto) {
+    public ResponseEntity<JoinResponse> join(@Valid @RequestBody UserDto joinDto) {
         try {
-            String joinedEmail = userService.join(joinDto);
-            return ResponseEntity.ok(joinedEmail);
+            JoinResponse joinResponse = userService.join(joinDto);
+            return ResponseEntity.ok(joinResponse);
         } catch (IdDuplicateException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.toString());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
 
     }
@@ -84,25 +84,29 @@ public class AuthController {
     }
 
     //인증메일 발송 API
-    @GetMapping("/email-verification")
-    public ResponseEntity<VerificationResponse> emailVerification(@RequestParam String email){
-        VerificationResponse verificationResponse = emailService.sendVerificationEmail(email);
+    @GetMapping("/join/email-verification")
+    public ResponseEntity<VerificationResponse> emailVerificationForJoin(@RequestParam String email){
+        VerificationResponse verificationResponse = emailService.sendVerificationEmail(email, false);
         return ResponseEntity.ok().body(verificationResponse);
     }
-
+    @GetMapping("/update/email-verification")
+    public ResponseEntity<VerificationResponse> emailVerificationForUpdate(@RequestParam String email){
+        VerificationResponse verificationResponse = emailService.sendVerificationEmail(email, true);
+        return ResponseEntity.ok().body(verificationResponse);
+    }
     //유저 업데이트 API
     @PutMapping("/users/{email}")
-    public ResponseEntity<UserSaveResponse> updateUser(@PathVariable("email") String email, @RequestBody UserDto updateDto) {
+    public ResponseEntity<UserUpdateResponse> updateUser(@PathVariable("email") String email, @RequestBody UserDto updateDto) {
 
         try {
-            UserSaveResponse userSaveResponse = userService.updateUser(email, updateDto);
-            return ResponseEntity.ok().body(userSaveResponse);
+            UserUpdateResponse userUpdateResponse = userService.updateUser(email, updateDto);
+            return ResponseEntity.ok().body(userUpdateResponse);
         } catch (IllegalArgumentException e) {
-            UserSaveResponse userSaveResponse = UserSaveResponse.builder()
+            UserUpdateResponse userUpdateResponse = UserUpdateResponse.builder()
                     .success(Boolean.FALSE)
                     .message(e.toString())
                     .build();
-            return ResponseEntity.ok().body(userSaveResponse);
+            return ResponseEntity.ok().body(userUpdateResponse);
         }
 
 
@@ -110,17 +114,17 @@ public class AuthController {
 
     //유저 비밀번호 변경 API
     @PutMapping("/users/{email}/password")
-    public ResponseEntity<UserSaveResponse> updateUserPassword(@PathVariable("email") String email, @RequestBody UserDto updateDto) {
+    public ResponseEntity<UserUpdateResponse> updateUserPassword(@PathVariable("email") String email, @RequestBody UserDto updateDto) {
 
         try {
-            UserSaveResponse userSaveResponse = userService.updateUserPassword(email, updateDto);
-            return ResponseEntity.ok().body(userSaveResponse);
+            UserUpdateResponse userUpdateResponse = userService.updateUserPassword(email, updateDto);
+            return ResponseEntity.ok().body(userUpdateResponse);
         } catch (IllegalArgumentException e) {
-            UserSaveResponse userSaveResponse = UserSaveResponse.builder()
+            UserUpdateResponse userUpdateResponse = UserUpdateResponse.builder()
                     .success(Boolean.FALSE)
                     .message(e.toString())
                     .build();
-            return ResponseEntity.ok().body(userSaveResponse);
+            return ResponseEntity.ok().body(userUpdateResponse);
         }
     }
 

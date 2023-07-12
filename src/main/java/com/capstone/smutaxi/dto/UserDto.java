@@ -11,7 +11,7 @@ import lombok.*;
 public class UserDto {
     private String email;
     private String password;
-    private String imgUri;
+    private String imgUrl;
     private String name;
     private Gender gender;
     //    private MultipartFile img;

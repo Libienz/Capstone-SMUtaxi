@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter @Setter
 @Builder
 public class VerificationResponse {
-    private Boolean emailChecked;
+    private Boolean sended;
     private Integer verificationCode;
 }

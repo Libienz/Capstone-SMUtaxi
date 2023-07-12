@@ -1,7 +1,6 @@
 package com.capstone.smutaxi.service.auth;
 
 import com.capstone.smutaxi.dto.responses.VerificationResponse;
-import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.NoSuchElementException;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -48,22 +46,25 @@ public class EmailService {
         return message;
     }
 
-    public VerificationResponse sendVerificationEmail(String email){
+    public VerificationResponse sendVerificationEmail(String email, boolean foundThenSend){
 
         VerificationResponse verificationResponse;
-        try {
-            User user = userRepository.findByEmail(email).get();
+        boolean present = userRepository.findByEmail(email).isPresent();
+
+        if ((present && foundThenSend) || (!present && !foundThenSend)) { //가입된 아이디일때 전송 foundThenSend
             MimeMessage message = CreateMail(email);
             javaMailSender.send(message);
             verificationResponse = VerificationResponse.builder().
                     verificationCode(mailAuthNumber).
-                    emailChecked(Boolean.TRUE).
+                    sended(Boolean.TRUE).
                     build();
-        } catch (NoSuchElementException e) {
-            verificationResponse = VerificationResponse.builder().
-                    emailChecked(Boolean.FALSE).
-                    build();
+        } else {
+            verificationResponse = VerificationResponse.builder()
+                    .sended(Boolean.FALSE)
+                    .build();
         }
+
         return verificationResponse;
     }
+
 }
