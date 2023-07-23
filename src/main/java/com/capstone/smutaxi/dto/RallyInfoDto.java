@@ -19,6 +19,7 @@ public class RallyInfoDto {
 
     private List<RallyDetailsDto> rallyDetailsDtoList;
 
+    //dto 이름 수정 필요
     @Getter
     @Setter
     public static class RallyDetailsDto {
