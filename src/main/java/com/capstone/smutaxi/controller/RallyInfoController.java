@@ -2,11 +2,10 @@ package com.capstone.smutaxi.controller;
 
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
 import com.capstone.smutaxi.dto.RallyInfoDto;
-import com.capstone.smutaxi.entity.RallyInfo;
+import com.capstone.smutaxi.entity.RallyInformation;
 import com.capstone.smutaxi.repository.RallyInfoRepository;
 import com.capstone.smutaxi.service.RallyInfoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,26 +30,26 @@ public class RallyInfoController {
     @PostMapping("/create")
     public ResponseEntity<RallyInfoDto> createRallyInfo(HttpServletRequest request,@RequestBody RallyInfoDto rallyInfoDto) {
         // 집회정보를 반환
-        String token = jwtTokenProvider.resolveToken(request);
-        String userRole = jwtTokenProvider.getUserRole(token);
-        System.out.println("userRole = " + userRole);
+//        String token = jwtTokenProvider.resolveToken(request);
+//        String userRole = jwtTokenProvider.getUserRole(token);
+//        System.out.println("userRole = " + userRole);
+//
+//        if (!"ADMIN".equals(userRole)) {
+//            // userRole이 ADMIN이 아닌 경우 접근 거부
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        }
 
-        if (!"ADMIN".equals(userRole)) {
-            // userRole이 ADMIN이 아닌 경우 접근 거부
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
-        RallyInfo rallyInfo = rallyInfoService.createRallyInfo(rallyInfoDto);
+        RallyInformation rallyInformation = rallyInfoService.createRallyInfo(rallyInfoDto);
         RallyInfoDto rallyResponse = RallyInfoDto.builder()
-                                            .date(rallyInfo.getDate())
-                                            .rallyDetailsDtoList(rallyInfo.getRallyDetailsList().stream()
+                                            .date(rallyInformation.getDate())
+                                            .rallyDetailsDtoList(rallyInformation.getRallyDetailList().stream()
                                             .map(rallyDetails -> {
                                                 RallyInfoDto.RallyDetailsDto rallyDetailDto = new RallyInfoDto.RallyDetailsDto();
                                                 rallyDetailDto.setStartTime(rallyDetails.getStartTime());
                                                 rallyDetailDto.setEndTime(rallyDetails.getEndTime());
                                                 rallyDetailDto.setLocation(rallyDetails.getLocation());
-                                                rallyDetailDto.setRallyAttendance(rallyDetails.getRallyAttendance());
-                                                rallyDetailDto.setPoliceStation(rallyDetails.getPoliceStation());
+                                                rallyDetailDto.setRallyAttendance(rallyDetails.getRallyScale());
+                                                rallyDetailDto.setPoliceStation(rallyDetails.getJurisdiction());
                                                 return rallyDetailDto;
                                             }).collect(Collectors.toList()))
                                             .build();
@@ -60,18 +59,18 @@ public class RallyInfoController {
 
     @GetMapping
     public ResponseEntity<RallyInfoDto> getRallyInfo(){
-        RallyInfo recentRallyInfo = rallyInfoRepository.getRecentRallyInfo();
+        RallyInformation recentRallyInformation = rallyInfoRepository.getRecentRallyInfo();
 
         RallyInfoDto rallyResponse = RallyInfoDto.builder()
-                .date(recentRallyInfo.getDate())
-                .rallyDetailsDtoList(recentRallyInfo.getRallyDetailsList().stream()
+                .date(recentRallyInformation.getDate())
+                .rallyDetailsDtoList(recentRallyInformation.getRallyDetailList().stream()
                         .map(rallyDetails -> {
                             RallyInfoDto.RallyDetailsDto rallyDetailDto = new RallyInfoDto.RallyDetailsDto();
                             rallyDetailDto.setStartTime(rallyDetails.getStartTime());
                             rallyDetailDto.setEndTime(rallyDetails.getEndTime());
                             rallyDetailDto.setLocation(rallyDetails.getLocation());
-                            rallyDetailDto.setRallyAttendance(rallyDetails.getRallyAttendance());
-                            rallyDetailDto.setPoliceStation(rallyDetails.getPoliceStation());
+                            rallyDetailDto.setRallyAttendance(rallyDetails.getRallyScale());
+                            rallyDetailDto.setPoliceStation(rallyDetails.getJurisdiction());
                             return rallyDetailDto;
                         }).collect(Collectors.toList()))
                 .build();

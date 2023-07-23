@@ -2,6 +2,7 @@ package com.capstone.smutaxi.config;
 
 import com.capstone.smutaxi.config.jwt.JwtAuthenticationFilter;
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
+import com.capstone.smutaxi.enums.Role;
 import com.capstone.smutaxi.service.auth.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -56,8 +57,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
 
-                //URL 관리
+                //엔드포인트 접근 권한 관리
                 .authorizeRequests()
+                //ADMIN 권한을 가지고 있어야 집회정보를 등록하는 api 자원 사용 가능
+                .antMatchers("/api/rally-info/create").hasRole(Role.ADMIN.name())
+                //인증 없이 접근 가능한 엔드포인트들
                 .antMatchers("/",
                         "/api/auth/join",
                         "/api/auth/login",
@@ -73,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
                         "/api/rally-info",
-                        "/api/rally-info/create",
+//                        "/api/rally-info/create",
 
 //                        "/users/update",
                         "/api/chat/add-user",

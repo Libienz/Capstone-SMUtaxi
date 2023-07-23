@@ -1,6 +1,6 @@
 package com.capstone.smutaxi.repository;
 
-import com.capstone.smutaxi.entity.RallyInfo;
+import com.capstone.smutaxi.entity.RallyInformation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,15 +12,15 @@ import javax.persistence.EntityManager;
 public class RallyInfoRepository {
     private final EntityManager em;
 
-    public RallyInfo save(RallyInfo rallyInfo) {
-        em.persist(rallyInfo);
+    public RallyInformation save(RallyInformation rallyInformation) {
+        em.persist(rallyInformation);
         em.flush();
-        return rallyInfo;
+        return rallyInformation;
     }
 
     @Transactional(readOnly = true)
-    public RallyInfo getRecentRallyInfo() {
-        return em.createQuery("SELECT r FROM RallyInfo r ORDER BY r.id DESC", RallyInfo.class)
+    public RallyInformation getRecentRallyInfo() {
+        return em.createQuery("SELECT r FROM RallyInformation r ORDER BY r.id DESC", RallyInformation.class)
                 .setMaxResults(1)
                 .getSingleResult();
     }

@@ -51,12 +51,12 @@ public class IndividualMatchingDispatcher implements MatchingDispatcher{
                 continue;
             }
             //채팅방 인원이 4명보다 채팅방의 대표 위치를 받아온다.
-            Location chatRoomLocation = chatRoom.getLocation();
+            Location chatRoomLocation = chatRoom.getChatRoomLocation();
             //채팅방 대표위치와 나의 위치 비교
             double distance = Location.calculateDistance(userLocation, chatRoomLocation); //채팅방 대표위치와 유저 위치간의 거리 (단위:m)
             if (distance <= 500) { //위치가 500m이내라면 매칭 가능
                 // 채팅방 정보 update(initLocation): 빈 채팅방과 매칭된 경우는 chatRoom의 대표 위치를 초기화 한다.
-                if (chatRoom.getLocation() == null) {
+                if (chatRoom.getChatRoomLocation() == null) {
                     Location copiedLocation = new Location(latitude, longitude); //깊은 복사
                     chatRoomRepository.initLocation(chatRoom.getId(), copiedLocation);
                 }

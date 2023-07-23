@@ -1,17 +1,14 @@
 package com.capstone.smutaxi.service;
 
 import com.capstone.smutaxi.dto.RallyInfoDto;
-import com.capstone.smutaxi.entity.ChatRoom;
-import com.capstone.smutaxi.entity.RallyDetails;
-import com.capstone.smutaxi.entity.RallyInfo;
+import com.capstone.smutaxi.entity.RallyDetail;
+import com.capstone.smutaxi.entity.RallyInformation;
 import com.capstone.smutaxi.repository.RallyDetailsRepository;
 import com.capstone.smutaxi.repository.RallyInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,30 +19,30 @@ public class RallyInfoService {
     private final RallyDetailsRepository rallyDetailsRepository;
 
     @Transactional
-    public RallyInfo createRallyInfo(RallyInfoDto rallyInfoDto) {
-        RallyInfo rallyInfo = new RallyInfo();
-        rallyInfo.setDate(rallyInfoDto.getDate());
+    public RallyInformation createRallyInfo(RallyInfoDto rallyInfoDto) {
+        RallyInformation rallyInformation = new RallyInformation();
+        rallyInformation.setDate(rallyInfoDto.getDate());
 
-        RallyInfo savedRallyInfo = rallyInfoRepository.save(rallyInfo);
+        RallyInformation savedRallyInformation = rallyInfoRepository.save(rallyInformation);
 
         for (RallyInfoDto.RallyDetailsDto rallyDetailsDto : rallyInfoDto.getRallyDetailsDtoList()) {
-            RallyDetails rallyDetails = new RallyDetails();
-            rallyDetails.setStartTime(rallyDetailsDto.getStartTime());
-            rallyDetails.setEndTime(rallyDetailsDto.getEndTime());
-            rallyDetails.setLocation(rallyDetailsDto.getLocation());
-            rallyDetails.setRallyAttendance(rallyDetailsDto.getRallyAttendance());
-            rallyDetails.setPoliceStation(rallyDetailsDto.getPoliceStation());
-            rallyDetails.setRallyInfo(savedRallyInfo);
+            RallyDetail rallyDetail = new RallyDetail();
+            rallyDetail.setStartTime(rallyDetailsDto.getStartTime());
+            rallyDetail.setEndTime(rallyDetailsDto.getEndTime());
+            rallyDetail.setLocation(rallyDetailsDto.getLocation());
+            rallyDetail.setRallyScale(rallyDetailsDto.getRallyAttendance());
+            rallyDetail.setJurisdiction(rallyDetailsDto.getPoliceStation());
+            rallyDetail.setRallyInformation(savedRallyInformation);
 
-            rallyDetailsRepository.save(rallyDetails);
+            rallyDetailsRepository.save(rallyDetail);
             rallyDetailsRepository.flush();
 
         }
 
-        // RallyInfo 엔티티의 rallyDetailsList를 업데이트
-        savedRallyInfo.getRallyDetailsList().addAll(rallyDetailsRepository.findByRallyInfo(savedRallyInfo));
+        // RallyInformation 엔티티의 rallyDetailsList를 업데이트
+        savedRallyInformation.getRallyDetailList().addAll(rallyDetailsRepository.findByRallyInformation(savedRallyInformation));
 
-        return savedRallyInfo;
+        return savedRallyInformation;
     }
 
 }

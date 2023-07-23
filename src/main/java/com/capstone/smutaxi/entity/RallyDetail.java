@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,8 +11,11 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-public class RallyDetails {
+@Table(name = "rally_details")
+public class RallyDetail {
+
     @Id
+    @Column(name = "rally_detail_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -25,12 +27,13 @@ public class RallyDetails {
 
     private String location;
 
-    private String rallyAttendance;
+    //집회 규모
+    private String rallyScale;
 
-    private String policeStation;
+    //집회 관할군
+    private String jurisdiction;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn
-    private RallyInfo rallyInfo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rally_information_id" )
+    private RallyInformation rallyInformation;
 }
