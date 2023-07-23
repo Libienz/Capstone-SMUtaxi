@@ -13,16 +13,18 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "chat_participants")
 public class ChatParticipant {
     @Id
+    @Column(name = "chat_participant_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
 
-    @ManyToOne
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 }

@@ -2,7 +2,6 @@ package com.capstone.smutaxi.entity;
 
 
 import com.capstone.smutaxi.enums.Gender;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,25 +23,21 @@ import java.util.stream.Collectors;
 @ToString
 public class User implements UserDetails {
 
-    //email ID primary key
     @Id
-    @Column(name = "email")
+    @Column(name = "user_id")
     private String email;
 
-    @Column(length = 300, nullable = false)
     private String password;
 
-    //닉네임
-    @Column(name = "name")
     private String name;
 
-    //프로필 사진 경로
-    @Column(name = "img_path")
-    private String imgPath;
+    private String imageUrl;
 
-    //성별
-    @Column(name = "gender")
+    @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    @OneToMany(mappedBy = "user")
+    private List<ChatParticipant> chatParticipantList = new ArrayList<>();
 
     //역할기반제어를 위한 roles필드 (Spring Security)
     @ElementCollection(fetch = FetchType.EAGER) //roles 컬렉션
@@ -50,7 +45,7 @@ public class User implements UserDetails {
     private List<String> roles = new ArrayList<>();
 
 
-
+    //Spring Security Method
     @Override   //사용자의 권한 목록 리턴
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()
@@ -58,26 +53,31 @@ public class User implements UserDetails {
                 .collect(Collectors.toList());
     }
 
+    //Spring Security Method
     @Override
     public String getUsername() {
         return email;
     }
 
+    //Spring Security Method
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    //Spring Security Method
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    //Spring Security Method
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    //Spring Security Method
     @Override
     public boolean isEnabled() {
         return true;

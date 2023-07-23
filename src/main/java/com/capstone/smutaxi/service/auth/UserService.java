@@ -8,6 +8,7 @@ import com.capstone.smutaxi.dto.responses.LoginResponse;
 import com.capstone.smutaxi.dto.responses.UserUpdateResponse;
 import com.capstone.smutaxi.enums.Gender;
 import com.capstone.smutaxi.entity.User;
+import com.capstone.smutaxi.enums.Role;
 import com.capstone.smutaxi.exception.auth.IdDuplicateException;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.utils.FileNameGenerator;
@@ -26,11 +27,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 public class UserService {
@@ -58,13 +56,13 @@ public class UserService {
         String password = updateDto.getPassword();
         String name = updateDto.getName();
         Gender gender = updateDto.getGender();
-        String imgPath = updateDto.getImgUrl();
+        String imageUrl = updateDto.getImgUrl();
 
         //유저 정보 수정
         user.setPassword(passwordEncoder.encode(password));
         user.setName(name);
         user.setGender(gender);
-        user.setImgPath(imgPath);
+        user.setImageUrl(imageUrl);
 
         userRepository.save(user); //이미 존재하면 업데이트 없으면 생성
 
@@ -124,16 +122,17 @@ public class UserService {
             User user = User.builder()
                     .email(joinDto.getEmail())
                     .password(passwordEncoder.encode(joinDto.getPassword()))  //비밀번호 인코딩
-                    .imgPath(joinDto.getImgUrl())
+                    .imageUrl(joinDto.getImgUrl())
                     .name(joinDto.getName())
                     .gender(joinDto.getGender())
-                    .roles(Collections.singletonList("ADMIN"))         //roles는 최초 USER로 설정
+                    .roles(Collections.singletonList(Role.ADMIN.getRoleName()))         //roles는 최초 USER로 설정
                     .build();
 
             userRepository.save(user);
             UserDto userDto = userToUserDto(user);
             userDto.setPassword(joinDto.getPassword());
             String token = jwtTokenProvider.createToken(user.getEmail(), user.getRoles());
+
             JoinResponse joinResponse = JoinResponse.builder()
                     .token(token)
                     .userDto(userDto)
@@ -170,7 +169,7 @@ public class UserService {
 
     //user에서 필요한 정보만 추려 전송용 객체 생성
     public UserDto userToUserDto(User user) {
-        UserDto userDto = new UserDto(user.getEmail(), user.getPassword(), user.getImgPath(), user.getName(), user.getGender());
+        UserDto userDto = new UserDto(user.getEmail(), user.getPassword(), user.getImageUrl(), user.getName(), user.getGender());
         return userDto;
     }
 

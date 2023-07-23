@@ -53,7 +53,7 @@ public class ChatRoomRepository {
     public void initLocation(Long chatRoomId, Location location) {
         ChatRoom chatRoom = em.find(ChatRoom.class, chatRoomId);
         if (chatRoom != null) {
-            chatRoom.setLocation(location);
+            chatRoom.setChatRoomLocation(location);
             em.flush(); // 변경 사항을 DB에 즉시 반영
         }
     }
