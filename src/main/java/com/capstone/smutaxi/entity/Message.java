@@ -5,6 +5,8 @@ import lombok.Getter;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.*;
+
 
 @Entity
 @Getter
@@ -24,8 +26,10 @@ public class Message {
 
     private String message;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
 
+    public Message() {
+    }
 }
