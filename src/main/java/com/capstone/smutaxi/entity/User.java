@@ -1,6 +1,7 @@
 package com.capstone.smutaxi.entity;
 
 
+import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.enums.Gender;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -85,7 +86,11 @@ public class User implements UserDetails {
         return true;
     }
 
-
+    //user에서 필요한 정보만 추려 전송용 객체 생성
+    public UserDto userToUserDto() {
+        UserDto userDto = new UserDto(this.getEmail(), this.getPassword(), this.getImageUrl(), this.getName(), this.getGender());
+        return userDto;
+    }
 
 
 }

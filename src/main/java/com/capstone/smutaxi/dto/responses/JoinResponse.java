@@ -8,6 +8,8 @@ import lombok.Setter;
 @Builder
 @Getter @Setter
 public class JoinResponse {
-    UserDto userDto;
-    String token;
+    private Boolean success;
+    private String message;
+    private UserDto userDto;
+    private String token;
 }
