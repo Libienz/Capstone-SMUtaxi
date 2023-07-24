@@ -5,6 +5,7 @@ import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.dto.requests.LoginRequest;
 import com.capstone.smutaxi.dto.responses.JoinResponse;
 import com.capstone.smutaxi.dto.responses.LoginResponse;
+import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.dto.responses.UserUpdateResponse;
 import com.capstone.smutaxi.enums.Gender;
 import com.capstone.smutaxi.entity.User;
@@ -156,19 +157,12 @@ public class UserService {
         // 토큰 생성
         String token = jwtTokenProvider.createToken(user.getEmail(), user.getRoles());
         // 응답 메시지 말기
-        UserDto userDto = userToUserDto(user);
-        userDto.setPassword(loginRequest.getPassword());
-        LoginResponse loginResponse = LoginResponse
-                .builder()
-                .userDto(userDto)
-                .error(null)
-                .token(token)
-                .build();
-        return loginResponse;
+        LoginResponse loginSuccessResponse = ResponseFactory.createLoginSuccessResponse(user, token);
+        return loginSuccessResponse;
     }
 
     //user에서 필요한 정보만 추려 전송용 객체 생성
-    public UserDto userToUserDto(User user) {
+    public static UserDto userToUserDto(User user) {
         UserDto userDto = new UserDto(user.getEmail(), user.getPassword(), user.getImageUrl(), user.getName(), user.getGender());
         return userDto;
     }
