@@ -31,6 +31,7 @@ public class ChatRoomService {
         return null;
     }
 
+    //유저가 참여하고있는 ChatRoom 리스트 반환
     public List<ChatRoom> getUserJoinedChatRooms(String userEmail) {
         List<ChatParticipant> participantInfo = chatParticipantRepository.findByUserEmail(userEmail);
         List<ChatRoom> chatRooms = new ArrayList<>();
@@ -55,11 +56,12 @@ public class ChatRoomService {
         chatParticipant.setUser(user);
         chatParticipantRepository.save(chatParticipant);
     }
-
+    //중간테이블인 chatParticipant에서 특정 chatRoomId를 가진 엔티티의 개수를 반환
     public int getParticipantCount(Long chatRoomId) {
         return chatParticipantRepository.countByChatRoomId(chatRoomId);
     }
 
+    //ChatRoom 생성
     @Transactional
     public ChatRoom createChatRoom(String name) {
         ChatRoom chatRoom = ChatRoom.create(name);
@@ -67,6 +69,7 @@ public class ChatRoomService {
         return chatRoom;
     }
 
+    //채팅방 전부 바놘
     public List<ChatRoom> getRoomList() {
         return chatRoomRepository.findAll();
     }

@@ -1,10 +1,10 @@
 package com.capstone.smutaxi.dto;
 
+import com.capstone.smutaxi.entity.RallyDetail;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RallyInfoDto {
+public class RallyInformationDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime date;
 
@@ -28,8 +28,18 @@ public class RallyInfoDto {
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime endTime;
         private String location;
-        private String rallyAttendance;
-        private String policeStation;
+        private String rallyScale;
+        private String jurisdiction;
+
+        public RallyDetail toRallyDetail() {
+            RallyDetail rallyDetail = new RallyDetail();
+            rallyDetail.setStartTime(this.startTime);
+            rallyDetail.setEndTime(this.endTime);
+            rallyDetail.setLocation(this.location);
+            rallyDetail.setRallyScale(this.rallyScale);
+            rallyDetail.setJurisdiction(this.jurisdiction);
+            return rallyDetail;
+        }
     }
 
 }
