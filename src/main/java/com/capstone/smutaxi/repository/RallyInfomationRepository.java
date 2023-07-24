@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 
 @Repository
 @RequiredArgsConstructor
-public class RallyInfoRepository {
+public class RallyInfomationRepository {
     private final EntityManager em;
 
     public RallyInformation save(RallyInformation rallyInformation) {
@@ -18,8 +18,7 @@ public class RallyInfoRepository {
         return rallyInformation;
     }
 
-    @Transactional(readOnly = true)
-    public RallyInformation getRecentRallyInfo() {
+    public RallyInformation findRecentRallyInfo() {
         return em.createQuery("SELECT r FROM RallyInformation r ORDER BY r.id DESC", RallyInformation.class)
                 .setMaxResults(1)
                 .getSingleResult();

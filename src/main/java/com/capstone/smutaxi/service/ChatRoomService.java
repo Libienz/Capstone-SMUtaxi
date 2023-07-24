@@ -16,13 +16,13 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ChatRoomService {
 
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatParticipantRepository chatParticipantRepository;
 
-    @Transactional(rollbackFor = Exception.class)
     public ChatRoom joinChatRoom(Long id) {
         Optional<ChatRoom> byId = chatRoomRepository.findById(id);
         if (byId.isPresent()) {
@@ -31,7 +31,6 @@ public class ChatRoomService {
         return null;
     }
 
-    @Transactional
     public List<ChatRoom> getUserJoinedChatRooms(String userEmail) {
         List<ChatParticipant> participantInfo = chatParticipantRepository.findByUserEmail(userEmail);
         List<ChatRoom> chatRooms = new ArrayList<>();
@@ -43,6 +42,7 @@ public class ChatRoomService {
     }
 
     /* 채팅방에 유저를 추가 : ChatParticipant를 하나 더 생성하면 끝 */
+    @Transactional
     public void addUserToChatRoom(Long chatRoomId, String userId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(() -> new RuntimeException("Chat room not found"));
@@ -67,7 +67,6 @@ public class ChatRoomService {
         return chatRoom;
     }
 
-    @Transactional(readOnly = true)
     public List<ChatRoom> getRoomList() {
         return chatRoomRepository.findAll();
     }

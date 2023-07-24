@@ -13,6 +13,7 @@ import com.capstone.smutaxi.enums.Role;
 import com.capstone.smutaxi.exception.auth.IdDuplicateException;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.utils.FileNameGenerator;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,9 +22,10 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,6 +34,8 @@ import java.util.Collections;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -40,13 +44,6 @@ public class UserService {
     @Value("${server.upload.directory}")
     private String uploadDirectory;
     private String serverDomain = "http://localhost:8080/";
-
-    @Autowired
-    public UserService(PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider, UserRepository userRepository) {
-        this.passwordEncoder = passwordEncoder;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.userRepository = userRepository;
-    }
 
     //유저 업데이트
     @Transactional
@@ -102,7 +99,6 @@ public class UserService {
     }
 
     //이메일 중복 확인
-    @Transactional
     public boolean emailDuplicateCheck(String email){
         Optional<User> findEmail = userRepository.findByEmail(email);
         if(findEmail.isPresent())
@@ -144,7 +140,6 @@ public class UserService {
     }
 
     //로그인
-    @Transactional
     public LoginResponse login(LoginRequest loginRequest) {
         //로그인 시도
         //참고 : BcryptEncoder는 단방향 해시임으로 서버도 해싱된걸 디코딩할 수 없다 -> 단 match해보고 패스워드가 정확한지 인증은 가능

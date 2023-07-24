@@ -15,6 +15,7 @@ import java.util.Optional;
 public class ChatRoomRepository {
     private final EntityManager em;
 
+    //ChatRoomInitializer에서 사용하기 위해 Transactional을 열어둠
     @Transactional
     public Long save(ChatRoom chatRoom) {
         em.persist(chatRoom);
@@ -49,7 +50,7 @@ public class ChatRoomRepository {
             em.flush(); // 변경 사항을 DB에 즉시 반영
         }
     }*/
-    @Transactional
+
     public void initLocation(Long chatRoomId, Location location) {
         ChatRoom chatRoom = em.find(ChatRoom.class, chatRoomId);
         if (chatRoom != null) {

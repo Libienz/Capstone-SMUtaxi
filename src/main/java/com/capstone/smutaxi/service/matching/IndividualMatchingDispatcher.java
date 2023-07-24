@@ -3,14 +3,17 @@ package com.capstone.smutaxi.service.matching;
 import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.repository.ChatRoomRepository;
 import com.capstone.smutaxi.dto.requests.MatchingRequest;
+import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.utils.Location;
-import com.capstone.smutaxi.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class IndividualMatchingDispatcher implements MatchingDispatcher{
     /**
      * Individual Style Dispatcher
@@ -31,6 +34,7 @@ public class IndividualMatchingDispatcher implements MatchingDispatcher{
 
 
 
+    @Transactional
     @Override
     public Long handleMatchingRequest(String userEmail, MatchingRequest matchingRequest) {
 

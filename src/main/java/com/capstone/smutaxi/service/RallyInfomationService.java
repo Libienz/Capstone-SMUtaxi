@@ -4,18 +4,17 @@ import com.capstone.smutaxi.dto.RallyInfoDto;
 import com.capstone.smutaxi.entity.RallyDetail;
 import com.capstone.smutaxi.entity.RallyInformation;
 import com.capstone.smutaxi.repository.RallyDetailsRepository;
-import com.capstone.smutaxi.repository.RallyInfoRepository;
+import com.capstone.smutaxi.repository.RallyInfomationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class RallyInfoService {
-    @Autowired
-    private final RallyInfoRepository rallyInfoRepository;
-    @Autowired
+@Transactional(readOnly = true)
+public class RallyInfomationService {
+
+    private final RallyInfomationRepository rallyInfomationRepository;
     private final RallyDetailsRepository rallyDetailsRepository;
 
     @Transactional
@@ -23,7 +22,7 @@ public class RallyInfoService {
         RallyInformation rallyInformation = new RallyInformation();
         rallyInformation.setDate(rallyInfoDto.getDate());
 
-        RallyInformation savedRallyInformation = rallyInfoRepository.save(rallyInformation);
+        RallyInformation savedRallyInformation = rallyInfomationRepository.save(rallyInformation);
 
         for (RallyInfoDto.RallyDetailsDto rallyDetailsDto : rallyInfoDto.getRallyDetailsDtoList()) {
             RallyDetail rallyDetail = new RallyDetail();
@@ -45,4 +44,7 @@ public class RallyInfoService {
         return savedRallyInformation;
     }
 
+    public RallyInformation getRecentRallyInfo() {
+        return rallyInfomationRepository.findRecentRallyInfo();
+    }
 }
