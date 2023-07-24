@@ -1,9 +1,12 @@
 package com.capstone.smutaxi.controller;
 
 
+import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.dto.responses.UploadImageResponse;
 import com.capstone.smutaxi.repository.UserRepository;
-import com.capstone.smutaxi.service.auth.UserService;
+import com.capstone.smutaxi.service.auth.ImageService;
+import com.capstone.smutaxi.service.auth.UserUpdateService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -19,43 +22,34 @@ import java.net.MalformedURLException;
 
 @RestController
 @RequestMapping("/api/images")
+@RequiredArgsConstructor
 public class ImageController {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserService userService;
+    private final UserRepository userRepository;
+    private final ImageService imageService;
 
-    @Value("${server.baseUrl}") // 서버의 기본 URL을 설정한 프로퍼티 값으로 가져옴
-    private String serverBaseUrl;
 
+    //프로필 이미지 업로드 (재설정 포함) API
     @PostMapping("profile-image/upload")
     public ResponseEntity<UploadImageResponse> uploadFile(@Part("imagePart") MultipartFile imagePart) {
 
         try {
-            String imageUrl = userService.updateUserProfileImage(imagePart);
-            UploadImageResponse uploadImageResponse = UploadImageResponse.builder()
-                    .success(Boolean.TRUE)
-                    .message("Image Uploaded")
-                    .imageUrl(imageUrl)
-                    .build();
+            String imageUrl = imageService.uploadUserProfileImage(imagePart);
+            UploadImageResponse uploadImageResponse = ResponseFactory.createUploadImageResponse(Boolean.TRUE, null, imageUrl);
             return ResponseEntity.ok(uploadImageResponse);
         } catch (Exception e) {
-            UploadImageResponse uploadImageResponse = UploadImageResponse.builder()
-                    .success(Boolean.TRUE)
-                    .message("Fail to upload image")
-                    .build();
-
+            UploadImageResponse uploadImageResponse = ResponseFactory.createUploadImageResponse(Boolean.FALSE, e.toString(), null);
             return ResponseEntity.ok(uploadImageResponse);
         }
     }
 
+    //프로필 이미지 GET API
     @GetMapping("profile-image/{fileName}")
     public ResponseEntity<Resource> getImage(@PathVariable String fileName) {
         try {
 
-            Resource profileImage = userService.getProfileImage(fileName);
-            MediaType imageMediaType = userService.getImageMediaType(fileName);
+            Resource profileImage = imageService.getProfileImage(fileName);
+            MediaType imageMediaType = imageService.getImageMediaType(fileName);
             // 응답에 이미지 파일을 포함하여 반환
             return ResponseEntity.ok()
                     .contentType(imageMediaType) // 이미지 파일 타입에 맞게 설정

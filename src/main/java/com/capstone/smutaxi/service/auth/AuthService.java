@@ -50,8 +50,7 @@ public class AuthService {
         UserDto userDto = user.userToUserDto();
         userDto.setPassword(joinDto.getPassword());
         String token = jwtTokenProvider.createToken(user.getEmail(), user.getRoles());
-        JoinResponse joinResponse = ResponseFactory.createJoinResponse(Boolean.TRUE, null, userDto, token);
-        return joinResponse;
+        return ResponseFactory.createJoinResponse(Boolean.TRUE, null, userDto, token);
 
     }
 
@@ -73,7 +72,15 @@ public class AuthService {
         //Response Dto 생성 -> {success, message, userDto, token}
         UserDto userDto = user.userToUserDto();
         userDto.setPassword(loginRequest.getPassword());
-        LoginResponse loginResponse = ResponseFactory.createLoginResponse(Boolean.TRUE, null, userDto, token);
-        return loginResponse;
+        return ResponseFactory.createLoginResponse(Boolean.TRUE, null, userDto, token);
+    }
+
+    //이메일 중복 확인
+    public boolean emailDuplicateCheck(String email){
+        Optional<User> findEmail = userRepository.findByEmail(email);
+        if(findEmail.isPresent())
+            return true;
+        else
+            return false;
     }
 }

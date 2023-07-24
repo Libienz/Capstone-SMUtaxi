@@ -1,6 +1,7 @@
 package com.capstone.smutaxi.service.auth;
 
-import com.capstone.smutaxi.dto.responses.VerificationResponse;
+import com.capstone.smutaxi.dto.responses.EmailVerificationResponse;
+import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -52,9 +53,9 @@ public class EmailService {
     //작성한 message를 포함하는 메일 전송
     //foundThenSend = true: 가입된 이메일에 대해서만 인증번호 전송
     //foundThenSend = false: 가입되지 않은 이메일일 경우 인증번호 전송
-    public VerificationResponse sendVerificationEmail(String email, boolean foundThenSend) {
+    public EmailVerificationResponse sendVerificationEmail(String email, boolean foundThenSend) {
 
-        VerificationResponse verificationResponse;
+        EmailVerificationResponse emailVerificationResponse;
         boolean present = userRepository.findByEmail(email).isPresent();
 
         //foundThenSend와 가입된 이메일 존재 여부 비교
@@ -62,18 +63,21 @@ public class EmailService {
             //메일 생성, 전송
             MimeMessage message = CreateMail(email);
             javaMailSender.send(message);
-            verificationResponse = VerificationResponse.builder().
-                    verificationCode(mailAuthNumber).
-                    sended(Boolean.TRUE).
-                    build();
-        } else {
-            //메일 전송 안함 (foundThenSend와 상태가 맞지 않은 이유로)
-            verificationResponse = VerificationResponse.builder()
-                    .sended(Boolean.FALSE)
-                    .build();
+            return ResponseFactory.createEmailVerificationResponse(Boolean.TRUE, null, mailAuthNumber);
         }
 
-        return verificationResponse;
+        //메일 전송 안함 (foundThenSend와 상태가 맞지 않은 이유로)
+        else {
+            //비밀번호 수정을 위해 재학생 메일 인증을 요청했는데 가입되지 않은 경우
+            if (!present) {
+                throw new IllegalArgumentException("가입되지 않은 이메일 입니다.");
+            }
+            //회원가입을 위해 재학생 메일 인증을 요청했는데 이미 가입된 아이디일 경우
+            else {
+                throw new IllegalArgumentException("이미 가입되어 있는 아이디 입니다.");
+            }
+        }
+
     }
 
 }
