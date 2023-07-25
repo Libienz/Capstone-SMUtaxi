@@ -3,13 +3,12 @@ package com.capstone.smutaxi.repository;
 import com.capstone.smutaxi.entity.RallyInformation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
 @Repository
 @RequiredArgsConstructor
-public class RallyInfomationRepository {
+public class RallyInformationRepository {
     private final EntityManager em;
 
     public RallyInformation save(RallyInformation rallyInformation) {
