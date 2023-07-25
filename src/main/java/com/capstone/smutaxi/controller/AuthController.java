@@ -3,11 +3,9 @@ package com.capstone.smutaxi.controller;
 import com.capstone.smutaxi.dto.requests.LoginRequest;
 import com.capstone.smutaxi.dto.responses.*;
 import com.capstone.smutaxi.dto.UserDto;
-import com.capstone.smutaxi.exception.auth.IdDuplicateException;
-import com.capstone.smutaxi.service.auth.AuthService;
-import com.capstone.smutaxi.service.auth.EmailService;
+import com.capstone.smutaxi.service.user.AuthService;
+import com.capstone.smutaxi.service.user.EmailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

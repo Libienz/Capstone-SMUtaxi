@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.service.auth;
+package com.capstone.smutaxi.service.user;
 
 
 import com.capstone.smutaxi.repository.UserRepository;

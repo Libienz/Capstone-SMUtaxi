@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.service.auth;
+package com.capstone.smutaxi.service.user;
 
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
 import com.capstone.smutaxi.dto.UserDto;
@@ -8,7 +8,9 @@ import com.capstone.smutaxi.dto.responses.LoginResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.enums.Role;
-import com.capstone.smutaxi.exception.auth.IdDuplicateException;
+import com.capstone.smutaxi.exception.ErrorCode;
+import com.capstone.smutaxi.exception.user.IdDuplicateException;
+import com.capstone.smutaxi.exception.user.LoginFailException;
 import com.capstone.smutaxi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +34,7 @@ public class AuthService {
         //중복된 아이디가 있는 지 검증
         Optional<User> findEmail = userRepository.findByEmail(joinDto.getEmail());
         if (findEmail.isPresent()) {
-            throw new IdDuplicateException("이미 존재하는 Id 입니다");
+            throw new IdDuplicateException(ErrorCode.EMAIL_DUPLICATION);
         }
         //유저 초기화
         User user = User.builder()
@@ -59,11 +61,11 @@ public class AuthService {
 
         //가입되지 않은 이메일인지 체크
         User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+                .orElseThrow(() -> new LoginFailException(ErrorCode.USER_NOT_FOUND));
 
         //로그인 시도 (참고 : BcryptEncoder는 단방향 해시임으로 서버도 해싱된걸 디코딩할 수 없다 -> 단 match는 가능)
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            throw new LoginFailException(ErrorCode.USER_ACCESS_DENIED);
         }
 
         // 토큰 생성

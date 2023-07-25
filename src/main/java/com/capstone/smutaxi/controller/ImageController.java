@@ -1,17 +1,12 @@
 package com.capstone.smutaxi.controller;
 
 
-import com.capstone.smutaxi.dto.responses.ErrorResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.dto.responses.UploadImageResponse;
 import com.capstone.smutaxi.repository.UserRepository;
-import com.capstone.smutaxi.service.auth.ImageService;
-import com.capstone.smutaxi.service.auth.UserUpdateService;
+import com.capstone.smutaxi.service.user.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

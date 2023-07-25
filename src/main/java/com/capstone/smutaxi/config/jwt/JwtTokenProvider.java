@@ -1,9 +1,8 @@
 package com.capstone.smutaxi.config.jwt;
 
-import com.capstone.smutaxi.exception.auth.InvalidLoginException;
-import com.capstone.smutaxi.exception.auth.TokenInvalidExpiredException;
-import com.capstone.smutaxi.exception.auth.TokenInvalidFormException;
-import com.capstone.smutaxi.exception.auth.TokenInvalidSecretKeyException;
+import com.capstone.smutaxi.exception.user.TokenInvalidExpiredException;
+import com.capstone.smutaxi.exception.user.TokenInvalidFormException;
+import com.capstone.smutaxi.exception.user.TokenInvalidSecretKeyException;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;

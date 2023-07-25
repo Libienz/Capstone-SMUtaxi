@@ -1,7 +1,9 @@
-package com.capstone.smutaxi.service.auth;
+package com.capstone.smutaxi.service.user;
 
 import com.capstone.smutaxi.dto.responses.EmailVerificationResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
+import com.capstone.smutaxi.exception.ErrorCode;
+import com.capstone.smutaxi.exception.user.EmailFailToSendException;
 import com.capstone.smutaxi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -71,11 +73,11 @@ public class EmailService {
         else {
             //비밀번호 수정을 위해 재학생 메일 인증을 요청했는데 가입되지 않은 경우
             if (!present) {
-                throw new IllegalArgumentException("가입되지 않은 이메일 입니다.");
+                throw new EmailFailToSendException(ErrorCode.USER_NOT_FOUND);
             }
             //회원가입을 위해 재학생 메일 인증을 요청했는데 이미 가입된 아이디일 경우
             else {
-                throw new IllegalArgumentException("이미 가입되어 있는 아이디 입니다.");
+                throw new EmailFailToSendException(ErrorCode.USER_ALREADY_EXIST);
             }
         }
 

@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.service.auth;
+package com.capstone.smutaxi.service.user;
 
 import com.capstone.smutaxi.utils.FileNameGenerator;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,8 @@ public class ImageService {
 
     @Value("${server.upload.directory}")
     private String uploadDirectory;
-    private String serverDomain = "http://localhost:8080/";
+    @Value("${server.baseUrl}")
+    private String serverDomain;
 
     //유저 프로필사진 업로드 후 img url 반환
     public String uploadUserProfileImage(MultipartFile file) throws IOException {
