@@ -3,7 +3,7 @@ package com.capstone.smutaxi.config;
 import com.capstone.smutaxi.config.jwt.JwtAuthenticationFilter;
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
 import com.capstone.smutaxi.enums.Role;
-import com.capstone.smutaxi.service.auth.UserDetailsServiceImpl;
+import com.capstone.smutaxi.service.user.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +15,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -65,9 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/",
                         "/api/auth/join",
                         "/api/auth/login",
-                        "/api/auth/users/{email}",
-                        "/api/auth/users/{email}/password",
-                        "/api/auth/join/email-verification",
+                        "/api/update/users/{email}",
+                        "/api/update/users/{email}/password",
+                        "/api/auth/send/verification-email",
                         "/api/auth/update/email-verification",
                         "/api/auth/check-duplicate/{email}",
 

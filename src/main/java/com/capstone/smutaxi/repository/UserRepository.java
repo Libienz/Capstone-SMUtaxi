@@ -1,19 +1,34 @@
 package com.capstone.smutaxi.repository;
 
 import com.capstone.smutaxi.entity.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository {
+@Repository
+@RequiredArgsConstructor
+public class UserRepository {
 
-    Optional<User> findByEmail(String id);
+    private final EntityManager em;
 
-    User save(User user);
+    public Optional<User> findByEmail(String email) {
+        User user = em.find(User.class, email);
+        return Optional.ofNullable(user);
+    }
 
-    List<User> findAll();
+    public User save(User user) {
+        em.persist(user);
+        return user;
+    }
 
-    Optional<User> findByName(String name);
+    public List<User> findAll() {
+        return null;
+    }
 
-
+    public Optional<User> findByName(String name) {
+        return Optional.empty();
+    }
 }

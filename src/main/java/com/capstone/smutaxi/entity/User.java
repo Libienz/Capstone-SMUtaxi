@@ -1,6 +1,7 @@
 package com.capstone.smutaxi.entity;
 
 
+import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.enums.Gender;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static javax.persistence.FetchType.*;
 
 
 @Entity // 이 클래스는 데이터베이스의 테이블과 1:1매핑되는 객체다라고 명시 ORM (Object Relation Mapping)
@@ -40,7 +43,7 @@ public class User implements UserDetails {
     private List<ChatParticipant> chatParticipantList = new ArrayList<>();
 
     //역할기반제어를 위한 roles필드 (Spring Security)
-    @ElementCollection(fetch = FetchType.EAGER) //roles 컬렉션
+    @ElementCollection(fetch = EAGER) //roles 컬렉션
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
@@ -83,7 +86,11 @@ public class User implements UserDetails {
         return true;
     }
 
-
+    //user에서 필요한 정보만 추려 전송용 객체 생성
+    public UserDto userToUserDto() {
+        UserDto userDto = new UserDto(this.getEmail(), this.getPassword(), this.getImageUrl(), this.getName(), this.getGender());
+        return userDto;
+    }
 
 
 }

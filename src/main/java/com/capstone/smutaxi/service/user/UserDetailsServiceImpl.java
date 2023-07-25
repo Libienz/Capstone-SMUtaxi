@@ -1,19 +1,14 @@
-package com.capstone.smutaxi.service.auth;
+package com.capstone.smutaxi.service.user;
 
-import com.capstone.smutaxi.entity.User;
+
 import com.capstone.smutaxi.repository.UserRepository;
-
-
-import com.sun.security.auth.UserPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
-
-//Spring Security에서 사용자 정보를 가져와 인증하기 위한 Service 클래스 UserService와 합칠 수도 있지만 Spring Security 부분을 분리하여 가독성 높이고자 따로 두었다.
+//Spring Security 에서 사용자 정보를 로드하기 위해 사용하는 클래스
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 

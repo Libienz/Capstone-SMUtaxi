@@ -1,9 +1,9 @@
 package com.capstone.smutaxi.config.jwt;
 
-import com.capstone.smutaxi.exception.auth.InvalidLoginException;
-import com.capstone.smutaxi.exception.auth.TokenInvalidExpiredException;
-import com.capstone.smutaxi.exception.auth.TokenInvalidFormException;
-import com.capstone.smutaxi.exception.auth.TokenInvalidSecretKeyException;
+import com.capstone.smutaxi.exception.user.LoginFailException;
+import com.capstone.smutaxi.exception.user.TokenInvalidExpiredException;
+import com.capstone.smutaxi.exception.user.TokenInvalidFormException;
+import com.capstone.smutaxi.exception.user.TokenInvalidSecretKeyException;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -90,7 +90,7 @@ public class JwtTokenProvider {
             final Jws<Claims> claims = tokenToJws(token);
 
             validateExpiredToken(claims); //토큰의 만료 여부 검증
-        } catch (final JwtException | InvalidLoginException e) {
+        } catch (final JwtException | LoginFailException e) {
             throw new TokenInvalidSecretKeyException(token);
         }
     }

@@ -8,6 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter
 @Setter
@@ -33,7 +35,7 @@ public class RallyDetail {
     //집회 관할군
     private String jurisdiction;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "rally_information_id" )
     private RallyInformation rallyInformation;
 }

@@ -1,23 +1,55 @@
 package com.capstone.smutaxi.dto.responses;
 
 import com.capstone.smutaxi.dto.UserDto;
-import com.capstone.smutaxi.entity.User;
-
-import static com.capstone.smutaxi.service.auth.UserService.userToUserDto;
 
 public class ResponseFactory {
 
-    //로그인 성공 반환 생성기
-    public static LoginResponse createLoginSuccessResponse(User loginedUser, String token) {
-
-        UserDto userDto = userToUserDto(loginedUser);
-        userDto.setPassword(loginedUser.getPassword());
-        LoginResponse loginResponse = LoginResponse
-                .builder()
+    public static JoinResponse createJoinResponse(Boolean success, String message, UserDto userDto, String token) {
+        return JoinResponse.builder()
+                .success(success)
+                .message(message)
                 .userDto(userDto)
-                .error(null)
                 .token(token)
                 .build();
-        return loginResponse;
+    }
+
+    public static LoginResponse createLoginResponse(Boolean success, String message, UserDto userDto, String token) {
+        return LoginResponse.builder()
+                .success(success)
+                .message(message)
+                .userDto(userDto)
+                .token(token)
+                .build();
+    }
+
+    public static UserUpdateResponse createUserUpdateResponse(Boolean success, String message, UserDto userDto) {
+        return UserUpdateResponse.builder()
+                .success(success)
+                .message(message)
+                .userDto(userDto)
+                .build();
+    }
+
+    public static UploadImageResponse createUploadImageResponse(Boolean success, String message, String imageUrl) {
+        return UploadImageResponse.builder()
+                .success(success)
+                .message(message)
+                .imageUrl(imageUrl)
+                .build();
+    }
+
+    public static EmailVerificationResponse createEmailVerificationResponse(Boolean success, String message, Integer verificationCode) {
+        return EmailVerificationResponse.builder().
+                success(success).
+                message(message).
+                verificationCode(verificationCode).
+                build();
+    }
+
+    public static ErrorResponse createErrorResponse(String error, String message) {
+        return ErrorResponse.builder().
+                error(error).
+                message(message).
+                build();
     }
 }

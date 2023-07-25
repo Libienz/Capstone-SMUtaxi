@@ -3,8 +3,8 @@ package com.capstone.smutaxi.controller;
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
 import com.capstone.smutaxi.dto.RallyInfoDto;
 import com.capstone.smutaxi.entity.RallyInformation;
-import com.capstone.smutaxi.repository.RallyInfoRepository;
-import com.capstone.smutaxi.service.RallyInfoService;
+import com.capstone.smutaxi.repository.RallyInfomationRepository;
+import com.capstone.smutaxi.service.RallyInfomationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/rally-info")
 @RequiredArgsConstructor
-public class RallyInfoController {
+public class RallyInfomationController {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final RallyInfoService rallyInfoService;
-    private final RallyInfoRepository rallyInfoRepository;
+    private final RallyInfomationService rallyInfomationService;
+    private final RallyInfomationRepository rallyInfomationRepository;
 
     /**
      * @RALLY_INFO_IMGURL
@@ -39,7 +39,7 @@ public class RallyInfoController {
 //            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 //        }
 
-        RallyInformation rallyInformation = rallyInfoService.createRallyInfo(rallyInfoDto);
+        RallyInformation rallyInformation = rallyInfomationService.createRallyInfo(rallyInfoDto);
         RallyInfoDto rallyResponse = RallyInfoDto.builder()
                                             .date(rallyInformation.getDate())
                                             .rallyDetailsDtoList(rallyInformation.getRallyDetailList().stream()
@@ -59,7 +59,7 @@ public class RallyInfoController {
 
     @GetMapping
     public ResponseEntity<RallyInfoDto> getRallyInfo(){
-        RallyInformation recentRallyInformation = rallyInfoRepository.getRecentRallyInfo();
+        RallyInformation recentRallyInformation = rallyInfomationService.getRecentRallyInfo();
 
         RallyInfoDto rallyResponse = RallyInfoDto.builder()
                 .date(recentRallyInformation.getDate())

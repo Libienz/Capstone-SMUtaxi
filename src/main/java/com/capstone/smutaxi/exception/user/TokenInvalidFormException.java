@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.exception.auth;
+package com.capstone.smutaxi.exception.user;
 
 public class TokenInvalidFormException extends RuntimeException{
     public TokenInvalidFormException() {

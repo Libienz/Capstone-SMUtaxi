@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.exception.auth;
+package com.capstone.smutaxi.exception.user;
 
 public class TokenInvalidSecretKeyException extends  RuntimeException{
     public TokenInvalidSecretKeyException(String token) {

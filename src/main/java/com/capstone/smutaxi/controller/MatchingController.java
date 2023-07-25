@@ -5,6 +5,7 @@ import com.capstone.smutaxi.dto.requests.MatchingRequest;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.service.matching.MatchingDispatcher;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("/api/match")
 @RestController
+@RequiredArgsConstructor
 public class MatchingController {
 
-    private MatchingDispatcher matchingDispatcher;
-    private JwtTokenProvider jwtTokenProvider;
-    private UserRepository userRepository;
-
-    @Autowired
-    public MatchingController(MatchingDispatcher matchingDispatcher, JwtTokenProvider jwtTokenProvider, UserRepository userRepository) {
-        this.matchingDispatcher = matchingDispatcher;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.userRepository = userRepository;
-    }
+    private final MatchingDispatcher matchingDispatcher;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
 
     @ResponseBody
     @PostMapping("/request")
