@@ -1,6 +1,7 @@
 package com.capstone.smutaxi.controller;
 
 
+import com.capstone.smutaxi.dto.responses.ErrorResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.dto.responses.UploadImageResponse;
 import com.capstone.smutaxi.repository.UserRepository;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import retrofit2.http.Part;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 @RestController
@@ -31,34 +33,24 @@ public class ImageController {
 
     //프로필 이미지 업로드 (재설정 포함) API
     @PostMapping("profile-image/upload")
-    public ResponseEntity<UploadImageResponse> uploadFile(@Part("imagePart") MultipartFile imagePart) {
+    public ResponseEntity<UploadImageResponse> uploadFile(@Part("imagePart") MultipartFile imagePart) throws IOException {
 
-        try {
-            String imageUrl = imageService.uploadUserProfileImage(imagePart);
-            UploadImageResponse uploadImageResponse = ResponseFactory.createUploadImageResponse(Boolean.TRUE, null, imageUrl);
-            return ResponseEntity.ok(uploadImageResponse);
-        } catch (Exception e) {
-            UploadImageResponse uploadImageResponse = ResponseFactory.createUploadImageResponse(Boolean.FALSE, e.toString(), null);
-            return ResponseEntity.ok(uploadImageResponse);
-        }
+        String imageUrl = imageService.uploadUserProfileImage(imagePart);
+        UploadImageResponse uploadImageResponse = ResponseFactory.createUploadImageResponse(Boolean.TRUE, null, imageUrl);
+        return ResponseEntity.ok(uploadImageResponse);
+
     }
 
     //프로필 이미지 GET API
     @GetMapping("profile-image/{fileName}")
-    public ResponseEntity<Resource> getImage(@PathVariable String fileName) {
-        try {
+    public ResponseEntity<Resource> getImage(@PathVariable String fileName) throws MalformedURLException, FileNotFoundException {
+        Resource profileImage = imageService.getProfileImage(fileName);
+        MediaType imageMediaType = imageService.getImageMediaType(fileName);
+        // 응답에 이미지 파일을 포함하여 반환
+        return ResponseEntity.ok()
+                .contentType(imageMediaType) // 이미지 파일 타입에 맞게 설정
+                .body(profileImage);
 
-            Resource profileImage = imageService.getProfileImage(fileName);
-            MediaType imageMediaType = imageService.getImageMediaType(fileName);
-            // 응답에 이미지 파일을 포함하여 반환
-            return ResponseEntity.ok()
-                    .contentType(imageMediaType) // 이미지 파일 타입에 맞게 설정
-                    .body(profileImage);
-        } catch (MalformedURLException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } catch (FileNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
     }
 
 }

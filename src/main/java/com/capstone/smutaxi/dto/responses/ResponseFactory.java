@@ -46,4 +46,10 @@ public class ResponseFactory {
                 build();
     }
 
+    public static ErrorResponse createErrorResponse(String error, String message) {
+        return ErrorResponse.builder().
+                error(error).
+                message(message).
+                build();
+    }
 }

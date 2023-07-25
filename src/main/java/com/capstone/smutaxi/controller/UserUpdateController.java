@@ -18,29 +18,15 @@ public class UserUpdateController {
     //유저 업데이트(모든 필드) API
     @PutMapping("/users/{email}")
     public ResponseEntity<UserUpdateResponse> updateUser(@PathVariable("email") String email, @RequestBody UserDto updateDto) {
-
-        try {
-            UserUpdateResponse userUpdateResponse = userUpdateService.updateUser(email, updateDto);
-            return ResponseEntity.ok().body(userUpdateResponse);
-        } catch (IllegalArgumentException e) {
-            UserUpdateResponse errorResponse = ResponseFactory.createUserUpdateResponse(Boolean.FALSE, e.toString(), null);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        }
-
-
+        UserUpdateResponse userUpdateResponse = userUpdateService.updateUser(email, updateDto);
+        return ResponseEntity.ok().body(userUpdateResponse);
     }
 
     //유저 비밀번호 변경 API
     @PutMapping("/users/{email}/password")
     public ResponseEntity<UserUpdateResponse> updateUserPassword(@PathVariable("email") String email, @RequestBody UserDto updateDto) {
+        UserUpdateResponse userUpdateResponse = userUpdateService.updateUserPassword(email, updateDto);
+        return ResponseEntity.ok().body(userUpdateResponse);
 
-        try {
-            UserUpdateResponse userUpdateResponse = userUpdateService.updateUserPassword(email, updateDto);
-            return ResponseEntity.ok().body(userUpdateResponse);
-        } catch (IllegalArgumentException e) {
-            UserUpdateResponse errorResponse = ResponseFactory.createUserUpdateResponse(Boolean.FALSE, e.toString(), null);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-
-        }
     }
 }

@@ -57,7 +57,8 @@ public class EmailService {
 
         EmailVerificationResponse emailVerificationResponse;
         boolean present = userRepository.findByEmail(email).isPresent();
-
+        System.out.println("present = " + present);
+        System.out.println("foundThenSend = " + foundThenSend);
         //foundThenSend와 가입된 이메일 존재 여부 비교
         if ((present && foundThenSend) || (!present && !foundThenSend)) {
             //메일 생성, 전송
