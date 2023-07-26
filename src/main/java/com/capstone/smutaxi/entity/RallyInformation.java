@@ -1,5 +1,6 @@
 package com.capstone.smutaxi.entity;
 
+import com.capstone.smutaxi.dto.RallyInformationDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,4 +26,16 @@ public class RallyInformation {
     @OneToMany(mappedBy = "rallyInformation", cascade = CascadeType.ALL)
     private List<RallyDetail> rallyDetailList = new ArrayList<>();
 
+    public RallyInformationDto toRallyInformationDto() {
+        RallyInformationDto rallyInformationDto = new RallyInformationDto();
+        rallyInformationDto.setDate(this.date);
+
+        List<RallyInformationDto.RallyDetailsDto> rallyDetailsDtoList = new ArrayList<>();
+        for (RallyDetail rallyDetail : this.rallyDetailList) {
+            rallyDetailsDtoList.add(rallyDetail.toRallyDetailsDto());
+        }
+        rallyInformationDto.setRallyDetailsDtoList(rallyDetailsDtoList);
+
+        return rallyInformationDto;
+    }
 }
