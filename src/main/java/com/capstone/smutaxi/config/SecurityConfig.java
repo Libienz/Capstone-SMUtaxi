@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/auth/send/verification-email",
                         "/api/auth/update/email-verification",
                         "/api/auth/check-duplicate/{email}",
-
+                        "/api/auth/grant-admin/{email}",
                         "/api/images/profile-image/upload",
                         "/api/images/profile-image/{fileName}",
 //                        "/demoImageURL",

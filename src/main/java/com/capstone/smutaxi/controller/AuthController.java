@@ -54,6 +54,12 @@ public class AuthController {
         return ResponseEntity.ok().body(emailVerificationResponse);
     }
 
+    //특정 유저 관리자 권한 부여 API
+    @PostMapping("/grant-admin/{userId}")
+    public ResponseEntity<String> grantAdminRole(@PathVariable("userId") String userId) {
+        authService.grantAdminRole(userId);
+        return ResponseEntity.ok("Admin role granted successfully to user with ID: " + userId);
+    }
 
 
 }
