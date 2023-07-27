@@ -2,12 +2,14 @@ package com.capstone.smutaxi.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Embeddable;
 
 @Getter
 @Embeddable
+@NoArgsConstructor
 @AllArgsConstructor
 public class Location {
 

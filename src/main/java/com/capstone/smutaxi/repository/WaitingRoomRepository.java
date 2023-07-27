@@ -25,7 +25,7 @@ public class WaitingRoomRepository {
     }
 
     public List<WaitingRoom> findAll() {
-        return em.createQuery("select r from waitingroom r", WaitingRoom.class)
+        return em.createQuery("select r from WaitingRoom r order by size(r.waiters) DESC", WaitingRoom.class)
                 .getResultList();
     }
 
