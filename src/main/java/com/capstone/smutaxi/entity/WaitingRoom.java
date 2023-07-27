@@ -21,6 +21,7 @@ public class WaitingRoom {
     private Location location;
 
     @ElementCollection
+    @OrderBy("length(watiers) DESC")
     List<String> waiters = new ArrayList<>();
 
     //==비즈니스 로직==//
