@@ -4,11 +4,10 @@ import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
 import com.capstone.smutaxi.dto.requests.MatchingRequest;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.repository.UserRepository;
-import com.capstone.smutaxi.service.matching.MatchingDispatcher;
+import com.capstone.smutaxi.service.matching.MatchingService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class MatchingController {
 
-    private final MatchingDispatcher matchingDispatcher;
+    private final MatchingService matchingDispatcher;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
 

@@ -2,7 +2,7 @@ package com.capstone.smutaxi.service.matching;
 
 import com.capstone.smutaxi.dto.requests.MatchingRequest;
 
-public class BatchMatchingDispatcher implements MatchingDispatcher {
+public class BatchMatchingService implements MatchingService {
     /**
      * Batch Style Dispatcher
      * @Scheduled 주기 마다 matchingRequest들 모두 가져와서 4명 모인거 있으면 매칭 한다.

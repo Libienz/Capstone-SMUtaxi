@@ -6,7 +6,6 @@ import com.capstone.smutaxi.dto.requests.MatchingRequest;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.utils.Location;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +13,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class IndividualMatchingDispatcher implements MatchingDispatcher{
+public class IndividualMatchingService implements MatchingService {
     /**
      * Individual Style Dispatcher
      * chatRoomPool을 만들어 놓는다. pool_size는 yml파일에 ..
