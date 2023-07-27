@@ -4,5 +4,5 @@ import com.capstone.smutaxi.dto.requests.MatchingRequest;
 
 public interface MatchingService {
 
-    public Long handleMatchingRequest(String userEmail, MatchingRequest matchingRequest);
+    public Long handleMatchingRequest(MatchingRequest matchingRequest);
 }
