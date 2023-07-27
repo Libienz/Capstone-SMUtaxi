@@ -1,9 +1,9 @@
 package com.capstone.smutaxi.utils;
 
-import com.capstone.smutaxi.entity.ChatRoom;
-import com.capstone.smutaxi.enums.GenderRestriction;
-import com.capstone.smutaxi.repository.ChatRoomRepository;
+import com.capstone.smutaxi.entity.WaitingRoom;
+import com.capstone.smutaxi.repository.WaitingRoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -18,19 +18,22 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RequiredArgsConstructor
 @Component
-public class ChatRoomInitializer implements ApplicationRunner {
-    private final ChatRoomRepository chatRoomRepository;
+public class WaitingRoomInitializer implements ApplicationRunner {
+    private final WaitingRoomRepository waitingRoomRepository;
+
+    @Value("${matching.pool-size}")
+    private int poolSize;
 
     @Override
+    @Transactional
     public void run(ApplicationArguments args) throws Exception {
-        createPredefinedChatRooms();
+        createWaitingRoomPool();
     }
 
-    private void createPredefinedChatRooms() {
-        for (int i = 1; i <= 300; i++) {
-            String chatRoomName = "ChatRoom " + i;
-            ChatRoom chatRoom = ChatRoom.create(chatRoomName);
-            chatRoomRepository.save(chatRoom);
+    private void createWaitingRoomPool() {
+        for (int i = 1; i <= poolSize; i++) {
+            WaitingRoom waitingRoom = WaitingRoom.createWaitingRoom();
+            waitingRoomRepository.save(waitingRoom);
         }
     }
 }

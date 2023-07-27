@@ -10,9 +10,9 @@ public class BatchMatchingService implements MatchingService {
      * pros : 로직 간단, DB 작업 줄어듦 (한방에 write하니까)
      * cons : Bad한 사용자 경험 (안잡히면 3초 기다리니까 기다리는 시간이 긴 것 처럼 느껴짐)
      */
-    @Override
-    public Long handleMatchingRequest(String userEmail, MatchingRequest matchingRequest) {
 
-        return 0L;
+    @Override
+    public Long handleMatchingRequest(MatchingRequest matchingRequest) {
+        return null;
     }
 }

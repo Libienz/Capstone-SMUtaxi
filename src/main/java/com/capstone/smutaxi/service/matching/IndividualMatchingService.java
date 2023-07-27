@@ -17,9 +17,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class IndividualMatchingService implements MatchingService {
 
-    private final ChatRoomRepository chatRoomRepository;
-    private final UserRepository userRepository;
-    private final ChatRoomService chatRoomService;
+
     private final WaitingRoomRepository waitingRoomRepository;
 
     /**
