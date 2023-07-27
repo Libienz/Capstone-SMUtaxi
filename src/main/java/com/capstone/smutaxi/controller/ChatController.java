@@ -1,6 +1,7 @@
 package com.capstone.smutaxi.controller;
 
 
+import com.capstone.smutaxi.dto.responses.ChatRoomResponse;
 import com.capstone.smutaxi.entity.ChatParticipant;
 import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.entity.Message;
@@ -30,20 +31,18 @@ public class ChatController {
         messagingTemplate.convertAndSend("/sub/channel/" + message.getChatRoom().getId(), message);
     }
 
+    //채팅방에 유저추가 API
     @PostMapping("/add-user")
     public ResponseEntity<String> addChatRoomUser(@RequestParam String userEmail, @RequestParam Long chatRoomId) {
-        try {
-            chatRoomService.addUserToChatRoom(chatRoomId, userEmail);
-            return ResponseEntity.ok("User added to the chat room successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        chatRoomService.addUserToChatRoom(chatRoomId, userEmail);
+        return ResponseEntity.ok("User added to the chat room successfully.");
     }
-    @GetMapping("/user/chatRooms")
-    public List<ChatRoom> getUserChatRooms(@RequestParam String email){
-        List<ChatRoom> chatRoomsByUserEmail = chatRoomService.getUserJoinedChatRooms(email);
-        return chatRoomsByUserEmail;
 
+    //유저가 참가한 ChatRoom의 이름과 Id 반환 API
+    @GetMapping("/user/chatRooms")
+    public List<ChatRoomResponse> getUserChatRooms(@RequestParam String email){
+        List<ChatRoomResponse> chatRoomResponses = chatRoomService.getUserJoinedChatRooms(email);
+        return chatRoomResponses;
     }
 
 }

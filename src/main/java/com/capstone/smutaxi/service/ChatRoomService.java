@@ -1,8 +1,13 @@
 package com.capstone.smutaxi.service;
 
+import com.capstone.smutaxi.dto.ChatRoomDto;
+import com.capstone.smutaxi.dto.responses.ChatRoomResponse;
+import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.ChatParticipant;
 import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.entity.User;
+import com.capstone.smutaxi.exception.ErrorCode;
+import com.capstone.smutaxi.exception.user.UserNotFoundException;
 import com.capstone.smutaxi.repository.ChatParticipantRepository;
 import com.capstone.smutaxi.repository.ChatRoomRepository;
 import com.capstone.smutaxi.repository.UserRepository;
@@ -31,15 +36,29 @@ public class ChatRoomService {
         return null;
     }
 
-    //유저가 참여하고있는 ChatRoom 리스트 반환
-    public List<ChatRoom> getUserJoinedChatRooms(String userEmail) {
-        List<ChatParticipant> participantInfo = chatParticipantRepository.findByUserEmail(userEmail);
-        List<ChatRoom> chatRooms = new ArrayList<>();
+    //유저가 참여하고있는 ChatRoom들의 Response 반환
+    public List<ChatRoomResponse> getUserJoinedChatRooms(String userEmail) {
 
-        for (ChatParticipant pi : participantInfo) {
-            chatRooms.add(pi.getChatRoom());
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        List<ChatRoomResponse> chatRoomResponseList = new ArrayList<>();
+
+        List<ChatParticipant> chatParticipantList = user.getChatParticipantList();
+        for (ChatParticipant chatParticipant : chatParticipantList) {
+            ChatRoom chatRoom = chatParticipant.getChatRoom();
+            ChatRoomDto chatRoomDto = ChatRoomDto.builder()
+                    .chatRoomId(chatRoom.getId())
+                    .chatRoomLocation(chatRoom.getChatRoomLocation())
+                    .chatRoomName(chatRoom.getChatRoomName())
+                    .messageList(chatRoom.getMessageList())
+                    .build();
+
+            //response Dto 생성 -> {Boolean success, String message, ChatRoomDto chatRoomDto}
+            chatRoomResponseList.add(ResponseFactory.createChatRoomResponse(true, null, chatRoomDto));
         }
-        return chatRooms;
+
+        return chatRoomResponseList;
     }
 
     /* 채팅방에 유저를 추가 : ChatParticipant를 하나 더 생성하면 끝 */
@@ -49,7 +68,7 @@ public class ChatRoomService {
                 .orElseThrow(() -> new RuntimeException("Chat room not found"));
 
         User user = userRepository.findByEmail(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         ChatParticipant chatParticipant = new ChatParticipant();
         chatParticipant.setChatRoom(chatRoom);
