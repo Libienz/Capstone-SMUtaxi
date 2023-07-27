@@ -23,8 +23,8 @@ public class WaitingRoom {
     @Embedded
     private Location location;
 
-    @ElementCollection
-    List<String> waiters = new ArrayList<>();
+    @OneToMany(mappedBy = "waitingRoom", cascade = CascadeType.ALL)
+    List<WaitingRoomUser> waiters = new ArrayList<>();
 
     //==생성 메서드==//
     public static WaitingRoom createWaitingRoom() {
