@@ -20,6 +20,10 @@ public enum ErrorCode {
         USER_ALREADY_EXIST("A03", "User already Exist", HttpStatus.BAD_REQUEST.value()),
         EMAIL_DUPLICATION("A04", "Email is Duplication.", HttpStatus.BAD_REQUEST.value()),
 
+        //ChatRoom
+        CHATROOM_NOT_FOUND("CR01", "ChatRoom is not Found.", HttpStatus.BAD_REQUEST.value()),
+        CHATPARTICIPANT_DUPLICATION("CR02", "ChatParticipant is Duplication.", HttpStatus.BAD_REQUEST.value()),
+
         // User - Token
         ACCESS_TOKEN_EXPIRED("AT01", "Access Token is Expired.", HttpStatus.UNAUTHORIZED.value()),
         ACCESS_TOKEN_INVALID("AT02", "Access Token is Invalid.", HttpStatus.UNAUTHORIZED.value()),

@@ -4,6 +4,7 @@ import com.capstone.smutaxi.entity.Message;
 import com.capstone.smutaxi.utils.Location;
 import lombok.*;
 
+
 import java.util.List;
 
 @Builder
@@ -14,7 +15,17 @@ import java.util.List;
 public class ChatRoomDto {
     private Long chatRoomId;
     private String chatRoomName;
-    private List<Message> messageList;
     private Location chatRoomLocation;
+    private List<MessageDto> messageList;
 
+    @Getter
+    @Setter
+    public static class MessageDto{
+
+        private Long id;
+        private String senderEmail;
+        private String senderName;
+        private String sendTime;
+        private String message;
+    }
 }

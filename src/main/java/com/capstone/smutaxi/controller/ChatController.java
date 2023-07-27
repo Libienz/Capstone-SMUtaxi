@@ -2,8 +2,6 @@ package com.capstone.smutaxi.controller;
 
 
 import com.capstone.smutaxi.dto.responses.ChatRoomResponse;
-import com.capstone.smutaxi.entity.ChatParticipant;
-import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.entity.Message;
 import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.service.MessageService;
@@ -27,7 +25,7 @@ public class ChatController {
 
     @MessageMapping("/send")
     public void chat(Message message) {
-        messageService.sendMessage(message);
+        messageService.saveMessage(message);
         messagingTemplate.convertAndSend("/sub/channel/" + message.getChatRoom().getId(), message);
     }
 

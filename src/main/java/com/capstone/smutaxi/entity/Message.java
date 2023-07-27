@@ -1,6 +1,7 @@
 package com.capstone.smutaxi.entity;
 
 
+import com.capstone.smutaxi.dto.ChatRoomDto;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -30,4 +31,14 @@ public class Message {
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
 
+    public ChatRoomDto.MessageDto toMessageDto() {
+        ChatRoomDto.MessageDto messageDto = new ChatRoomDto.MessageDto();
+        messageDto.setId(this.id);
+        messageDto.setSenderEmail(this.senderEmail);
+        messageDto.setSenderName(this.senderName);
+        messageDto.setSendTime(this.sendTime);
+        messageDto.setMessage(this.message);
+        return messageDto;
+
+    }
 }
