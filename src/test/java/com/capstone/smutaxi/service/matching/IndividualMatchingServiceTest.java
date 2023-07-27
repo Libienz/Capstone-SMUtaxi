@@ -34,7 +34,7 @@ public class IndividualMatchingServiceTest {
         MatchingRequest matchingRequest = createMatchingRequest(1.0, 1.0, "202010891@sangmyung.kr");
 
         //when
-        Long waitingRoomId = matchingService.handleMatchingRequest(matchingRequest);
+        Long waitingRoomId = matchingService.handleMatchingRequest(matchingRequest).getWaitingRoomId();
         WaitingRoom waitingRoom = waitingRoomRepository.findById(waitingRoomId);
         Double watingRoomLatitude = waitingRoom.getLocation().getLatitude();
         Double watingRoomLongitude = waitingRoom.getLocation().getLongitude();
@@ -49,7 +49,7 @@ public class IndividualMatchingServiceTest {
     public void 대기방_인원_내림차순_정렬_확인() throws Exception {
         //given
         MatchingRequest matchingRequest = createMatchingRequest(1.0, 1.0, "202010891@sangmyung.kr");
-        Long waitingRoomId = matchingService.handleMatchingRequest(matchingRequest);
+        Long waitingRoomId = matchingService.handleMatchingRequest(matchingRequest).getWaitingRoomId();
         //when
         List<WaitingRoom> waitingRooms = waitingRoomRepository.findAll();
         //then
@@ -73,8 +73,8 @@ public class IndividualMatchingServiceTest {
         double distance = Location.calculateDistance(kyobo, gangnam);
         MatchingRequest matchingRequestA = createMatchingRequest(aLat, aLong, "202010891@sangmyung.kr");
         MatchingRequest matchingRequestB = createMatchingRequest(bLat, bLong, "202010891@sangmyung.kr");
-        Long aId = matchingService.handleMatchingRequest(matchingRequestA);
-        Long bId = matchingService.handleMatchingRequest(matchingRequestB);
+        Long aId = matchingService.handleMatchingRequest(matchingRequestA).getWaitingRoomId();
+        Long bId = matchingService.handleMatchingRequest(matchingRequestB).getWaitingRoomId();
         //then
         assertNotEquals(aId, bId);
      }
@@ -90,11 +90,16 @@ public class IndividualMatchingServiceTest {
         //when: a <-> b 11미터이기에 이 두명의 매칭은 성공해야 함
         double distance = Location.calculateDistance(new Location(aLat, aLong), new Location(bLat, bLong));
         MatchingRequest matchingRequestA = createMatchingRequest(aLat, aLong, "202010891@sangmyung.kr");
-        MatchingRequest matchingRequestB = createMatchingRequest(bLat, bLong, "202010891@sangmyung.kr");
-        Long aId = matchingService.handleMatchingRequest(matchingRequestA);
-        Long bId = matchingService.handleMatchingRequest(matchingRequestB);
+        MatchingRequest matchingRequestB = createMatchingRequest(bLat, bLong, "202010890@sangmyung.kr");
+        Long aId = matchingService.handleMatchingRequest(matchingRequestA).getWaitingRoomId();
+        Long bId = matchingService.handleMatchingRequest(matchingRequestB).getWaitingRoomId();
         //then
         assertEquals(aId, bId);
+        WaitingRoom waitingRoom = waitingRoomRepository.findById(aId);
+        List<String> waiters = waitingRoom.getWaiters();
+        assertEquals(waiters.get(0), "202010891@sangmyung.kr");
+        assertEquals(waiters.get(1), "202010890@sangmyung.kr");
+
     }
 
     @NotNull

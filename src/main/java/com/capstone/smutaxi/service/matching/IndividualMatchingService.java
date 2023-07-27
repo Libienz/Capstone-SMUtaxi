@@ -1,7 +1,11 @@
 package com.capstone.smutaxi.service.matching;
 
+import com.capstone.smutaxi.dto.responses.MatchingResponseDto;
+import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.entity.WaitingRoom;
+import com.capstone.smutaxi.exception.BusinessException;
+import com.capstone.smutaxi.exception.ErrorCode;
 import com.capstone.smutaxi.repository.ChatRoomRepository;
 import com.capstone.smutaxi.dto.requests.MatchingRequest;
 import com.capstone.smutaxi.repository.UserRepository;
@@ -26,7 +30,7 @@ public class IndividualMatchingService implements MatchingService {
      */
     @Transactional
     @Override
-    public Long handleMatchingRequest(MatchingRequest matchingRequest) {
+    public MatchingResponseDto handleMatchingRequest(MatchingRequest matchingRequest) {
 
         //유저 정보 초기화
         String requestorId = matchingRequest.getEmail();
@@ -44,7 +48,8 @@ public class IndividualMatchingService implements MatchingService {
             if (waitingRoom.getWaiters().size() == 0) {
                 waitingRoom.setLocation(userLocation);
                 waitingRoom.getWaiters().add(requestorId);
-                return waitingRoom.getId();
+                Long waitingRoomId = waitingRoom.getId();
+                return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, waitingRoomId);
             }
             Location waitingRoomLocation = waitingRoom.getLocation();
 
@@ -52,9 +57,11 @@ public class IndividualMatchingService implements MatchingService {
             double distance = Location.calculateDistance(userLocation, waitingRoomLocation);
             if (distance <= 500) {
                 waitingRoom.getWaiters().add(requestorId);
-                return waitingRoom.getId();
+                Long waitingRoomId = waitingRoom.getId();
+                return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, waitingRoomId);
             }
         }
-        return null;
+        throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR); //flow가 여기로 오면 안됨 -> 무조건 waiting Room에 배치되어야 함
+
     }
 }

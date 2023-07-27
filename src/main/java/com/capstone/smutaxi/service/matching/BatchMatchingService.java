@@ -1,6 +1,7 @@
 package com.capstone.smutaxi.service.matching;
 
 import com.capstone.smutaxi.dto.requests.MatchingRequest;
+import com.capstone.smutaxi.dto.responses.MatchingResponseDto;
 
 public class BatchMatchingService implements MatchingService {
     /**
@@ -12,7 +13,7 @@ public class BatchMatchingService implements MatchingService {
      */
 
     @Override
-    public Long handleMatchingRequest(MatchingRequest matchingRequest) {
+    public MatchingResponseDto handleMatchingRequest(MatchingRequest matchingRequest) {
         return null;
     }
 }

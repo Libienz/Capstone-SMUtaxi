@@ -1,8 +1,9 @@
 package com.capstone.smutaxi.service.matching;
 
 import com.capstone.smutaxi.dto.requests.MatchingRequest;
+import com.capstone.smutaxi.dto.responses.MatchingResponseDto;
 
 public interface MatchingService {
 
-    public Long handleMatchingRequest(MatchingRequest matchingRequest);
+    public MatchingResponseDto handleMatchingRequest(MatchingRequest matchingRequest);
 }
