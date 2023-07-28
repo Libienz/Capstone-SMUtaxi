@@ -90,8 +90,10 @@ public class ChatRoomService {
         }
 
         ChatParticipant chatParticipant = new ChatParticipant();
-        chatParticipant.setChatRoom(chatRoom);
-        chatParticipant.setUser(user);
+
+        //연관관계 메서드
+        chatParticipant.setChatRoomAndUser(chatRoom,user);
+
         chatParticipantRepository.save(chatParticipant);
     }
     //중간테이블인 chatParticipant에서 특정 chatRoomId를 가진 엔티티의 개수를 반환

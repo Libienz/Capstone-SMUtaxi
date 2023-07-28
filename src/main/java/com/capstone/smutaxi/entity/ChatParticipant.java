@@ -29,4 +29,10 @@ public class ChatParticipant {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    //==연관관계 메서드==//
+    public void setChatRoomAndUser(ChatRoom chatRoom, User user){
+        this.chatRoom = chatRoom;
+        this.user = user;
+    }
 }
