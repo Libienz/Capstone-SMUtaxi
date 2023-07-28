@@ -1,8 +1,8 @@
 package com.capstone.smutaxi.controller;
 
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
-import com.capstone.smutaxi.dto.RallyInformationDto;
-import com.capstone.smutaxi.dto.responses.RallyResponse;
+import com.capstone.smutaxi.dto.responses.rally.RallyInformationDto;
+import com.capstone.smutaxi.dto.responses.rally.RallyResponse;
 import com.capstone.smutaxi.entity.RallyInformation;
 import com.capstone.smutaxi.repository.RallyInformationRepository;
 import com.capstone.smutaxi.service.RallyInformationService;

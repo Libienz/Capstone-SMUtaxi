@@ -1,6 +1,7 @@
 package com.capstone.smutaxi.service.matching;
 
-import com.capstone.smutaxi.dto.requests.MatchingRequest;
+import com.capstone.smutaxi.dto.requests.match.MatchCancelRequest;
+import com.capstone.smutaxi.dto.requests.match.MatchingRequest;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.entity.WaitingRoom;
 import com.capstone.smutaxi.entity.WaitingRoomUser;
@@ -15,7 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -127,7 +127,7 @@ public class IndividualMatchingServiceTest {
 
     }
 
-    @Rollback(value = false)
+
     @Test
     public void 연관관계_cascade_확인() {
 
@@ -146,7 +146,25 @@ public class IndividualMatchingServiceTest {
 
 
     }
+    //매칭 취소 테스트들
+    @Test
+    public void 매칭_취소_확인() throws Exception {
+        //given
+        User user = createUser("123@abc.com", "1", "lee", Gender.MALE, null);
+        authService.join(user.userToUserDto());
 
+        Double aLat = 37.566610;
+        Double aLong = 126.977943;
+        MatchingRequest matchingRequest = createMatchingRequest(aLat, aLong, "user1@sangmyung.kr");
+        Long waitingRoomId = matchingService.handleMatchingRequest(matchingRequest).getWaitingRoomId();
+        //when
+        MatchCancelRequest matchCancelRequest = new MatchCancelRequest();
+        matchCancelRequest.setWaitingRoomId(waitingRoomId);
+        matchCancelRequest.setEmail(user.getEmail());
+
+        matchingService.
+        //then
+     }
     @NotNull
     private static MatchingRequest createMatchingRequest(Double latitude, Double longitude, String email) {
         MatchingRequest matchingRequest = new MatchingRequest();
@@ -166,4 +184,6 @@ public class IndividualMatchingServiceTest {
         user.getRoles().add("USER");
         return user;
     }
+
+
 }

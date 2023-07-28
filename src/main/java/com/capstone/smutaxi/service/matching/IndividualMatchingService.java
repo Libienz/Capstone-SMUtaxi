@@ -1,25 +1,21 @@
 package com.capstone.smutaxi.service.matching;
 
-import com.capstone.smutaxi.dto.responses.MatchingResponseDto;
+import com.capstone.smutaxi.dto.requests.match.MatchCancelRequest;
+import com.capstone.smutaxi.dto.responses.match.MatchingResponseDto;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
-import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.entity.WaitingRoom;
 import com.capstone.smutaxi.entity.WaitingRoomUser;
-import com.capstone.smutaxi.exception.BusinessException;
 import com.capstone.smutaxi.exception.ErrorCode;
 import com.capstone.smutaxi.exception.matching.CannotJoinWaitingRoomException;
-import com.capstone.smutaxi.repository.ChatRoomRepository;
-import com.capstone.smutaxi.dto.requests.MatchingRequest;
+import com.capstone.smutaxi.dto.requests.match.MatchingRequest;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.repository.WaitingRoomRepository;
-import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.utils.Location;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -70,6 +66,21 @@ public class IndividualMatchingService implements MatchingService {
             }
         }
         throw new CannotJoinWaitingRoomException(ErrorCode.INTERNAL_SERVER_ERROR); //flow가 여기로 오면 안됨 -> 무조건 waiting Room에 배치되어야 함
+
+    }
+
+    @Transactional
+    public void cancelMatchRequest(MatchCancelRequest matchCancelRequest) {
+
+        Long waitingRoomId = matchCancelRequest.getWaitingRoomId();
+        WaitingRoom waitingRoom = waitingRoomRepository.findById(waitingRoomId);
+        List<WaitingRoomUser> waiters = waitingRoom.getWaiters();
+        for (int i = 0; i < waiters.size(); i++) {
+            if (waiters.get(i).getUser().getEmail().equals(matchCancelRequest.getEmail())) {
+                waiters.remove(i);
+            }
+        }
+
 
     }
 }

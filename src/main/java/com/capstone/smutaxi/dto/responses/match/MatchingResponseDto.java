@@ -1,14 +1,14 @@
-package com.capstone.smutaxi.dto.responses;
+package com.capstone.smutaxi.dto.responses.match;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Builder
-@Getter @Setter
-public class UploadImageResponse {
+@Getter
+@Setter
+public class MatchingResponseDto {
     private Boolean success;
     private String message;
-    private String imageUrl;
-
+    private Long waitingRoomId;
 }

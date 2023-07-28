@@ -1,7 +1,7 @@
 package com.capstone.smutaxi.controller;
 
 import com.capstone.smutaxi.dto.UserDto;
-import com.capstone.smutaxi.dto.responses.UserUpdateResponse;
+import com.capstone.smutaxi.dto.responses.user.UserUpdateResponse;
 import com.capstone.smutaxi.service.user.UserUpdateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

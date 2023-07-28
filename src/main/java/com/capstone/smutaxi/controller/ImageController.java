@@ -2,7 +2,7 @@ package com.capstone.smutaxi.controller;
 
 
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
-import com.capstone.smutaxi.dto.responses.UploadImageResponse;
+import com.capstone.smutaxi.dto.responses.user.UploadImageResponse;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.service.user.ImageService;
 import lombok.RequiredArgsConstructor;

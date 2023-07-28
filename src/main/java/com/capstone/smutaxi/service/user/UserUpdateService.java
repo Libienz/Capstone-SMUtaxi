@@ -2,7 +2,7 @@ package com.capstone.smutaxi.service.user;
 
 import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
-import com.capstone.smutaxi.dto.responses.UserUpdateResponse;
+import com.capstone.smutaxi.dto.responses.user.UserUpdateResponse;
 import com.capstone.smutaxi.enums.Gender;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.exception.ErrorCode;

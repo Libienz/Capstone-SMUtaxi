@@ -1,6 +1,6 @@
 package com.capstone.smutaxi.service.user;
 
-import com.capstone.smutaxi.dto.responses.EmailVerificationResponse;
+import com.capstone.smutaxi.dto.responses.auth.EmailVerificationResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.exception.ErrorCode;
 import com.capstone.smutaxi.exception.user.EmailFailToSendException;

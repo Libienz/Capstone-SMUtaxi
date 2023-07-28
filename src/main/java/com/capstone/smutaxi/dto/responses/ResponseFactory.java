@@ -1,6 +1,12 @@
 package com.capstone.smutaxi.dto.responses;
 
 import com.capstone.smutaxi.dto.UserDto;
+import com.capstone.smutaxi.dto.responses.auth.EmailVerificationResponse;
+import com.capstone.smutaxi.dto.responses.auth.JoinResponse;
+import com.capstone.smutaxi.dto.responses.auth.LoginResponse;
+import com.capstone.smutaxi.dto.responses.match.MatchingResponseDto;
+import com.capstone.smutaxi.dto.responses.user.UploadImageResponse;
+import com.capstone.smutaxi.dto.responses.user.UserUpdateResponse;
 
 public class ResponseFactory {
 

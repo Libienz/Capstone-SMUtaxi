@@ -1,7 +1,7 @@
 package com.capstone.smutaxi.service.matching;
 
-import com.capstone.smutaxi.dto.requests.MatchingRequest;
-import com.capstone.smutaxi.dto.responses.MatchingResponseDto;
+import com.capstone.smutaxi.dto.requests.match.MatchingRequest;
+import com.capstone.smutaxi.dto.responses.match.MatchingResponseDto;
 
 public class BatchMatchingService implements MatchingService {
     /**

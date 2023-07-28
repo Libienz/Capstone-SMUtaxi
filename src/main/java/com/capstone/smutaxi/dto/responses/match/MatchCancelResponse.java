@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.dto.responses.matching;
+package com.capstone.smutaxi.dto.responses.match;
 
 
 

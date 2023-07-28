@@ -1,6 +1,6 @@
 package com.capstone.smutaxi.service;
 
-import com.capstone.smutaxi.dto.RallyInformationDto;
+import com.capstone.smutaxi.dto.responses.rally.RallyInformationDto;
 import com.capstone.smutaxi.entity.RallyDetail;
 import com.capstone.smutaxi.entity.RallyInformation;
 import com.capstone.smutaxi.repository.RallyInformationRepository;
