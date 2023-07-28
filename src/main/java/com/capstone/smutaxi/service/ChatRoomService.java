@@ -8,6 +8,7 @@ import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.entity.Message;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.exception.ChatParticipantDuplicateException;
+import com.capstone.smutaxi.exception.ChatParticipantNotFoundException;
 import com.capstone.smutaxi.exception.ChatRoomNotFoundException;
 import com.capstone.smutaxi.exception.ErrorCode;
 import com.capstone.smutaxi.exception.user.IdDuplicateException;
