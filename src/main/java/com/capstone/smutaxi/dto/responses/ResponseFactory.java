@@ -52,4 +52,12 @@ public class ResponseFactory {
                 message(message).
                 build();
     }
+
+    public static MatchingResponseDto createMatchingResponse(Boolean success, String message, Long waitingRoomId) {
+        return MatchingResponseDto.builder().
+                success(success).
+                message(message).
+                waitingRoomId(waitingRoomId).
+                build();
+    }
 }

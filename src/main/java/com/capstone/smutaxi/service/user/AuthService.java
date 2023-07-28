@@ -11,6 +11,7 @@ import com.capstone.smutaxi.enums.Role;
 import com.capstone.smutaxi.exception.ErrorCode;
 import com.capstone.smutaxi.exception.user.IdDuplicateException;
 import com.capstone.smutaxi.exception.user.LoginFailException;
+import com.capstone.smutaxi.exception.user.UserNotFoundException;
 import com.capstone.smutaxi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -84,5 +85,13 @@ public class AuthService {
             return true;
         else
             return false;
+    }
+
+    @Transactional
+    public void grantAdminRole(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        user.getRoles().add(Role.ADMIN.getRoleName());
+
     }
 }
