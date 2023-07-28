@@ -30,7 +30,8 @@ public class MessageService {
         List<Message> messageList = chatRoom.getMessageList();
         messageList.add(message);
         //ChatRoom은 Message와 cascade로 연결되어있기 때문에 부모인 ChatRoom을 업데이트하면 Message도 자동으로 저장된다.
-        chatRoomRepository.save(chatRoom);
+        //그래서 ChatRoom을 save하려했는데 '변경감지' 기능때문에 명시적으로 save메서드를 호출안해도 업데이트 되고 Message도 저장되는 모습
+        //chatRoomRepository.save(chatRoom);
 
     }
 }
