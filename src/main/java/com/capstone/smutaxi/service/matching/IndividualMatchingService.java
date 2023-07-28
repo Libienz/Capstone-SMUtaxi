@@ -8,6 +8,7 @@ import com.capstone.smutaxi.entity.WaitingRoom;
 import com.capstone.smutaxi.entity.WaitingRoomUser;
 import com.capstone.smutaxi.exception.BusinessException;
 import com.capstone.smutaxi.exception.ErrorCode;
+import com.capstone.smutaxi.exception.matching.CannotJoinWaitingRoomException;
 import com.capstone.smutaxi.repository.ChatRoomRepository;
 import com.capstone.smutaxi.dto.requests.MatchingRequest;
 import com.capstone.smutaxi.repository.UserRepository;
@@ -31,6 +32,7 @@ public class IndividualMatchingService implements MatchingService {
     /**
      * Individual Style Match Handling
      * 미리 만들어져 있는 Waiting Room Pool에 TMA 방식으로 매칭 요청
+     * 매칭 완료: 4명 모임 -> 문닫고 온사람이 알리는걸로? 아니면 listener 구현?
      */
     @Transactional
     @Override
@@ -67,7 +69,7 @@ public class IndividualMatchingService implements MatchingService {
                 return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, waitingRoomId);
             }
         }
-        throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR); //flow가 여기로 오면 안됨 -> 무조건 waiting Room에 배치되어야 함
+        throw new CannotJoinWaitingRoomException(ErrorCode.INTERNAL_SERVER_ERROR); //flow가 여기로 오면 안됨 -> 무조건 waiting Room에 배치되어야 함
 
     }
 }
