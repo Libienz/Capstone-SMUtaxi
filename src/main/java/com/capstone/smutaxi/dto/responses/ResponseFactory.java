@@ -4,6 +4,7 @@ import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.dto.responses.auth.EmailVerificationResponse;
 import com.capstone.smutaxi.dto.responses.auth.JoinResponse;
 import com.capstone.smutaxi.dto.responses.auth.LoginResponse;
+import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
 import com.capstone.smutaxi.dto.responses.match.MatchingResponseDto;
 import com.capstone.smutaxi.dto.responses.user.UploadImageResponse;
 import com.capstone.smutaxi.dto.responses.user.UserUpdateResponse;
@@ -50,6 +51,13 @@ public class ResponseFactory {
                 message(message).
                 verificationCode(verificationCode).
                 build();
+    }
+
+    public static MatchCancelResponse createMatchCancelResponse(Boolean success, String message) {
+        return MatchCancelResponse.builder()
+                .success(success)
+                .message(message)
+                .build();
     }
 
     public static ErrorResponse createErrorResponse(String error, String message) {

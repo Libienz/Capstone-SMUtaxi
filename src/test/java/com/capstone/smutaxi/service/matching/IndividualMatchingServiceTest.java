@@ -2,6 +2,7 @@ package com.capstone.smutaxi.service.matching;
 
 import com.capstone.smutaxi.dto.requests.match.MatchCancelRequest;
 import com.capstone.smutaxi.dto.requests.match.MatchingRequest;
+import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.entity.WaitingRoom;
 import com.capstone.smutaxi.entity.WaitingRoomUser;
@@ -155,16 +156,19 @@ public class IndividualMatchingServiceTest {
 
         Double aLat = 37.566610;
         Double aLong = 126.977943;
-        MatchingRequest matchingRequest = createMatchingRequest(aLat, aLong, "user1@sangmyung.kr");
+        MatchingRequest matchingRequest = createMatchingRequest(aLat, aLong, "123@abc.com");
         Long waitingRoomId = matchingService.handleMatchingRequest(matchingRequest).getWaitingRoomId();
         //when
         MatchCancelRequest matchCancelRequest = new MatchCancelRequest();
         matchCancelRequest.setWaitingRoomId(waitingRoomId);
         matchCancelRequest.setEmail(user.getEmail());
 
-        matchingService.
+        MatchCancelResponse matchCancelResponse = matchingService.cancelMatchRequest(matchCancelRequest);
         //then
-     }
+        WaitingRoom canceledRoom = waitingRoomRepository.findById(waitingRoomId);
+        assertEquals(canceledRoom.getWaiters().size(), 0);
+
+    }
     @NotNull
     private static MatchingRequest createMatchingRequest(Double latitude, Double longitude, String email) {
         MatchingRequest matchingRequest = new MatchingRequest();

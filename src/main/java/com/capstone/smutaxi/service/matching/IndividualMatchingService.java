@@ -1,6 +1,7 @@
 package com.capstone.smutaxi.service.matching;
 
 import com.capstone.smutaxi.dto.requests.match.MatchCancelRequest;
+import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
 import com.capstone.smutaxi.dto.responses.match.MatchingResponseDto;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.User;
@@ -70,7 +71,8 @@ public class IndividualMatchingService implements MatchingService {
     }
 
     @Transactional
-    public void cancelMatchRequest(MatchCancelRequest matchCancelRequest) {
+    @Override
+    public MatchCancelResponse cancelMatchRequest(MatchCancelRequest matchCancelRequest) {
 
         Long waitingRoomId = matchCancelRequest.getWaitingRoomId();
         WaitingRoom waitingRoom = waitingRoomRepository.findById(waitingRoomId);
@@ -78,9 +80,9 @@ public class IndividualMatchingService implements MatchingService {
         for (int i = 0; i < waiters.size(); i++) {
             if (waiters.get(i).getUser().getEmail().equals(matchCancelRequest.getEmail())) {
                 waiters.remove(i);
+                break;
             }
         }
-
-
+        return ResponseFactory.createMatchCancelResponse(Boolean.TRUE, null);
     }
 }
