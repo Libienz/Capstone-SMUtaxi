@@ -36,6 +36,12 @@ public class ChatController {
         return ResponseEntity.ok("User added to the chat room successfully.");
     }
 
+    @PostMapping("/leave")
+    public ResponseEntity<String> leaveChatParticipant(@RequestParam String userEmail, @RequestParam Long chatRoomId) {
+        chatRoomService.leaveChatParticipant(chatRoomId, userEmail);
+        return ResponseEntity.ok("User leave to the chat room successfully.");
+    }
+
     //유저가 참가한 ChatRoom의 이름과 Id 반환 API
     @GetMapping("/user/chatRooms")
     public List<ChatRoomResponse> getUserChatRooms(@RequestParam String email){

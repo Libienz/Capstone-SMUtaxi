@@ -101,6 +101,18 @@ public class ChatRoomService {
         return chatParticipantRepository.countByChatRoomId(chatRoomId);
     }
 
+    @Transactional
+    public void leaveChatParticipant(Long chatRoomId, String userId) {
+        //ChatParticipant가 있는지 검증
+        Optional<ChatParticipant> findChatParticipant = chatParticipantRepository.findByUserEmailAndChatRoomId(userId, chatRoomId);
+        if(findChatParticipant.isEmpty()){
+            throw new ChatParticipantNotFoundException(ErrorCode.CHATPARTICIPANT_NOT_FOUND);
+        }
+        // ChatParticipant 엔티티를 삭제
+        chatParticipantRepository.delete(findChatParticipant.get());
+
+    }
+
     //ChatRoom 생성
     @Transactional
     public ChatRoom createChatRoom(String name) {
