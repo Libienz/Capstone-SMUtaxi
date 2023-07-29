@@ -56,10 +56,11 @@ public class ResponseFactory {
                 .build();
     }
 
-    public static ChatRoomResponse createChatRoomResponse(Boolean success, String message, ChatRoomDto chatRoomDto){
+    public static ChatRoomResponse createChatRoomResponse(Boolean success, String message,Long chatParticipantId, ChatRoomDto chatRoomDto){
         return ChatRoomResponse.builder()
                 .success(success)
                 .message(message)
+                .chatParticipantId(chatParticipantId)
                 .chatRoomDto(chatRoomDto)
                 .build();
     }

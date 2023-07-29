@@ -51,6 +51,7 @@ public class ChatRoomService {
 
         List<ChatParticipant> chatParticipantList = user.getChatParticipantList();
         for (ChatParticipant chatParticipant : chatParticipantList) {
+            Long chatParticipantId = chatParticipant.getId();
             ChatRoom chatRoom = chatParticipant.getChatRoom();
 
             //message Dto 생성
@@ -69,7 +70,7 @@ public class ChatRoomService {
                     .build();
 
             //response Dto 생성 -> {Boolean success, String message, ChatRoomDto chatRoomDto}
-            chatRoomResponseList.add(ResponseFactory.createChatRoomResponse(true, null, chatRoomDto));
+            chatRoomResponseList.add(ResponseFactory.createChatRoomResponse(true, null,chatParticipantId, chatRoomDto));
         }
 
         return chatRoomResponseList;
@@ -102,10 +103,11 @@ public class ChatRoomService {
         return chatParticipantRepository.countByChatRoomId(chatRoomId);
     }
 
+    //ChatParticipant삭제 메서드 (삭제될때 유저와 chatRoom의 list는 조회할떄 없어지고 chatRoom의 Message는 남아있다)
     @Transactional
-    public void leaveChatParticipant(Long chatRoomId, String userId) {
+    public void leaveChatParticipant(Long chatParticipantId) {
         //ChatParticipant가 있는지 검증
-        Optional<ChatParticipant> findChatParticipant = chatParticipantRepository.findByUserEmailAndChatRoomId(userId, chatRoomId);
+        Optional<ChatParticipant> findChatParticipant = chatParticipantRepository.findById(chatParticipantId);
         if(findChatParticipant.isEmpty()){
             throw new ChatParticipantNotFoundException(ErrorCode.CHATPARTICIPANT_NOT_FOUND);
         }

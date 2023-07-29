@@ -37,8 +37,8 @@ public class ChatController {
     }
 
     @PostMapping("/leave")
-    public ResponseEntity<String> leaveChatParticipant(@RequestParam String userEmail, @RequestParam Long chatRoomId) {
-        chatRoomService.leaveChatParticipant(chatRoomId, userEmail);
+    public ResponseEntity<String> leaveChatParticipant(@RequestParam Long chatParticipantId) {
+        chatRoomService.leaveChatParticipant(chatParticipantId);
         return ResponseEntity.ok("User leave to the chat room successfully.");
     }
 

@@ -12,5 +12,6 @@ import lombok.Setter;
 public class ChatRoomResponse {
     private Boolean success;
     private String message;
+    private Long chatParticipantId;
     private ChatRoomDto chatRoomDto;
 }
