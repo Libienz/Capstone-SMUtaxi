@@ -20,14 +20,14 @@ public class MatchingController {
 
     @ResponseBody
     @PostMapping("/request")
-    public ResponseEntity<MatchingResponse> matching(MatchingRequest matchingRequest) {
+    public ResponseEntity<MatchingResponse> matching(@RequestBody MatchingRequest matchingRequest) {
         MatchingResponse matchingResponse = matchingService.handleMatchingRequest(matchingRequest);
         return ResponseEntity.ok(matchingResponse);
     }
 
     @ResponseBody
     @PostMapping("/cancel-request")
-    public ResponseEntity<MatchCancelResponse> matching(MatchCancelRequest matchCancelRequest) {
+    public ResponseEntity<MatchCancelResponse> matching(@RequestBody MatchCancelRequest matchCancelRequest) {
         MatchCancelResponse matchCancelResponse = matchingService.cancelMatchRequest(matchCancelRequest);
         return ResponseEntity.ok(matchCancelResponse);
     }
