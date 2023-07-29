@@ -3,6 +3,7 @@ package com.capstone.smutaxi.service.matching;
 import com.capstone.smutaxi.dto.requests.match.MatchCancelRequest;
 import com.capstone.smutaxi.dto.requests.match.MatchingRequest;
 import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
+import com.capstone.smutaxi.dto.responses.match.MatchingResponseDto;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.entity.WaitingRoom;
 import com.capstone.smutaxi.entity.WaitingRoomUser;
@@ -157,16 +158,22 @@ public class IndividualMatchingServiceTest {
         Double aLat = 37.566610;
         Double aLong = 126.977943;
         MatchingRequest matchingRequest = createMatchingRequest(aLat, aLong, "123@abc.com");
-        Long waitingRoomId = matchingService.handleMatchingRequest(matchingRequest).getWaitingRoomId();
+        MatchingResponseDto matchingResponseDto = matchingService.handleMatchingRequest(matchingRequest);
+        Long waitingRoomId = matchingResponseDto.getWaitingRoomId();
+        Long waitingRoomUserId = matchingResponseDto.getWaitingRoomUserId();
+
         //when
         MatchCancelRequest matchCancelRequest = new MatchCancelRequest();
         matchCancelRequest.setWaitingRoomId(waitingRoomId);
         matchCancelRequest.setEmail(user.getEmail());
+        matchCancelRequest.setWaitingRoomUserId(waitingRoomUserId);
 
         MatchCancelResponse matchCancelResponse = matchingService.cancelMatchRequest(matchCancelRequest);
         //then
         WaitingRoom canceledRoom = waitingRoomRepository.findById(waitingRoomId);
         assertEquals(canceledRoom.getWaiters().size(), 0);
+        Optional<WaitingRoomUser> byId = waitingRoomUserRepository.findById(waitingRoomUserId);
+        assertEquals(byId.isPresent(), false);
 
     }
     @NotNull

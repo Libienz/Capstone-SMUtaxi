@@ -12,6 +12,7 @@ import com.capstone.smutaxi.exception.matching.CannotJoinWaitingRoomException;
 import com.capstone.smutaxi.dto.requests.match.MatchingRequest;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.repository.WaitingRoomRepository;
+import com.capstone.smutaxi.repository.WaitingRoomUserRepository;
 import com.capstone.smutaxi.utils.Location;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ public class IndividualMatchingService implements MatchingService {
 
 
     private final WaitingRoomRepository waitingRoomRepository;
+    private final WaitingRoomUserRepository waitingRoomUserRepository;
     private final UserRepository userRepository;
 
     /**
@@ -52,18 +54,27 @@ public class IndividualMatchingService implements MatchingService {
             //빈방이면 들어간다.
             if (waitingRoom.getWaiters().size() == 0) {
                 waitingRoom.setLocation(userLocation);
-                waitingRoom.getWaiters().add(WaitingRoomUser.createWaitingRoomUser(waitingRoom,user));
+                //참가 정보 생성
+                WaitingRoomUser waitingRoomUser = WaitingRoomUser.createWaitingRoomUser(waitingRoom, user);
+                waitingRoomUserRepository.save(waitingRoomUser);
+                waitingRoom.getWaiters().add(waitingRoomUser);
                 Long waitingRoomId = waitingRoom.getId();
-                return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, waitingRoomId);
+                Long waitingRoomUserId = waitingRoomUser.getId();
+                return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, waitingRoomId, waitingRoomUserId);
             }
+
             Location waitingRoomLocation = waitingRoom.getLocation();
 
-            //대기방의 대표 위치와 요청자의 위치를 비교, 성공 여부 핸들링
+            //빈방 아닐 시 대기방의 대표 위치와 요청자의 위치를 비교, 성공 여부 핸들링
             double distance = Location.calculateDistance(userLocation, waitingRoomLocation);
             if (distance <= 500) {
-                waitingRoom.getWaiters().add(WaitingRoomUser.createWaitingRoomUser(waitingRoom,user));
+                //참가정보 생성
+                WaitingRoomUser waitingRoomUser = WaitingRoomUser.createWaitingRoomUser(waitingRoom, user);
+                waitingRoomUserRepository.save(waitingRoomUser);
+                waitingRoom.getWaiters().add(waitingRoomUser);
                 Long waitingRoomId = waitingRoom.getId();
-                return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, waitingRoomId);
+                Long waitingRoomUserId = waitingRoomUser.getId();
+                return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, waitingRoomId, waitingRoomUserId);
             }
         }
         throw new CannotJoinWaitingRoomException(ErrorCode.INTERNAL_SERVER_ERROR); //flow가 여기로 오면 안됨 -> 무조건 waiting Room에 배치되어야 함
@@ -74,15 +85,19 @@ public class IndividualMatchingService implements MatchingService {
     @Override
     public MatchCancelResponse cancelMatchRequest(MatchCancelRequest matchCancelRequest) {
 
+
         Long waitingRoomId = matchCancelRequest.getWaitingRoomId();
+        Long waitingRoomUserId = matchCancelRequest.getWaitingRoomUserId();
+
         WaitingRoom waitingRoom = waitingRoomRepository.findById(waitingRoomId);
         List<WaitingRoomUser> waiters = waitingRoom.getWaiters();
         for (int i = 0; i < waiters.size(); i++) {
-            if (waiters.get(i).getUser().getEmail().equals(matchCancelRequest.getEmail())) {
+            if (waiters.get(i).getId() == waitingRoomUserId) {
                 waiters.remove(i);
                 break;
             }
         }
+        waitingRoomUserRepository.deleteById(waitingRoomUserId);
         return ResponseFactory.createMatchCancelResponse(Boolean.TRUE, null);
     }
 }
