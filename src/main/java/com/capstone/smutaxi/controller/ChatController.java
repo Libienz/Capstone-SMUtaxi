@@ -1,8 +1,7 @@
 package com.capstone.smutaxi.controller;
 
 
-import com.capstone.smutaxi.entity.ChatParticipant;
-import com.capstone.smutaxi.entity.ChatRoom;
+import com.capstone.smutaxi.dto.responses.UserJoinedChatRoomResponse;
 import com.capstone.smutaxi.entity.Message;
 import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.service.MessageService;
@@ -26,24 +25,28 @@ public class ChatController {
 
     @MessageMapping("/send")
     public void chat(Message message) {
-        messageService.sendMessage(message);
+        messageService.saveMessage(message);
         messagingTemplate.convertAndSend("/sub/channel/" + message.getChatRoom().getId(), message);
     }
 
+    //채팅방에 유저추가 API
     @PostMapping("/add-user")
     public ResponseEntity<String> addChatRoomUser(@RequestParam String userEmail, @RequestParam Long chatRoomId) {
-        try {
-            chatRoomService.addUserToChatRoom(chatRoomId, userEmail);
-            return ResponseEntity.ok("User added to the chat room successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        chatRoomService.addUserToChatRoom(chatRoomId, userEmail);
+        return ResponseEntity.ok("User added to the chat room successfully.");
     }
-    @GetMapping("/user/chatRooms")
-    public List<ChatRoom> getUserChatRooms(@RequestParam String email){
-        List<ChatRoom> chatRoomsByUserEmail = chatRoomService.getUserJoinedChatRooms(email);
-        return chatRoomsByUserEmail;
 
+    @PostMapping("/leave")
+    public ResponseEntity<String> leaveChatParticipant(@RequestParam Long chatParticipantId) {
+        chatRoomService.leaveChatParticipant(chatParticipantId);
+        return ResponseEntity.ok("User leave to the chat room successfully.");
+    }
+
+    //유저가 참가한 ChatRoom의 이름과 Id 반환 API
+    @GetMapping("/user/chatRooms")
+    public List<UserJoinedChatRoomResponse> getUserChatRooms(@RequestParam String email){
+        List<UserJoinedChatRoomResponse> userJoinedChatRoomRespons = chatRoomService.getUserJoinedChatRooms(email);
+        return userJoinedChatRoomRespons;
     }
 
 }

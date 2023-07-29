@@ -1,5 +1,7 @@
 package com.capstone.smutaxi.dto.responses;
 
+import com.capstone.smutaxi.dto.ChatRoomDto;
+import com.capstone.smutaxi.dto.RallyInformationDto;
 import com.capstone.smutaxi.dto.UserDto;
 
 public class ResponseFactory {
@@ -44,6 +46,23 @@ public class ResponseFactory {
                 message(message).
                 verificationCode(verificationCode).
                 build();
+    }
+
+    public static RallyResponse createRallyResponse(Boolean success, String message, RallyInformationDto rallyInformationDto){
+        return RallyResponse.builder()
+                .success(success)
+                .message(message)
+                .rallyInformationDto(rallyInformationDto)
+                .build();
+    }
+
+    public static UserJoinedChatRoomResponse createChatRoomResponse(Boolean success, String message, Long chatParticipantId, ChatRoomDto chatRoomDto){
+        return UserJoinedChatRoomResponse.builder()
+                .success(success)
+                .message(message)
+                .chatParticipantId(chatParticipantId)
+                .chatRoomDto(chatRoomDto)
+                .build();
     }
 
     public static ErrorResponse createErrorResponse(String error, String message) {
