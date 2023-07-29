@@ -1,11 +1,14 @@
 package com.capstone.smutaxi.dto.responses;
 
+import com.capstone.smutaxi.dto.ChatRoomDto;
 import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.dto.responses.auth.EmailVerificationResponse;
 import com.capstone.smutaxi.dto.responses.auth.JoinResponse;
 import com.capstone.smutaxi.dto.responses.auth.LoginResponse;
 import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
 import com.capstone.smutaxi.dto.responses.match.MatchingResponse;
+import com.capstone.smutaxi.dto.responses.rally.RallyInformationDto;
+import com.capstone.smutaxi.dto.responses.rally.RallyResponse;
 import com.capstone.smutaxi.dto.responses.user.UploadImageResponse;
 import com.capstone.smutaxi.dto.responses.user.UserUpdateResponse;
 
@@ -57,6 +60,22 @@ public class ResponseFactory {
         return MatchCancelResponse.builder()
                 .success(success)
                 .message(message)
+                .build();
+    }
+    public static RallyResponse createRallyResponse(Boolean success, String message, RallyInformationDto rallyInformationDto){
+        return RallyResponse.builder()
+                .success(success)
+                .message(message)
+                .rallyInformationDto(rallyInformationDto)
+                .build();
+    }
+
+    public static UserJoinedChatRoomResponse createChatRoomResponse(Boolean success, String message, Long chatParticipantId, ChatRoomDto chatRoomDto){
+        return UserJoinedChatRoomResponse.builder()
+                .success(success)
+                .message(message)
+                .chatParticipantId(chatParticipantId)
+                .chatRoomDto(chatRoomDto)
                 .build();
     }
 

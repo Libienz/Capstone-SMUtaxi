@@ -1,7 +1,7 @@
 package com.capstone.smutaxi.entity;
 
+import com.capstone.smutaxi.dto.responses.rally.RallyInformationDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,4 +38,14 @@ public class RallyDetail {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "rally_information_id" )
     private RallyInformation rallyInformation;
+
+    public RallyInformationDto.RallyDetailsDto toRallyDetailsDto() {
+        RallyInformationDto.RallyDetailsDto rallyDetailsDto = new RallyInformationDto.RallyDetailsDto();
+        rallyDetailsDto.setStartTime(this.startTime);
+        rallyDetailsDto.setEndTime(this.endTime);
+        rallyDetailsDto.setLocation(this.location);
+        rallyDetailsDto.setRallyScale(this.rallyScale);
+        rallyDetailsDto.setJurisdiction(this.jurisdiction);
+        return rallyDetailsDto;
+    }
 }

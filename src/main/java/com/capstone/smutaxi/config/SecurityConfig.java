@@ -79,10 +79,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 //                        "/users/update",
                         "/api/chat/add-user",
+                        "/api/chat/leave",
                         "/api/chat/user/chatRooms",
                         "/h2-console/**",
                         "/ws/**",
-                        "/chat/**").permitAll()
+                        "/send").permitAll()
 
                 .anyRequest().authenticated()
                 .and()
