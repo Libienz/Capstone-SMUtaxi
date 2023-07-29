@@ -15,6 +15,7 @@ import com.capstone.smutaxi.repository.WaitingRoomRepository;
 import com.capstone.smutaxi.repository.WaitingRoomUserRepository;
 import com.capstone.smutaxi.utils.Location;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -50,35 +51,42 @@ public class IndividualMatchingService implements MatchingService {
 
         //모든 웨이팅 룸 돌면서 TMA
         for (WaitingRoom waitingRoom : waitingRooms) {
-
-            //빈방이면 들어간다.
-            if (waitingRoom.getWaiters().size() == 0) {
-                waitingRoom.setLocation(userLocation);
-                //참가 정보 생성
-                WaitingRoomUser waitingRoomUser = WaitingRoomUser.createWaitingRoomUser(waitingRoom, user);
-                waitingRoomUserRepository.save(waitingRoomUser);
-                waitingRoom.getWaiters().add(waitingRoomUser);
+            boolean canEnter = knockWaitingRoom(user, userLocation, waitingRoom);
+            if (canEnter) {
+                //참가 정보 생성 및 대기방 입장
+                WaitingRoomUser entranceInformation = enterWaitingRoom(user, waitingRoom);
                 Long waitingRoomId = waitingRoom.getId();
-                Long waitingRoomUserId = waitingRoomUser.getId();
-                return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, waitingRoomId, waitingRoomUserId);
-            }
-
-            Location waitingRoomLocation = waitingRoom.getLocation();
-
-            //빈방 아닐 시 대기방의 대표 위치와 요청자의 위치를 비교, 성공 여부 핸들링
-            double distance = Location.calculateDistance(userLocation, waitingRoomLocation);
-            if (distance <= 500) {
-                //참가정보 생성
-                WaitingRoomUser waitingRoomUser = WaitingRoomUser.createWaitingRoomUser(waitingRoom, user);
-                waitingRoomUserRepository.save(waitingRoomUser);
-                waitingRoom.getWaiters().add(waitingRoomUser);
-                Long waitingRoomId = waitingRoom.getId();
-                Long waitingRoomUserId = waitingRoomUser.getId();
+                Long waitingRoomUserId = entranceInformation.getId();
                 return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, waitingRoomId, waitingRoomUserId);
             }
         }
         throw new CannotJoinWaitingRoomException(ErrorCode.INTERNAL_SERVER_ERROR); //flow가 여기로 오면 안됨 -> 무조건 waiting Room에 배치되어야 함
 
+    }
+
+    @NotNull
+    private WaitingRoomUser enterWaitingRoom(User user, WaitingRoom waitingRoom) {
+        WaitingRoomUser waitingRoomUser = WaitingRoomUser.createWaitingRoomUser(waitingRoom, user);
+        waitingRoomUserRepository.save(waitingRoomUser);
+        waitingRoom.getWaiters().add(waitingRoomUser);
+        return waitingRoomUser;
+    }
+
+
+    private boolean knockWaitingRoom(User user, Location userLocation, WaitingRoom waitingRoom) {
+
+        //빈방이면 들어간다.
+        if (waitingRoom.getWaiters().size() == 0) {
+            waitingRoom.setLocation(userLocation);
+            return true;
+        }
+        //빈방 아닐 시 대기방의 대표 위치와 요청자의 위치를 비교
+        Location waitingRoomLocation = waitingRoom.getLocation();
+        double distance = Location.calculateDistance(userLocation, waitingRoomLocation);
+        if (distance <= 500) {
+            return true;
+        }
+        return false;
     }
 
     @Transactional
