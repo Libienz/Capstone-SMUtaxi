@@ -67,11 +67,12 @@ public class ResponseFactory {
                 build();
     }
 
-    public static MatchingResponseDto createMatchingResponse(Boolean success, String message, Long waitingRoomId) {
+    public static MatchingResponseDto createMatchingResponse(Boolean success, String message, Long waitingRoomId, Long waitingRoomUserId) {
         return MatchingResponseDto.builder().
                 success(success).
                 message(message).
                 waitingRoomId(waitingRoomId).
+                waitingRoomUserId(waitingRoomUserId).
                 build();
     }
 }

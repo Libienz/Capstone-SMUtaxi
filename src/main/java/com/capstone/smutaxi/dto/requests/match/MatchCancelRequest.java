@@ -7,4 +7,6 @@ import lombok.Setter;
 public class MatchCancelRequest {
     private String email;
     private Long waitingRoomId;
+    private Long waitingRoomUserId;
+
 }

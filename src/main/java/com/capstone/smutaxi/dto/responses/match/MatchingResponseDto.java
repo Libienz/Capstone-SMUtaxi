@@ -11,4 +11,5 @@ public class MatchingResponseDto {
     private Boolean success;
     private String message;
     private Long waitingRoomId;
+    private Long waitingRoomUserId;
 }
