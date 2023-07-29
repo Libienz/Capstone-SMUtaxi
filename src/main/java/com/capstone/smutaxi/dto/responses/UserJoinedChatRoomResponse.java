@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ChatRoomResponse {
+public class UserJoinedChatRoomResponse {
     private Boolean success;
     private String message;
     private Long chatParticipantId;

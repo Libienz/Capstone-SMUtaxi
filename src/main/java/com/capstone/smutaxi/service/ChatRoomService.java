@@ -1,7 +1,7 @@
 package com.capstone.smutaxi.service;
 
 import com.capstone.smutaxi.dto.ChatRoomDto;
-import com.capstone.smutaxi.dto.responses.ChatRoomResponse;
+import com.capstone.smutaxi.dto.responses.UserJoinedChatRoomResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.ChatParticipant;
 import com.capstone.smutaxi.entity.ChatRoom;
@@ -11,7 +11,6 @@ import com.capstone.smutaxi.exception.ChatParticipantDuplicateException;
 import com.capstone.smutaxi.exception.ChatParticipantNotFoundException;
 import com.capstone.smutaxi.exception.ChatRoomNotFoundException;
 import com.capstone.smutaxi.exception.ErrorCode;
-import com.capstone.smutaxi.exception.user.IdDuplicateException;
 import com.capstone.smutaxi.exception.user.UserNotFoundException;
 import com.capstone.smutaxi.repository.ChatParticipantRepository;
 import com.capstone.smutaxi.repository.ChatRoomRepository;
@@ -42,12 +41,12 @@ public class ChatRoomService {
     }
 
     //유저가 참여하고있는 ChatRoom들의 Response 반환
-    public List<ChatRoomResponse> getUserJoinedChatRooms(String userEmail) {
+    public List<UserJoinedChatRoomResponse> getUserJoinedChatRooms(String userEmail) {
 
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        List<ChatRoomResponse> chatRoomResponseList = new ArrayList<>();
+        List<UserJoinedChatRoomResponse> userJoinedChatRoomResponseList = new ArrayList<>();
 
         List<ChatParticipant> chatParticipantList = user.getChatParticipantList();
         for (ChatParticipant chatParticipant : chatParticipantList) {
@@ -70,10 +69,10 @@ public class ChatRoomService {
                     .build();
 
             //response Dto 생성 -> {Boolean success, String message, ChatRoomDto chatRoomDto}
-            chatRoomResponseList.add(ResponseFactory.createChatRoomResponse(true, null,chatParticipantId, chatRoomDto));
+            userJoinedChatRoomResponseList.add(ResponseFactory.createChatRoomResponse(true, null,chatParticipantId, chatRoomDto));
         }
 
-        return chatRoomResponseList;
+        return userJoinedChatRoomResponseList;
     }
 
     //채팅방에 유저를 추가 = ChatParticipant 생성

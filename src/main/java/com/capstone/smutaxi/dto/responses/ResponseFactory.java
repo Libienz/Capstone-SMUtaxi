@@ -56,8 +56,8 @@ public class ResponseFactory {
                 .build();
     }
 
-    public static ChatRoomResponse createChatRoomResponse(Boolean success, String message,Long chatParticipantId, ChatRoomDto chatRoomDto){
-        return ChatRoomResponse.builder()
+    public static UserJoinedChatRoomResponse createChatRoomResponse(Boolean success, String message, Long chatParticipantId, ChatRoomDto chatRoomDto){
+        return UserJoinedChatRoomResponse.builder()
                 .success(success)
                 .message(message)
                 .chatParticipantId(chatParticipantId)

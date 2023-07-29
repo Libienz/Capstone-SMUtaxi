@@ -1,7 +1,7 @@
 package com.capstone.smutaxi.controller;
 
 
-import com.capstone.smutaxi.dto.responses.ChatRoomResponse;
+import com.capstone.smutaxi.dto.responses.UserJoinedChatRoomResponse;
 import com.capstone.smutaxi.entity.Message;
 import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.service.MessageService;
@@ -44,9 +44,9 @@ public class ChatController {
 
     //유저가 참가한 ChatRoom의 이름과 Id 반환 API
     @GetMapping("/user/chatRooms")
-    public List<ChatRoomResponse> getUserChatRooms(@RequestParam String email){
-        List<ChatRoomResponse> chatRoomResponses = chatRoomService.getUserJoinedChatRooms(email);
-        return chatRoomResponses;
+    public List<UserJoinedChatRoomResponse> getUserChatRooms(@RequestParam String email){
+        List<UserJoinedChatRoomResponse> userJoinedChatRoomRespons = chatRoomService.getUserJoinedChatRooms(email);
+        return userJoinedChatRoomRespons;
     }
 
 }

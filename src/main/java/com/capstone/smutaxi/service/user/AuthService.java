@@ -43,7 +43,7 @@ public class AuthService {
                 .imageUrl(joinDto.getImgUrl())
                 .name(joinDto.getName())
                 .gender(joinDto.getGender())
-                .roles(Collections.singletonList(Role.ADMIN.getRoleName()))
+                .roles(Collections.singletonList(Role.USER.getRoleName()))
                 .build();
         //회원가입
         userRepository.save(user);
