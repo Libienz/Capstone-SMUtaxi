@@ -7,7 +7,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class MatchingResponseDto {
+public class MatchingResponse {
     private Boolean success;
     private String message;
     private Long waitingRoomId;

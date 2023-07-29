@@ -3,7 +3,7 @@ package com.capstone.smutaxi.service.matching;
 import com.capstone.smutaxi.dto.requests.match.MatchCancelRequest;
 import com.capstone.smutaxi.dto.requests.match.MatchingRequest;
 import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
-import com.capstone.smutaxi.dto.responses.match.MatchingResponseDto;
+import com.capstone.smutaxi.dto.responses.match.MatchingResponse;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.entity.WaitingRoom;
 import com.capstone.smutaxi.entity.WaitingRoomUser;
@@ -158,9 +158,9 @@ public class IndividualMatchingServiceTest {
         Double aLat = 37.566610;
         Double aLong = 126.977943;
         MatchingRequest matchingRequest = createMatchingRequest(aLat, aLong, "123@abc.com");
-        MatchingResponseDto matchingResponseDto = matchingService.handleMatchingRequest(matchingRequest);
-        Long waitingRoomId = matchingResponseDto.getWaitingRoomId();
-        Long waitingRoomUserId = matchingResponseDto.getWaitingRoomUserId();
+        MatchingResponse matchingResponse = matchingService.handleMatchingRequest(matchingRequest);
+        Long waitingRoomId = matchingResponse.getWaitingRoomId();
+        Long waitingRoomUserId = matchingResponse.getWaitingRoomUserId();
 
         //when
         MatchCancelRequest matchCancelRequest = new MatchCancelRequest();

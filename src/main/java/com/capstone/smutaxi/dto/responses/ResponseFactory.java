@@ -5,7 +5,7 @@ import com.capstone.smutaxi.dto.responses.auth.EmailVerificationResponse;
 import com.capstone.smutaxi.dto.responses.auth.JoinResponse;
 import com.capstone.smutaxi.dto.responses.auth.LoginResponse;
 import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
-import com.capstone.smutaxi.dto.responses.match.MatchingResponseDto;
+import com.capstone.smutaxi.dto.responses.match.MatchingResponse;
 import com.capstone.smutaxi.dto.responses.user.UploadImageResponse;
 import com.capstone.smutaxi.dto.responses.user.UserUpdateResponse;
 
@@ -67,8 +67,8 @@ public class ResponseFactory {
                 build();
     }
 
-    public static MatchingResponseDto createMatchingResponse(Boolean success, String message, Long waitingRoomId, Long waitingRoomUserId) {
-        return MatchingResponseDto.builder().
+    public static MatchingResponse createMatchingResponse(Boolean success, String message, Long waitingRoomId, Long waitingRoomUserId) {
+        return MatchingResponse.builder().
                 success(success).
                 message(message).
                 waitingRoomId(waitingRoomId).

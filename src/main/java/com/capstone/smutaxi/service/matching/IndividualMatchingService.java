@@ -2,7 +2,7 @@ package com.capstone.smutaxi.service.matching;
 
 import com.capstone.smutaxi.dto.requests.match.MatchCancelRequest;
 import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
-import com.capstone.smutaxi.dto.responses.match.MatchingResponseDto;
+import com.capstone.smutaxi.dto.responses.match.MatchingResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.entity.WaitingRoom;
@@ -35,7 +35,7 @@ public class IndividualMatchingService implements MatchingService {
      */
     @Transactional
     @Override
-    public MatchingResponseDto handleMatchingRequest(MatchingRequest matchingRequest) {
+    public MatchingResponse handleMatchingRequest(MatchingRequest matchingRequest) {
 
         //유저 get
         String requestorId = matchingRequest.getEmail();

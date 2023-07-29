@@ -3,7 +3,7 @@ package com.capstone.smutaxi.controller;
 import com.capstone.smutaxi.dto.requests.match.MatchCancelRequest;
 import com.capstone.smutaxi.dto.requests.match.MatchingRequest;
 import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
-import com.capstone.smutaxi.dto.responses.match.MatchingResponseDto;
+import com.capstone.smutaxi.dto.responses.match.MatchingResponse;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.service.matching.MatchingService;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +20,9 @@ public class MatchingController {
 
     @ResponseBody
     @PostMapping("/request")
-    public ResponseEntity<MatchingResponseDto> matching(MatchingRequest matchingRequest) {
-        MatchingResponseDto matchingResponseDto = matchingService.handleMatchingRequest(matchingRequest);
-        return ResponseEntity.ok(matchingResponseDto);
+    public ResponseEntity<MatchingResponse> matching(MatchingRequest matchingRequest) {
+        MatchingResponse matchingResponse = matchingService.handleMatchingRequest(matchingRequest);
+        return ResponseEntity.ok(matchingResponse);
     }
 
     @ResponseBody
