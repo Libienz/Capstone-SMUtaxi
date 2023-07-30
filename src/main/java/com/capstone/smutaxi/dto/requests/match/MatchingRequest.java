@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.dto.requests;
+package com.capstone.smutaxi.dto.requests.match;
 
 import lombok.Getter;
 import lombok.Setter;

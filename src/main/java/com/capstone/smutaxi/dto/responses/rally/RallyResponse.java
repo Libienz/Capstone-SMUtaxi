@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.dto.responses;
+package com.capstone.smutaxi.dto.responses.rally;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,8 +7,8 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class MatchingResponseDto {
+public class RallyResponse {
     private Boolean success;
     private String message;
-    private Long waitingRoomId;
+    private RallyInformationDto rallyInformationDto;
 }

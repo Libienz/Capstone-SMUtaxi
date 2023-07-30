@@ -1,18 +1,15 @@
 package com.capstone.smutaxi.controller;
 
-import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
-import com.capstone.smutaxi.dto.RallyInformationDto;
-import com.capstone.smutaxi.dto.responses.RallyResponse;
+import com.capstone.smutaxi.dto.responses.rally.RallyInformationDto;
+import com.capstone.smutaxi.dto.responses.rally.RallyResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.RallyInformation;
-import com.capstone.smutaxi.repository.RallyInformationRepository;
 import com.capstone.smutaxi.service.RallyInformationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/rally-info")
@@ -47,7 +44,7 @@ public class RallyInformationController {
         RallyInformation recentRallyInformation = rallyInformationService.getRecentRallyInfo();
 
         //Dto로 변환
-        RallyInformationDto rallyResponseRallyInformationDto =recentRallyInformation.toRallyInformationDto();
+        RallyInformationDto rallyResponseRallyInformationDto = recentRallyInformation.toRallyInformationDto();
 
         //Response Dto 생성 -> {success, message, RallyInfoDto}
         RallyResponse rallyResponse = ResponseFactory.createRallyResponse(true, null, rallyResponseRallyInformationDto);

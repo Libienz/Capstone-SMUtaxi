@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.dto.responses;
+package com.capstone.smutaxi.dto.responses.auth;
 
 import com.capstone.smutaxi.dto.UserDto;
 import lombok.Builder;
@@ -7,9 +7,9 @@ import lombok.Setter;
 
 @Builder
 @Getter @Setter
-public class JoinResponse {
+public class LoginResponse {
     private Boolean success;
     private String message;
-    private UserDto userDto;
     private String token;
+    private UserDto userDto;
 }

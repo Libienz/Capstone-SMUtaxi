@@ -2,9 +2,9 @@ package com.capstone.smutaxi.service.user;
 
 import com.capstone.smutaxi.config.jwt.JwtTokenProvider;
 import com.capstone.smutaxi.dto.UserDto;
-import com.capstone.smutaxi.dto.requests.LoginRequest;
-import com.capstone.smutaxi.dto.responses.JoinResponse;
-import com.capstone.smutaxi.dto.responses.LoginResponse;
+import com.capstone.smutaxi.dto.requests.auth.LoginRequest;
+import com.capstone.smutaxi.dto.responses.auth.JoinResponse;
+import com.capstone.smutaxi.dto.responses.auth.LoginResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.enums.Role;

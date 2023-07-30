@@ -1,8 +1,10 @@
 package com.capstone.smutaxi.controller;
 
-import com.capstone.smutaxi.dto.requests.LoginRequest;
-import com.capstone.smutaxi.dto.responses.*;
+import com.capstone.smutaxi.dto.requests.auth.LoginRequest;
 import com.capstone.smutaxi.dto.UserDto;
+import com.capstone.smutaxi.dto.responses.auth.EmailVerificationResponse;
+import com.capstone.smutaxi.dto.responses.auth.JoinResponse;
+import com.capstone.smutaxi.dto.responses.auth.LoginResponse;
 import com.capstone.smutaxi.service.user.AuthService;
 import com.capstone.smutaxi.service.user.EmailService;
 import lombok.RequiredArgsConstructor;

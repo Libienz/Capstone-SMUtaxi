@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.dto.responses;
+package com.capstone.smutaxi.dto.responses.user;
 
 import lombok.Builder;
 import lombok.Getter;

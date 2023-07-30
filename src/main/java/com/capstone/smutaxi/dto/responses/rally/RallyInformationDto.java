@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.dto;
+package com.capstone.smutaxi.dto.responses.rally;
 
 import com.capstone.smutaxi.entity.RallyDetail;
 import lombok.*;

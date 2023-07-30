@@ -1,13 +1,12 @@
 package com.capstone.smutaxi.controller;
 
-import com.capstone.smutaxi.dto.requests.MatchingRequest;
-import com.capstone.smutaxi.dto.responses.MatchingResponseDto;
-import com.capstone.smutaxi.entity.User;
+import com.capstone.smutaxi.dto.requests.match.MatchCancelRequest;
+import com.capstone.smutaxi.dto.requests.match.MatchingRequest;
+import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
+import com.capstone.smutaxi.dto.responses.match.MatchingResponse;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.service.matching.MatchingService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +20,17 @@ public class MatchingController {
 
     @ResponseBody
     @PostMapping("/request")
-    public ResponseEntity<MatchingResponseDto> matching(MatchingRequest matchingRequest) {
-        MatchingResponseDto matchingResponseDto = matchingService.handleMatchingRequest(matchingRequest);
-        return ResponseEntity.ok(matchingResponseDto);
+    public ResponseEntity<MatchingResponse> matching(@RequestBody MatchingRequest matchingRequest) {
+        MatchingResponse matchingResponse = matchingService.handleMatchingRequest(matchingRequest);
+        return ResponseEntity.ok(matchingResponse);
     }
+
+    @ResponseBody
+    @PostMapping("/cancel-request")
+    public ResponseEntity<MatchCancelResponse> matching(@RequestBody MatchCancelRequest matchCancelRequest) {
+        MatchCancelResponse matchCancelResponse = matchingService.cancelMatchRequest(matchCancelRequest);
+        return ResponseEntity.ok(matchCancelResponse);
+    }
+
 
 }

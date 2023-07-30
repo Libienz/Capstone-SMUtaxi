@@ -1,8 +1,16 @@
 package com.capstone.smutaxi.dto.responses;
 
 import com.capstone.smutaxi.dto.ChatRoomDto;
-import com.capstone.smutaxi.dto.RallyInformationDto;
 import com.capstone.smutaxi.dto.UserDto;
+import com.capstone.smutaxi.dto.responses.auth.EmailVerificationResponse;
+import com.capstone.smutaxi.dto.responses.auth.JoinResponse;
+import com.capstone.smutaxi.dto.responses.auth.LoginResponse;
+import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
+import com.capstone.smutaxi.dto.responses.match.MatchingResponse;
+import com.capstone.smutaxi.dto.responses.rally.RallyInformationDto;
+import com.capstone.smutaxi.dto.responses.rally.RallyResponse;
+import com.capstone.smutaxi.dto.responses.user.UploadImageResponse;
+import com.capstone.smutaxi.dto.responses.user.UserUpdateResponse;
 
 public class ResponseFactory {
 
@@ -48,6 +56,12 @@ public class ResponseFactory {
                 build();
     }
 
+    public static MatchCancelResponse createMatchCancelResponse(Boolean success, String message) {
+        return MatchCancelResponse.builder()
+                .success(success)
+                .message(message)
+                .build();
+    }
     public static RallyResponse createRallyResponse(Boolean success, String message, RallyInformationDto rallyInformationDto){
         return RallyResponse.builder()
                 .success(success)
@@ -72,11 +86,12 @@ public class ResponseFactory {
                 build();
     }
 
-    public static MatchingResponseDto createMatchingResponse(Boolean success, String message, Long waitingRoomId) {
-        return MatchingResponseDto.builder().
+    public static MatchingResponse createMatchingResponse(Boolean success, String message, Long waitingRoomId, Long waitingRoomUserId) {
+        return MatchingResponse.builder().
                 success(success).
                 message(message).
                 waitingRoomId(waitingRoomId).
+                waitingRoomUserId(waitingRoomUserId).
                 build();
     }
 }

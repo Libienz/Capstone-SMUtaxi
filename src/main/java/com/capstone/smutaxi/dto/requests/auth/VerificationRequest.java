@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.dto.requests;
+package com.capstone.smutaxi.dto.requests.auth;
 
 import lombok.Getter;
 

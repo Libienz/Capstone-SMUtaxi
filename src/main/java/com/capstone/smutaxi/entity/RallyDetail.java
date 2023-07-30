@@ -1,8 +1,7 @@
 package com.capstone.smutaxi.entity;
 
-import com.capstone.smutaxi.dto.RallyInformationDto;
+import com.capstone.smutaxi.dto.responses.rally.RallyInformationDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
