@@ -2,6 +2,7 @@ package com.capstone.smutaxi.controller;
 
 
 import com.capstone.smutaxi.dto.responses.UserJoinedChatRoomResponse;
+import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.entity.Message;
 import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.service.MessageService;
@@ -28,12 +29,18 @@ public class ChatController {
         messageService.saveMessage(message);
         messagingTemplate.convertAndSend("/sub/channel/" + message.getChatRoom().getId(), message);
     }
+    //채팅방 생성 API
+    @PostMapping("/create-chatRoom")
+    public ResponseEntity<String> createChatRoom(@RequestParam String chatRoomName){
+        ChatRoom chatRoom = chatRoomService.createChatRoom(chatRoomName);
+        return ResponseEntity.ok("create chatRoom successfully. chatRoomId: "+chatRoom.getId());
+    }
 
     //채팅방에 유저추가 API
     @PostMapping("/add-user")
     public ResponseEntity<String> addChatRoomUser(@RequestParam String userEmail, @RequestParam Long chatRoomId) {
-        chatRoomService.addUserToChatRoom(chatRoomId, userEmail);
-        return ResponseEntity.ok("User added to the chat room successfully.");
+        Long chatParticipantId = chatRoomService.addUserToChatRoom(chatRoomId, userEmail);
+        return ResponseEntity.ok("User added to the chat room successfully. chatParticipantId: "+chatParticipantId);
     }
 
     @PostMapping("/leave")
@@ -44,9 +51,9 @@ public class ChatController {
 
     //유저가 참가한 ChatRoom의 이름과 Id 반환 API
     @GetMapping("/user/chatRooms")
-    public List<UserJoinedChatRoomResponse> getUserChatRooms(@RequestParam String email){
-        List<UserJoinedChatRoomResponse> userJoinedChatRoomRespons = chatRoomService.getUserJoinedChatRooms(email);
-        return userJoinedChatRoomRespons;
+    public ResponseEntity<UserJoinedChatRoomResponse> getUserChatRooms(@RequestParam String email){
+        UserJoinedChatRoomResponse userJoinedChatRooms = chatRoomService.getUserJoinedChatRooms(email);
+        return ResponseEntity.ok(userJoinedChatRooms);
     }
 
 }

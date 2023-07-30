@@ -41,13 +41,12 @@ public class ChatRoomService {
     }
 
     //유저가 참여하고있는 ChatRoom들의 Response 반환
-    public List<UserJoinedChatRoomResponse> getUserJoinedChatRooms(String userEmail) {
+    public UserJoinedChatRoomResponse getUserJoinedChatRooms(String userEmail) {
 
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        List<UserJoinedChatRoomResponse> userJoinedChatRoomResponseList = new ArrayList<>();
-
+        List<ChatRoomDto> chatRoomDtoList = new ArrayList<>();
         List<ChatParticipant> chatParticipantList = user.getChatParticipantList();
         for (ChatParticipant chatParticipant : chatParticipantList) {
             Long chatParticipantId = chatParticipant.getId();
@@ -63,21 +62,23 @@ public class ChatRoomService {
 
             ChatRoomDto chatRoomDto = ChatRoomDto.builder()
                     .chatRoomId(chatRoom.getId())
+                    .chatParticipantId(chatParticipantId)
                     .chatRoomLocation(chatRoom.getChatRoomLocation())
                     .chatRoomName(chatRoom.getChatRoomName())
                     .messageList(messageDtoList)
                     .build();
 
-            //response Dto 생성 -> {Boolean success, String message, ChatRoomDto chatRoomDto}
-            userJoinedChatRoomResponseList.add(ResponseFactory.createChatRoomResponse(true, null,chatParticipantId, chatRoomDto));
+            chatRoomDtoList.add(chatRoomDto);
         }
+            //response Dto 생성 -> {Boolean success, String message, ChatRoomDto chatRoomDto}
+        UserJoinedChatRoomResponse chatRoomResponse = ResponseFactory.createChatRoomResponse(true, null, chatRoomDtoList);
 
-        return userJoinedChatRoomResponseList;
+        return chatRoomResponse;
     }
 
     //채팅방에 유저를 추가 = ChatParticipant 생성
     @Transactional
-    public void addUserToChatRoom(Long chatRoomId, String userId) {
+    public Long addUserToChatRoom(Long chatRoomId, String userId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(() -> new ChatRoomNotFoundException(ErrorCode.CHATROOM_NOT_FOUND));
 
@@ -95,7 +96,8 @@ public class ChatRoomService {
         //연관관계 메서드
         chatParticipant.setChatRoomAndUser(chatRoom,user);
 
-        chatParticipantRepository.save(chatParticipant);
+        ChatParticipant save = chatParticipantRepository.save(chatParticipant);
+        return save.getId();
     }
     //중간테이블인 chatParticipant에서 특정 chatRoomId를 가진 엔티티의 개수를 반환
     public int getParticipantCount(Long chatRoomId) {

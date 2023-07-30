@@ -81,6 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/chat/add-user",
                         "/api/chat/leave",
                         "/api/chat/user/chatRooms",
+                        "/api/chat/create-chatRoom",
                         "/h2-console/**",
                         "/ws/**",
                         "/send").permitAll()
