@@ -43,7 +43,7 @@ public class ChatRoomService {
     //유저가 참여하고있는 ChatRoom들의 Response 반환
     public UserJoinedChatRoomResponse getUserJoinedChatRooms(String userEmail) {
 
-        User user = userRepository.findByEmail(userEmail)
+        User user = userRepository.findById(userEmail)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         List<ChatRoomDto> chatRoomDtoList = new ArrayList<>();
@@ -82,7 +82,7 @@ public class ChatRoomService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(() -> new ChatRoomNotFoundException(ErrorCode.CHATROOM_NOT_FOUND));
 
-        User user = userRepository.findByEmail(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         // 이미 있는 ChatParticipant인지 검증

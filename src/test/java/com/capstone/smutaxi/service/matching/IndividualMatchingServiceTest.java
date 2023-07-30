@@ -49,7 +49,7 @@ public class IndividualMatchingServiceTest {
 
         //when
         Long waitingRoomId = matchingService.handleMatchingRequest(matchingRequest).getWaitingRoomId();
-        WaitingRoom waitingRoom = waitingRoomRepository.findById(waitingRoomId);
+        WaitingRoom waitingRoom = waitingRoomRepository.findById(waitingRoomId).get();
         Double watingRoomLatitude = waitingRoom.getLocation().getLatitude();
         Double watingRoomLongitude = waitingRoom.getLocation().getLongitude();
 
@@ -122,7 +122,7 @@ public class IndividualMatchingServiceTest {
         Long bId = matchingService.handleMatchingRequest(matchingRequestB).getWaitingRoomId();
         //then
         assertEquals(aId, bId);
-        WaitingRoom waitingRoom = waitingRoomRepository.findById(aId);
+        WaitingRoom waitingRoom = waitingRoomRepository.findById(aId).get();
         List<WaitingRoomUser> waiters = waitingRoom.getWaiters();
         assertEquals(waiters.get(0).getUser().getEmail(), "user1@sangmyung.kr");
         assertEquals(waiters.get(1).getUser().getEmail(), "user2@sangmyung.kr");
@@ -140,10 +140,10 @@ public class IndividualMatchingServiceTest {
         Double aLong = 126.977943;
         MatchingRequest matchingRequest = createMatchingRequest(aLat, aLong, "user1@sangmyung.kr");
         Long aId = matchingService.handleMatchingRequest(matchingRequest).getWaitingRoomId();
-        WaitingRoom waitingRoom = waitingRoomRepository.findById(aId);
+        WaitingRoom waitingRoom = waitingRoomRepository.findById(aId).get();
         waitingRoomUserRepository.delete(waitingRoom.getWaiters().get(0));
 
-        Optional<User> byEmail = userRepository.findByEmail("user1@sangmyung.kr");
+        Optional<User> byEmail = userRepository.findById("user1@sangmyung.kr");
         assertEquals(byEmail.get().getEmail(),"user1@sangmyung.kr");
 
 
@@ -170,7 +170,7 @@ public class IndividualMatchingServiceTest {
 
         MatchCancelResponse matchCancelResponse = matchingService.cancelMatchRequest(matchCancelRequest);
         //then
-        WaitingRoom canceledRoom = waitingRoomRepository.findById(waitingRoomId);
+        WaitingRoom canceledRoom = waitingRoomRepository.findById(waitingRoomId).get();
         assertEquals(canceledRoom.getWaiters().size(), 0);
         Optional<WaitingRoomUser> byId = waitingRoomUserRepository.findById(waitingRoomUserId);
         assertEquals(byId.isPresent(), false);

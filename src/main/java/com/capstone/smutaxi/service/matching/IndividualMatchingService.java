@@ -40,7 +40,7 @@ public class IndividualMatchingService implements MatchingService {
 
         //유저 get
         String requestorId = matchingRequest.getEmail();
-        User user = userRepository.findByEmail(requestorId).get();
+        User user = userRepository.findById(requestorId).get();
         //유저 위치 정보
         double latitude = matchingRequest.getLatitude();
         double longitude = matchingRequest.getLongitude();
@@ -97,7 +97,7 @@ public class IndividualMatchingService implements MatchingService {
         Long waitingRoomId = matchCancelRequest.getWaitingRoomId();
         Long waitingRoomUserId = matchCancelRequest.getWaitingRoomUserId();
 
-        WaitingRoom waitingRoom = waitingRoomRepository.findById(waitingRoomId);
+        WaitingRoom waitingRoom = waitingRoomRepository.findById(waitingRoomId).get();
         List<WaitingRoomUser> waiters = waitingRoom.getWaiters();
         for (int i = 0; i < waiters.size(); i++) {
             if (waiters.get(i).getId() == waitingRoomUserId) {
