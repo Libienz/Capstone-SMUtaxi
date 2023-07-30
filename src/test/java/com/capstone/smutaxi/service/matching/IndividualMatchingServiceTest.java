@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,6 +69,7 @@ public class IndividualMatchingServiceTest {
         Long waitingRoomId = matchingService.handleMatchingRequest(matchingRequest).getWaitingRoomId();
         //when
         List<WaitingRoom> waitingRooms = waitingRoomRepository.findAll();
+        Collections.sort(waitingRooms);
         //then
         WaitingRoom waitingRoom = waitingRooms.get(0);
         assertEquals(waitingRoom.getWaiters().size(), 1);

@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,9 +15,10 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class WaitingRoom {
+public class WaitingRoom implements Comparable<WaitingRoom> {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "waiting_room_id")
     private Long id;
 
@@ -30,6 +32,11 @@ public class WaitingRoom {
     public static WaitingRoom createWaitingRoom() {
         WaitingRoom waitingRoom = new WaitingRoom();
         return waitingRoom;
+    }
+
+    @Override
+    public int compareTo(@NotNull WaitingRoom o) {
+        return o.getWaiters().size() - this.getWaiters().size();
     }
     //==비즈니스 로직==//
     //notify match success

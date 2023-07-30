@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -46,8 +47,10 @@ public class IndividualMatchingService implements MatchingService {
         double longitude = matchingRequest.getLongitude();
         Location userLocation = new Location(latitude, longitude);
 
-        //WaitingRoom list 받아오기 (들어있는 인원수 내림차순 정렬되어 있음)
+        //WaitingRoom list 받아오기
         List<WaitingRoom> waitingRooms = waitingRoomRepository.findAll();
+        //들어있는 인원수 내림차순 정렬
+        Collections.sort(waitingRooms);
 
         //모든 웨이팅 룸 돌면서 TMA
         for (WaitingRoom waitingRoom : waitingRooms) {
