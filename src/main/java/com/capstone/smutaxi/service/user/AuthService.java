@@ -38,14 +38,10 @@ public class AuthService {
             throw new IdDuplicateException(ErrorCode.EMAIL_DUPLICATION);
         }
         //유저 초기화
-        User user = User.builder()
-                .email(joinDto.getEmail())
-                .password(passwordEncoder.encode(joinDto.getPassword()))
-                .imageUrl(joinDto.getImgUrl())
-                .name(joinDto.getName())
-                .gender(joinDto.getGender())
-                .roles(Collections.singletonList(Role.USER.getRoleName()))
-                .build();
+        User user = User.createUser(joinDto.getEmail(),
+                                    passwordEncoder.encode(joinDto.getPassword()),
+                                    joinDto.getName(),
+                                    joinDto.getImgUrl());
         //회원가입
         userRepository.save(user);
 
@@ -81,12 +77,11 @@ public class AuthService {
     //이메일 중복 확인
     public boolean emailDuplicateCheck(String email){
         Optional<User> findEmail = userRepository.findById(email);
-        if(findEmail.isPresent())
-            return true;
-        else
-            return false;
+        if(findEmail.isPresent()) return true;
+        return false;
     }
 
+    //관리자 권한 부여
     @Transactional
     public void grantAdminRole(String email) {
         User user = userRepository.findById(email)

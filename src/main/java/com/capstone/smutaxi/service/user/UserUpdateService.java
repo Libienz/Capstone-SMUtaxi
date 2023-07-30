@@ -38,9 +38,6 @@ public class UserUpdateService {
         user.setGender(gender);
         user.setImageUrl(imageUrl);
 
-        //업데이트
-        userRepository.save(user);
-
         //Response Dto 생성
         UserDto userDto = user.userToUserDto();
         userDto.setPassword(password);
@@ -58,8 +55,6 @@ public class UserUpdateService {
         //유저의 비밀번호만 수정
         String password = updateDto.getPassword();
         user.setPassword(passwordEncoder.encode(password));
-        userRepository.save(user);
-
         //Response Dto 생성
 
         UserDto userDto = user.userToUserDto();
