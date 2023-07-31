@@ -47,6 +47,7 @@ public class RallyInformationService {
 
     //가장 최근의 집회를 하나 가져옴
     public RallyInformation getRecentRallyInfo() {
-        return rallyInformationRepository.findRecentRallyInfo();
+        List<RallyInformation> all = rallyInformationRepository.findAll();
+        return all.get(all.size() - 1);
     }
 }

@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -40,14 +41,16 @@ public class IndividualMatchingService implements MatchingService {
 
         //유저 get
         String requestorId = matchingRequest.getEmail();
-        User user = userRepository.findByEmail(requestorId).get();
+        User user = userRepository.findById(requestorId).get();
         //유저 위치 정보
         double latitude = matchingRequest.getLatitude();
         double longitude = matchingRequest.getLongitude();
         Location userLocation = new Location(latitude, longitude);
 
-        //WaitingRoom list 받아오기 (들어있는 인원수 내림차순 정렬되어 있음)
+        //WaitingRoom list 받아오기
         List<WaitingRoom> waitingRooms = waitingRoomRepository.findAll();
+        //들어있는 인원수 내림차순 정렬
+        Collections.sort(waitingRooms);
 
         //모든 웨이팅 룸 돌면서 TMA
         for (WaitingRoom waitingRoom : waitingRooms) {
@@ -97,7 +100,7 @@ public class IndividualMatchingService implements MatchingService {
         Long waitingRoomId = matchCancelRequest.getWaitingRoomId();
         Long waitingRoomUserId = matchCancelRequest.getWaitingRoomUserId();
 
-        WaitingRoom waitingRoom = waitingRoomRepository.findById(waitingRoomId);
+        WaitingRoom waitingRoom = waitingRoomRepository.findById(waitingRoomId).get();
         List<WaitingRoomUser> waiters = waitingRoom.getWaiters();
         for (int i = 0; i < waiters.size(); i++) {
             if (waiters.get(i).getId() == waitingRoomUserId) {

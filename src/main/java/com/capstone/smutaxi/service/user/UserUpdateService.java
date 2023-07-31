@@ -25,7 +25,7 @@ public class UserUpdateService {
     @Transactional
     public UserUpdateResponse updateUser(String email, UserDto updateDto){
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findById(email)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
         String password = updateDto.getPassword();
         String name = updateDto.getName();
@@ -38,9 +38,6 @@ public class UserUpdateService {
         user.setGender(gender);
         user.setImageUrl(imageUrl);
 
-        //업데이트
-        userRepository.save(user);
-
         //Response Dto 생성
         UserDto userDto = user.userToUserDto();
         userDto.setPassword(password);
@@ -52,14 +49,12 @@ public class UserUpdateService {
     @Transactional
     public UserUpdateResponse updateUserPassword(String email, UserDto updateDto) {
         //프론트에서 한번 검증 거쳐서 user가 null인 흐름은 없긴 함
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findById(email)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
         //유저의 비밀번호만 수정
         String password = updateDto.getPassword();
         user.setPassword(passwordEncoder.encode(password));
-        userRepository.save(user);
-
         //Response Dto 생성
 
         UserDto userDto = user.userToUserDto();

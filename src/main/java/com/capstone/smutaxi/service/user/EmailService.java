@@ -58,7 +58,7 @@ public class EmailService {
     public EmailVerificationResponse sendVerificationEmail(String email, boolean foundThenSend) {
 
         EmailVerificationResponse emailVerificationResponse;
-        boolean present = userRepository.findByEmail(email).isPresent();
+        boolean present = userRepository.findById(email).isPresent();
         System.out.println("present = " + present);
         System.out.println("foundThenSend = " + foundThenSend);
         //foundThenSend와 가입된 이메일 존재 여부 비교
@@ -68,7 +68,6 @@ public class EmailService {
             javaMailSender.send(message);
             return ResponseFactory.createEmailVerificationResponse(Boolean.TRUE, null, mailAuthNumber);
         }
-
         //메일 전송 안함 (foundThenSend와 상태가 맞지 않은 이유로)
         else {
             //비밀번호 수정을 위해 재학생 메일 인증을 요청했는데 가입되지 않은 경우

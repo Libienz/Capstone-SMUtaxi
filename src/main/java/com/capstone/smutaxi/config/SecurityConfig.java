@@ -69,11 +69,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/auth/update/email-verification",
                         "/api/auth/check-duplicate/{email}",
                         "/api/auth/grant-admin/{email}",
-                        "/api/images/profile-image/upload",
-                        "/api/images/profile-image/{fileName}",
+                        "/api/images/**",
+//                        "/api/images/profile-image/{fileName}",
 //                        "/demoImageURL",
-
-
                         "/api/rally-info",
 //                        "/api/rally-info/create",
 
@@ -81,6 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/chat/add-user",
                         "/api/chat/leave",
                         "/api/chat/user/chatRooms",
+                        "/api/chat/create-chatRoom",
                         "/h2-console/**",
                         "/ws/**",
                         "/send").permitAll()

@@ -12,6 +12,8 @@ import com.capstone.smutaxi.dto.responses.rally.RallyResponse;
 import com.capstone.smutaxi.dto.responses.user.UploadImageResponse;
 import com.capstone.smutaxi.dto.responses.user.UserUpdateResponse;
 
+import java.util.List;
+
 public class ResponseFactory {
 
     public static JoinResponse createJoinResponse(Boolean success, String message, UserDto userDto, String token) {
@@ -70,12 +72,11 @@ public class ResponseFactory {
                 .build();
     }
 
-    public static UserJoinedChatRoomResponse createChatRoomResponse(Boolean success, String message, Long chatParticipantId, ChatRoomDto chatRoomDto){
+    public static UserJoinedChatRoomResponse createChatRoomResponse(Boolean success, String message, List<ChatRoomDto> chatRoomDtoList){
         return UserJoinedChatRoomResponse.builder()
                 .success(success)
                 .message(message)
-                .chatParticipantId(chatParticipantId)
-                .chatRoomDto(chatRoomDto)
+                .chatRoomDtoList(chatRoomDtoList)
                 .build();
     }
 
