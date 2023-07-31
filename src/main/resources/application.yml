@@ -34,6 +34,10 @@ security:
     token:
       secret-key: MySuperSecretKey123!MySuperSecretKey123!MySuperSecretKey123!
       expire-length: 3600000
+fcm:
+  key:
+    path: gjgs-fcm.json
+
 
 matching:
   pool-size: 500

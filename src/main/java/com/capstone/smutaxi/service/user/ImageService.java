@@ -41,7 +41,7 @@ public class ImageService {
         file.transferTo(dest);
 
         // URL 생성
-        String imageUrl = serverDomain + "api/images/" + fileName;
+        String imageUrl = serverDomain + "/api/images/" + fileName;
         return imageUrl;
     }
 
