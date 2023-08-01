@@ -27,12 +27,14 @@ public class WaitingRoomUser {
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+    private String deviceToken;
 
     //==생성메서드==//
-    public static WaitingRoomUser createWaitingRoomUser(WaitingRoom waitingRoom, User user) {
+    public static WaitingRoomUser createWaitingRoomUser(WaitingRoom waitingRoom, User user, String deviceToken) {
         WaitingRoomUser waitingRoomUser = new WaitingRoomUser();
         waitingRoomUser.setWaitingRoom(waitingRoom);
         waitingRoomUser.setUser(user);
+        waitingRoomUser.setDeviceToken(deviceToken);
         return waitingRoomUser;
     }
 

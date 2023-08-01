@@ -13,11 +13,13 @@ import com.capstone.smutaxi.dto.requests.match.MatchingRequest;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.repository.WaitingRoomRepository;
 import com.capstone.smutaxi.repository.WaitingRoomUserRepository;
+import com.capstone.smutaxi.service.FcmService;
 import com.capstone.smutaxi.utils.Location;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class IndividualMatchingService implements MatchingService {
     private final WaitingRoomRepository waitingRoomRepository;
     private final WaitingRoomUserRepository waitingRoomUserRepository;
     private final UserRepository userRepository;
+    private final FcmService fcmService;
 
     /**
      * Individual Style Match Handling
@@ -45,6 +48,8 @@ public class IndividualMatchingService implements MatchingService {
         //유저 위치 정보
         double latitude = matchingRequest.getLatitude();
         double longitude = matchingRequest.getLongitude();
+        //fcm deviceToken
+        String deviceToken = matchingRequest.getDeviceToken();
         Location userLocation = new Location(latitude, longitude);
 
         //WaitingRoom list 받아오기
@@ -57,9 +62,16 @@ public class IndividualMatchingService implements MatchingService {
             boolean canEnter = knockWaitingRoom(user, userLocation, waitingRoom);
             if (canEnter) {
                 //참가 정보 생성 및 대기방 입장
-                WaitingRoomUser entranceInformation = enterWaitingRoom(user, waitingRoom);
+                WaitingRoomUser entranceInformation = enterWaitingRoom(user, waitingRoom, deviceToken);
                 Long waitingRoomId = waitingRoom.getId();
                 Long waitingRoomUserId = entranceInformation.getId();
+                if (waitingRoom.getWaiters().size() == 4) {
+                    try {
+                        processMatchSuccess(waitingRoom);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                 return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, waitingRoomId, waitingRoomUserId);
             }
         }
@@ -67,9 +79,10 @@ public class IndividualMatchingService implements MatchingService {
 
     }
 
+
     @NotNull
-    private WaitingRoomUser enterWaitingRoom(User user, WaitingRoom waitingRoom) {
-        WaitingRoomUser waitingRoomUser = WaitingRoomUser.createWaitingRoomUser(waitingRoom, user);
+    private WaitingRoomUser enterWaitingRoom(User user, WaitingRoom waitingRoom, String deviceToken) {
+        WaitingRoomUser waitingRoomUser = WaitingRoomUser.createWaitingRoomUser(waitingRoom, user, deviceToken);
         waitingRoomUserRepository.save(waitingRoomUser);
         waitingRoom.getWaiters().add(waitingRoomUser);
         return waitingRoomUser;
@@ -110,5 +123,16 @@ public class IndividualMatchingService implements MatchingService {
         }
         waitingRoomUserRepository.deleteById(waitingRoomUserId);
         return ResponseFactory.createMatchCancelResponse(Boolean.TRUE, null);
+    }
+
+    private void processMatchSuccess(WaitingRoom waitingRoom) throws IOException {
+        List<WaitingRoomUser> waiters = waitingRoom.getWaiters();
+        //create Chat Room & push chatRoomId
+        for (WaitingRoomUser wru : waiters) {
+            String targetToken = wru.getDeviceToken();
+            fcmService.sendMessageTo(targetToken, "matchSuccess", "chatRoom: 1");
+        }
+        waitingRoomRepository.delete(waitingRoom);
+
     }
 }
