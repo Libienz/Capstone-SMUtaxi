@@ -1,6 +1,7 @@
 package com.capstone.smutaxi.service;
 
-import com.capstone.smutaxi.dto.ChatRoomDto;
+import com.capstone.smutaxi.dto.UserDto;
+import com.capstone.smutaxi.dto.UserJoinedChatRoomDto;
 import com.capstone.smutaxi.dto.responses.UserJoinedChatRoomResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.ChatParticipant;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,32 +48,64 @@ public class ChatRoomService {
         User user = userRepository.findById(userEmail)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-        List<ChatRoomDto> chatRoomDtoList = new ArrayList<>();
+        List<UserJoinedChatRoomDto> userJoinedChatRoomDtoList = new ArrayList<>();
+
         List<ChatParticipant> chatParticipantList = user.getChatParticipantList();
         for (ChatParticipant chatParticipant : chatParticipantList) {
             Long chatParticipantId = chatParticipant.getId();
+
             ChatRoom chatRoom = chatParticipant.getChatRoom();
 
-            //message Dto 생성
-            List<Message> messageList = chatRoom.getMessageList();
-            List<ChatRoomDto.MessageDto> messageDtoList = new ArrayList<>();
-            for (Message message : messageList) {
-                ChatRoomDto.MessageDto messageDto = message.toMessageDto();
-                messageDtoList.add(messageDto);
+            List<Message> messageList = chatParticipant.getChatRoom().getMessageList();
+
+            String lastMessage = null;
+            LocalDateTime lastSentTime =null;
+            // messageList에서 가장 큰 id 값을 찾기
+            Optional<Long> maxId = messageList.stream()
+                    .map(Message::getId)
+                    .max(Long::compareTo);
+
+            if (maxId.isPresent()) {
+                Long largestId = maxId.get();
+
+                // 가장 큰 id를 가진 Message 객체를 찾습니다.
+                Optional<Message> largestMessage = messageList.stream()
+                        .filter(message -> message.getId().equals(largestId))
+                        .findFirst();
+
+                if (largestMessage.isPresent()) {
+                    Message messageWithLargestId = largestMessage.get();
+                    lastMessage = messageWithLargestId.getMessage();
+                    lastSentTime = messageWithLargestId.getSendTime();
+
+                    System.out.println("가장 큰 id 값: " + largestId);
+                    System.out.println("가장 큰 id를 가진 Message의 message: " + lastMessage);
+                    System.out.println("가장 큰 id를 가진 Message의 sendTime: " + lastSentTime);
+                } else {
+                    System.out.println("해당하는 가장 큰 id를 가진 Message를 찾을 수 없습니다.");
+                }
+            } else {
+                System.out.println("messageList가 비어있습니다.");
             }
 
-            ChatRoomDto chatRoomDto = ChatRoomDto.builder()
+            List<ChatParticipant> chatRoomParticipant = chatRoom.getChatRoomParticipant();
+            List<UserDto> participantsList = new ArrayList<>();
+            for (ChatParticipant participant : chatRoomParticipant) {
+                participantsList.add(participant.getUser().userToUserDto());
+            }
+
+            UserJoinedChatRoomDto userJoinedChatRoomDto = UserJoinedChatRoomDto.builder()
                     .chatRoomId(chatRoom.getId())
-                    .chatParticipantId(chatParticipantId)
-                    .chatRoomLocation(chatRoom.getChatRoomLocation())
                     .chatRoomName(chatRoom.getChatRoomName())
-                    .messageList(messageDtoList)
+                    .lastMessage(lastMessage)
+                    .lastSentTime(lastSentTime)
+                    .participants(participantsList)
                     .build();
 
-            chatRoomDtoList.add(chatRoomDto);
+            userJoinedChatRoomDtoList.add(userJoinedChatRoomDto);
         }
             //response Dto 생성 -> {Boolean success, String message, ChatRoomDto chatRoomDto}
-        UserJoinedChatRoomResponse chatRoomResponse = ResponseFactory.createChatRoomResponse(true, null, chatRoomDtoList);
+        UserJoinedChatRoomResponse chatRoomResponse = ResponseFactory.createChatRoomResponse(true, null, userJoinedChatRoomDtoList);
 
         return chatRoomResponse;
     }
@@ -125,8 +159,4 @@ public class ChatRoomService {
         return chatRoom;
     }
 
-    //채팅방 전부 바놘
-    public List<ChatRoom> getRoomList() {
-        return chatRoomRepository.findAll();
-    }
 }

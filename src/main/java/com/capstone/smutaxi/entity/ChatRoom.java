@@ -26,11 +26,6 @@ public class ChatRoom  {
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     private List<Message> messageList = new ArrayList<>();
 
-    //채팅방에 참여중인 인원들의 대표위치
-    @Embedded
-    private Location chatRoomLocation;
-
-
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     private List<ChatParticipant> chatRoomParticipant = new ArrayList<>();
 
