@@ -1,5 +1,6 @@
 package com.capstone.smutaxi.dto.responses;
 
+import com.capstone.smutaxi.dto.MessageDto;
 import com.capstone.smutaxi.dto.UserJoinedChatRoomDto;
 import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.dto.responses.auth.EmailVerificationResponse;
@@ -77,6 +78,15 @@ public class ResponseFactory {
                 .success(success)
                 .message(message)
                 .userJoinedChatRoomDtoList(userJoinedChatRoomDtoList)
+                .build();
+    }
+
+    public static ChatRoomMessageResponse createChatRoomMessageResponse(Boolean success, String message,Long chatParticipantId, List<MessageDto> messageDtoList){
+        return ChatRoomMessageResponse.builder()
+                .success(success)
+                .message(message)
+                .chatParticipantId(chatParticipantId)
+                .messageDtoList(messageDtoList)
                 .build();
     }
 

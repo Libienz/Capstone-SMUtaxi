@@ -1,7 +1,9 @@
 package com.capstone.smutaxi.service;
 
+import com.capstone.smutaxi.dto.MessageDto;
 import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.dto.UserJoinedChatRoomDto;
+import com.capstone.smutaxi.dto.responses.ChatRoomMessageResponse;
 import com.capstone.smutaxi.dto.responses.UserJoinedChatRoomResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.ChatParticipant;
@@ -19,6 +21,7 @@ import com.capstone.smutaxi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -149,6 +152,32 @@ public class ChatRoomService {
         // ChatParticipant 엔티티를 삭제
         chatParticipantRepository.delete(findChatParticipant.get());
 
+    }
+    public ChatRoomMessageResponse getChatRoomMessages(String userId, Long chatRoomId){
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new ChatRoomNotFoundException(ErrorCode.CHATROOM_NOT_FOUND));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        Long chatParticipantId = null;
+
+        List<ChatParticipant> chatRoomParticipant = chatRoom.getChatRoomParticipant();
+        for (ChatParticipant chatParticipant : chatRoomParticipant) {
+            if(chatParticipant.getUser().equals(user)){
+                chatParticipantId=chatParticipant.getId();
+            }
+        }
+        List<MessageDto> messageDtoList = new ArrayList<>();
+        List<Message> messageList = chatRoom.getMessageList();
+        for (Message message : messageList) {
+            MessageDto messageDto = message.toMessageDto();
+            messageDtoList.add(messageDto);
+        }
+
+        ChatRoomMessageResponse chatRoomMessageResponse = ResponseFactory.createChatRoomMessageResponse(true, null, chatParticipantId, messageDtoList);
+
+        return chatRoomMessageResponse;
     }
 
     //ChatRoom 생성

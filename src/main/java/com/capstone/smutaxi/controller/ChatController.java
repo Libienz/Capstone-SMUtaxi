@@ -1,9 +1,11 @@
 package com.capstone.smutaxi.controller;
 
 
+import com.capstone.smutaxi.dto.responses.ChatRoomMessageResponse;
 import com.capstone.smutaxi.dto.responses.UserJoinedChatRoomResponse;
 import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.entity.Message;
+import com.capstone.smutaxi.repository.MessageRepository;
 import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +24,13 @@ import java.util.List;
 public class ChatController {
     private final ChatRoomService chatRoomService;
     private final MessageService messageService;
+    private final MessageRepository messageRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/send")
     public void chat(Message message) {
-        messageService.saveMessage(message);
+        Message msg = messageService.saveMessage(message);
+        System.out.println("msgid = " + msg.getId());
         messagingTemplate.convertAndSend("/sub/channel/" + message.getChatRoom().getId(), message);
     }
     //채팅방 생성 API
@@ -54,6 +58,12 @@ public class ChatController {
     public ResponseEntity<UserJoinedChatRoomResponse> getUserChatRooms(@RequestParam String email){
         UserJoinedChatRoomResponse userJoinedChatRooms = chatRoomService.getUserJoinedChatRooms(email);
         return ResponseEntity.ok(userJoinedChatRooms);
+    }
+
+    @GetMapping("/chatRoom/messages")
+    public ResponseEntity<ChatRoomMessageResponse> getChatRoomMessages(@RequestParam String userEmail, @RequestParam Long chatRoomId){
+        ChatRoomMessageResponse chatRoomMessages = chatRoomService.getChatRoomMessages(userEmail, chatRoomId);
+        return ResponseEntity.ok(chatRoomMessages);
     }
 
 }
