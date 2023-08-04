@@ -5,8 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.net.HttpHeaders;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,33 +23,12 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class FCMService {
+public class FcmService {
     @Value("${fcm.key.path}")
     private String FCM_PRIVATE_KEY_PATH;
     private final ObjectMapper objectMapper;
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/spoot-taxi/messages:send";
 
-//    // fcm 기본 설정 진행
-//    // Firebase에 Admin 계정을 인증하는 작업
-//    @PostConstruct
-//    public void init() {
-//        try {
-//            FirebaseOptions options = new FirebaseOptions.Builder()
-//                    .setCredentials(
-//                            GoogleCredentials
-//                                    .fromStream(new ClassPathResource(FCM_PRIVATE_KEY_PATH).getInputStream())
-//                                    .createScoped(List.of(fireBaseScope)))
-//                    .build();
-//            if (FirebaseApp.getApps().isEmpty()) {
-//                FirebaseApp.initializeApp(options);
-//                log.info("Firebase application has been initialized");
-//            }
-//        } catch (java.io.IOException e) {
-//            log.error(e.getMessage());
-//            // spring 뜰때 알림 서버가 잘 동작하지 않는 것이므로 바로 죽임
-//            throw new RuntimeException(e.getMessage());
-//        }
-//    }
 
 
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
@@ -69,7 +46,6 @@ public class FCMService {
 
         Response response = client.newCall(request).execute();
 
-        System.out.println(response.body().string());
     }
 
     private String makeMessage(String targetToken, String title, String body) throws JsonParseException, JsonProcessingException {
@@ -87,15 +63,19 @@ public class FCMService {
     }
 
     private String getAccessToken() throws IOException {
-        String firebaseConfigPath = "firebase/firebase_service_key.json";
+        String firebaseConfigFileName = "spoot-taxi-firebase-adminsdk-4w4i3-b36f67dc8c.json";
+
+        // Firebase Admin SDK 파일의 InputStream을 얻습니다.
+        InputStream serviceAccount = getClass().getClassLoader().getResourceAsStream(firebaseConfigFileName);
 
         GoogleCredentials googleCredentials = GoogleCredentials
-                .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
+                .fromStream(serviceAccount)
                 .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
 
         googleCredentials.refreshIfExpired();
         return googleCredentials.getAccessToken().getTokenValue();
     }
+
     // 알림 보내기
     public void sendByTokenList(List<String> tokenList) {
 

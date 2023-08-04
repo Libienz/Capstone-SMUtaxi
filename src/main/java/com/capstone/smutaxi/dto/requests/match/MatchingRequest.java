@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter @Setter
 public class MatchingRequest {
     private String email;
+    private String deviceToken;
     private double latitude;
     private double longitude;
 

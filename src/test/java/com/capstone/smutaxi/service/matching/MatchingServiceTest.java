@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @Transactional
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class IndividualMatchingServiceTest {
+public class MatchingServiceTest {
 
     @Autowired WaitingRoomRepository waitingRoomRepository;
     @Autowired MatchingService matchingService;
