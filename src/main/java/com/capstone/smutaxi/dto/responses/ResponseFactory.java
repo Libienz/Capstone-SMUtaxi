@@ -1,10 +1,13 @@
 package com.capstone.smutaxi.dto.responses;
 
-import com.capstone.smutaxi.dto.ChatRoomDto;
+import com.capstone.smutaxi.dto.MessageDto;
+import com.capstone.smutaxi.dto.UserJoinedChatRoomDto;
 import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.dto.responses.auth.EmailVerificationResponse;
 import com.capstone.smutaxi.dto.responses.auth.JoinResponse;
 import com.capstone.smutaxi.dto.responses.auth.LoginResponse;
+import com.capstone.smutaxi.dto.responses.chat.ChatRoomMessageResponse;
+import com.capstone.smutaxi.dto.responses.chat.UserJoinedChatRoomResponse;
 import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
 import com.capstone.smutaxi.dto.responses.match.MatchingResponse;
 import com.capstone.smutaxi.dto.responses.rally.RallyInformationDto;
@@ -72,11 +75,20 @@ public class ResponseFactory {
                 .build();
     }
 
-    public static UserJoinedChatRoomResponse createChatRoomResponse(Boolean success, String message, List<ChatRoomDto> chatRoomDtoList){
+    public static UserJoinedChatRoomResponse createChatRoomResponse(Boolean success, String message, List<UserJoinedChatRoomDto> userJoinedChatRoomDtoList){
         return UserJoinedChatRoomResponse.builder()
                 .success(success)
                 .message(message)
-                .chatRoomDtoList(chatRoomDtoList)
+                .userJoinedChatRoomDtoList(userJoinedChatRoomDtoList)
+                .build();
+    }
+
+    public static ChatRoomMessageResponse createChatRoomMessageResponse(Boolean success, String message, Long chatParticipantId, List<MessageDto> messageDtoList){
+        return ChatRoomMessageResponse.builder()
+                .success(success)
+                .message(message)
+                .chatParticipantId(chatParticipantId)
+                .messageDtoList(messageDtoList)
                 .build();
     }
 
