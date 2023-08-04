@@ -130,12 +130,14 @@ public class MatchingService {
 
     private void processMatchSuccess(WaitingRoom waitingRoom) throws IOException {
         List<WaitingRoomUser> waiters = waitingRoom.getWaiters();
-        //create Chat Room & push chatRoomId
+        //create Chat Room
         String chatRoomName = generateChatRoomName(waiters);
         ChatRoom chatRoom = chatRoomService.createChatRoom(chatRoomName);
+        //push match success notification & addUserToChatRoom
         for (WaitingRoomUser wru : waiters) {
             String targetToken = wru.getDeviceToken();
-            fcmService.sendMessageTo(targetToken, "matchSuccess", "chatRoomId: " + chatRoom.getId());
+            chatRoomService.addUserToChatRoom(chatRoom.getId(), wru.getUser().getEmail());
+            fcmService.sendMessageTo(targetToken, "상명대행 택시팟 매칭 성공!", "매칭된 채팅방으로 얼른 이동하세요!" + chatRoom.getId());
         }
         waitingRoomRepository.delete(waitingRoom);
 
