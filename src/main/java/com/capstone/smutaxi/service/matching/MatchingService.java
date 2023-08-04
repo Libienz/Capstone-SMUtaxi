@@ -4,6 +4,7 @@ import com.capstone.smutaxi.dto.requests.match.MatchCancelRequest;
 import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
 import com.capstone.smutaxi.dto.responses.match.MatchingResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
+import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.entity.User;
 import com.capstone.smutaxi.entity.WaitingRoom;
 import com.capstone.smutaxi.entity.WaitingRoomUser;
@@ -13,6 +14,7 @@ import com.capstone.smutaxi.dto.requests.match.MatchingRequest;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.repository.WaitingRoomRepository;
 import com.capstone.smutaxi.repository.WaitingRoomUserRepository;
+import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.service.FcmService;
 import com.capstone.smutaxi.utils.Location;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ public class MatchingService {
     private final WaitingRoomUserRepository waitingRoomUserRepository;
     private final UserRepository userRepository;
     private final FcmService fcmService;
+    private final ChatRoomService chatRoomService;
 
     /**
      * Individual Style Match Handling
@@ -128,11 +131,24 @@ public class MatchingService {
     private void processMatchSuccess(WaitingRoom waitingRoom) throws IOException {
         List<WaitingRoomUser> waiters = waitingRoom.getWaiters();
         //create Chat Room & push chatRoomId
+        String chatRoomName = generateChatRoomName(waiters);
+        ChatRoom chatRoom = chatRoomService.createChatRoom(chatRoomName);
         for (WaitingRoomUser wru : waiters) {
             String targetToken = wru.getDeviceToken();
-            fcmService.sendMessageTo(targetToken, "matchSuccess", "chatRoom: 1");
+            fcmService.sendMessageTo(targetToken, "matchSuccess", "chatRoomId: " + chatRoom.getId());
         }
         waitingRoomRepository.delete(waitingRoom);
 
+    }
+
+    private String generateChatRoomName(List<WaitingRoomUser> waiters) {
+        StringBuilder chatRoomNameBuilder = new StringBuilder();
+        for (int i = 0; i < waiters.size(); i++) {
+            chatRoomNameBuilder.append(waiters.get(i).getUser().getName());
+            if (i < waiters.size() - 1) {
+                chatRoomNameBuilder.append(", ");
+            }
+        }
+        return chatRoomNameBuilder.toString();
     }
 }
