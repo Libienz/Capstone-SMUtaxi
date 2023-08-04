@@ -39,7 +39,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*");//sockJs 안쓰고 연결하려면 /websocket을 추가해야되는듯함
+                .setAllowedOriginPatterns("*").withSockJS();//sockJs 쓰면 연결할때 /websocket 추가
     }
 
     /**

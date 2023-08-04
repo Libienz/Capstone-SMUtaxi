@@ -1,10 +1,13 @@
 package com.capstone.smutaxi.entity;
 
 
-import com.capstone.smutaxi.dto.ChatRoomDto;
+import com.capstone.smutaxi.dto.MessageDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
 import javax.persistence.*;
+
+import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.*;
 
@@ -23,7 +26,8 @@ public class Message {
 
     private String senderName;
 
-    private String sendTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime sendTime;
 
     private String message;
 
@@ -31,13 +35,13 @@ public class Message {
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
 
-    public ChatRoomDto.MessageDto toMessageDto() {
-        ChatRoomDto.MessageDto messageDto = new ChatRoomDto.MessageDto();
-        messageDto.setId(this.id);
-        messageDto.setSenderEmail(this.senderEmail);
+    public MessageDto toMessageDto() {
+        MessageDto messageDto = new MessageDto();
+        messageDto.setMessageId(this.id);
+        messageDto.setSenderId(this.senderEmail);
         messageDto.setSenderName(this.senderName);
-        messageDto.setSendTime(this.sendTime);
         messageDto.setMessage(this.message);
+        messageDto.setSentTime(this.sendTime);
         return messageDto;
 
     }

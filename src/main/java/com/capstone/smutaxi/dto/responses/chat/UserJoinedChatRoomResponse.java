@@ -1,6 +1,6 @@
-package com.capstone.smutaxi.dto.responses;
+package com.capstone.smutaxi.dto.responses.chat;
 
-import com.capstone.smutaxi.dto.ChatRoomDto;
+import com.capstone.smutaxi.dto.UserJoinedChatRoomDto;
 import lombok.*;
 
 import java.util.List;
@@ -14,5 +14,5 @@ import java.util.List;
 public class UserJoinedChatRoomResponse {
     private Boolean success;
     private String message;
-    private List<ChatRoomDto> chatRoomDtoList;
+    private List<UserJoinedChatRoomDto> userJoinedChatRoomDtoList;
 }
