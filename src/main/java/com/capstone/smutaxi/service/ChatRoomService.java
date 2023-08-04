@@ -3,8 +3,8 @@ package com.capstone.smutaxi.service;
 import com.capstone.smutaxi.dto.MessageDto;
 import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.dto.UserJoinedChatRoomDto;
-import com.capstone.smutaxi.dto.responses.ChatRoomMessageResponse;
-import com.capstone.smutaxi.dto.responses.UserJoinedChatRoomResponse;
+import com.capstone.smutaxi.dto.responses.chat.ChatRoomMessageResponse;
+import com.capstone.smutaxi.dto.responses.chat.UserJoinedChatRoomResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.ChatParticipant;
 import com.capstone.smutaxi.entity.ChatRoom;
@@ -21,7 +21,6 @@ import com.capstone.smutaxi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

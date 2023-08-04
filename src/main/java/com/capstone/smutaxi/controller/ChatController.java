@@ -1,8 +1,9 @@
 package com.capstone.smutaxi.controller;
 
 
-import com.capstone.smutaxi.dto.responses.ChatRoomMessageResponse;
-import com.capstone.smutaxi.dto.responses.UserJoinedChatRoomResponse;
+import com.capstone.smutaxi.dto.responses.chat.ChatRoomMessageResponse;
+import com.capstone.smutaxi.dto.responses.chat.UserJoinedChatRoomResponse;
+import com.capstone.smutaxi.dto.responses.chat.LeaveChatParticipantResponse;
 import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.entity.Message;
 import com.capstone.smutaxi.repository.MessageRepository;
@@ -14,8 +15,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,9 +47,10 @@ public class ChatController {
     }
 
     @PostMapping("/leave")
-    public ResponseEntity<String> leaveChatParticipant(@RequestParam Long chatParticipantId) {
+    public ResponseEntity<LeaveChatParticipantResponse> leaveChatParticipant(@RequestParam Long chatParticipantId) {
         chatRoomService.leaveChatParticipant(chatParticipantId);
-        return ResponseEntity.ok("User leave to the chat room successfully.");
+        LeaveChatParticipantResponse leaveChatParticipantResponse = LeaveChatParticipantResponse.builder().success(true).message("User leave to the chat room successfully.").build();
+        return ResponseEntity.ok(leaveChatParticipantResponse);
     }
 
     //유저가 참가한 ChatRoom의 이름과 Id 반환 API

@@ -1,4 +1,4 @@
-package com.capstone.smutaxi.dto.responses;
+package com.capstone.smutaxi.dto.responses.chat;
 
 import com.capstone.smutaxi.dto.MessageDto;
 import lombok.*;
