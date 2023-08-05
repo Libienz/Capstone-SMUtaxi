@@ -31,6 +31,7 @@ public class Message {
 
     private String message;
 
+    private String senderProfileImageUrl;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
@@ -40,6 +41,7 @@ public class Message {
         messageDto.setMessageId(this.id);
         messageDto.setSenderId(this.senderEmail);
         messageDto.setSenderName(this.senderName);
+        messageDto.setSenderProfileImageUrl(this.senderProfileImageUrl);
         messageDto.setMessage(this.message);
         messageDto.setSentTime(this.sendTime);
         return messageDto;
