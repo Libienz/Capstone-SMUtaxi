@@ -151,6 +151,12 @@ public class MatchingService {
                 chatRoomNameBuilder.append(", ");
             }
         }
-        return chatRoomNameBuilder.toString();
+
+        String chatRoomName = chatRoomNameBuilder.toString();
+        if (chatRoomName.length() > 12) {
+            chatRoomName = chatRoomName.substring(0, 12) + "...";
+        }
+        return chatRoomName;
     }
+
 }
