@@ -26,7 +26,7 @@ public class Message {
 
     private String senderName;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime sendTime;
 
     private String message;

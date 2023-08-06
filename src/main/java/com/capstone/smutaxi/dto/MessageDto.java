@@ -14,6 +14,6 @@ public class MessageDto {
     private String senderName;
     private String message;
     private String senderProfileImageUrl;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime sentTime;
 }

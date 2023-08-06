@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class RallyInformationDto {
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime date;
 
     private List<RallyDetailsDto> rallyDetailsDtoList;
@@ -23,9 +23,9 @@ public class RallyInformationDto {
     @Getter
     @Setter
     public static class RallyDetailsDto {
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         private LocalDateTime startTime;
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         private LocalDateTime endTime;
         private String location;
         private String rallyScale;

@@ -30,7 +30,7 @@ public class ChatController {
     public void chat(Message message) {
         Message msg = messageService.saveMessage(message);
         System.out.println("msgid = " + msg.getId());
-        messagingTemplate.convertAndSend("/sub/channel/" + message.getChatRoom().getId(), message);
+        messagingTemplate.convertAndSend("/sub/channel/" + message.getChatRoom().getId(), msg);
     }
     //채팅방 생성 API
     @PostMapping("/create-chatRoom")
