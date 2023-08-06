@@ -55,41 +55,21 @@ public class ChatRoomService {
         List<ChatParticipant> chatParticipantList = user.getChatParticipantList();
         for (ChatParticipant chatParticipant : chatParticipantList) {
             Long chatParticipantId = chatParticipant.getId();
-
             ChatRoom chatRoom = chatParticipant.getChatRoom();
-
             List<Message> messageList = chatParticipant.getChatRoom().getMessageList();
-
             String lastMessage = null;
             LocalDateTime lastSentTime =null;
-            // messageList에서 가장 큰 id 값을 찾기
-            Optional<Long> maxId = messageList.stream()
-                    .map(Message::getId)
-                    .max(Long::compareTo);
 
-            if (maxId.isPresent()) {
-                Long largestId = maxId.get();
-
-                // 가장 큰 id를 가진 Message 객체를 찾습니다.
-                Optional<Message> largestMessage = messageList.stream()
-                        .filter(message -> message.getId().equals(largestId))
-                        .findFirst();
-
-                if (largestMessage.isPresent()) {
-                    Message messageWithLargestId = largestMessage.get();
-                    lastMessage = messageWithLargestId.getMessage();
-                    lastSentTime = messageWithLargestId.getSendTime();
-
-                    System.out.println("가장 큰 id 값: " + largestId);
-                    System.out.println("가장 큰 id를 가진 Message의 message: " + lastMessage);
-                    System.out.println("가장 큰 id를 가진 Message의 sendTime: " + lastSentTime);
-                } else {
-                    System.out.println("해당하는 가장 큰 id를 가진 Message를 찾을 수 없습니다.");
-                }
-            } else {
-                System.out.println("messageList가 비어있습니다.");
+            //안읽은 메시지 카운트 (참여 정보에 채팅방을 나간 시점이 기록되어 있다)
+            int nonReadMessageCount = countNonReadMessage(chatParticipant, messageList);
+            //가장 마지막 메시지 받아오기
+            Message lastSentMessage = getLastSentMessage(messageList);
+            if (lastSentMessage != null) {
+                lastMessage = lastSentMessage.getMessage();
+                lastSentTime = lastSentMessage.getSendTime();
             }
 
+            //현재 루프에서 보고있는 채팅방(유저가 참여하고 있는 채팅방 중 하나)에 대한 정보를 dto로 변환
             List<ChatParticipant> chatRoomParticipant = chatRoom.getChatRoomParticipant();
             List<UserDto> participantsList = new ArrayList<>();
             for (ChatParticipant participant : chatRoomParticipant) {
@@ -100,17 +80,18 @@ public class ChatRoomService {
                     .chatRoomId(chatRoom.getId())
                     .chatRoomName(chatRoom.getChatRoomName())
                     .lastMessage(lastMessage)
+                    .nonReadMessageCount(nonReadMessageCount)
                     .lastSentTime(lastSentTime)
                     .participants(participantsList)
                     .build();
 
             userJoinedChatRoomDtoList.add(userJoinedChatRoomDto);
         }
-            //response Dto 생성 -> {Boolean success, String message, ChatRoomDto chatRoomDto}
+        //response Dto 생성 -> {Boolean success, String message, ChatRoomDto chatRoomDto}
         UserJoinedChatRoomResponse chatRoomResponse = ResponseFactory.createChatRoomResponse(true, null, userJoinedChatRoomDtoList);
-
         return chatRoomResponse;
     }
+
 
     //채팅방에 유저를 추가 = ChatParticipant 생성
     @Transactional
@@ -185,6 +166,40 @@ public class ChatRoomService {
         ChatRoom chatRoom = ChatRoom.create(name);
         chatRoomRepository.save(chatRoom);
         return chatRoom;
+    }
+
+
+    // List<Message>에서 가장 최근의 메시지를 찾아 반환하는 메서드
+    private Message getLastSentMessage(List<Message> messageList) {
+        // 메시지가 없는 경우 null 반환
+        if (messageList == null || messageList.isEmpty()) {
+            return null;
+        }
+        // 초기값으로 첫 번째 메시지를 최근 메시지로 설정
+        Message latestMessage = messageList.get(0);
+
+        // 모든 메시지를 순회하며 최근 메시지를 찾음
+        for (Message message : messageList) {
+            LocalDateTime messageTime = message.getSendTime();
+            LocalDateTime latestMessageTime = latestMessage.getSendTime();
+            if (messageTime.isAfter(latestMessageTime)) {
+                latestMessage = message;
+            }
+        }
+        return latestMessage;
+    }
+
+    //entrnace information(chatParticipant)로 안읽은 메시지 카운트
+    private static int countNonReadMessage(ChatParticipant chatParticipant, List<Message> messageList) {
+        int nonReadMessageCount = 0;
+        for (Message message : messageList) {
+            LocalDateTime sendTime = message.getSendTime();
+            LocalDateTime lastLeaveTime = chatParticipant.getLastLeaveTime();
+            if (lastLeaveTime.isBefore(sendTime)) {
+                nonReadMessageCount++;
+            }
+        }
+        return nonReadMessageCount;
     }
 
 }
