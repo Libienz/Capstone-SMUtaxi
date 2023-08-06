@@ -16,10 +16,20 @@ public class StompHandler implements ChannelInterceptor {
         if(accessor.getCommand() == StompCommand.DISCONNECT){
             String destination = accessor.getDestination();
             System.out.println("연결종료");
-            //이곳에서 매칭 종료시 어떤식으로 채팅방을 처리할지 생각
-            //구독 종료시 유저 리스트에서 제거하려면 해당 chatroom id와 유저의id가 필요할텐데 그럼 어떻게받지?
-            //구독종료할때 클라이언트에서 stomp헤더에 추가 헤더를달아서 채팅방id를 보내면 괜찮을까?
 
+        }
+        if(accessor.getCommand()==StompCommand.SUBSCRIBE){
+            String destination = accessor.getDestination();
+            System.out.println("구독됨, destination = " + destination);
+
+        }
+        if(accessor.getCommand()==StompCommand.CONNECT){
+            System.out.println("서버와 웹소켓 연결됨");
+
+        }
+        if(accessor.getCommand()==StompCommand.UNSUBSCRIBE){
+            String destination = accessor.getDestination();
+            System.out.println("구독해제됨, destination = " + destination);
         }
         return message;
     }
