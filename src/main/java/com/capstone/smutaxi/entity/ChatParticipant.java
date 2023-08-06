@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
+
 import static javax.persistence.FetchType.*;
 
 /**
@@ -29,6 +31,8 @@ public class ChatParticipant {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    private LocalDateTime lastLeaveTime;
 
     //==연관관계 메서드==//
     public void setChatRoomAndUser(ChatRoom chatRoom, User user){
