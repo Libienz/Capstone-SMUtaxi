@@ -108,11 +108,7 @@ public class ChatRoomService {
             throw new ChatParticipantDuplicateException(ErrorCode.CHATPARTICIPANT_DUPLICATION);
         }
 
-        ChatParticipant chatParticipant = new ChatParticipant();
-
-        //연관관계 메서드
-        chatParticipant.setChatRoomAndUser(chatRoom,user);
-
+        ChatParticipant chatParticipant = ChatParticipant.createChatParticipant(chatRoom, user, LocalDateTime.now());
         ChatParticipant save = chatParticipantRepository.save(chatParticipant);
         return save.getId();
     }
