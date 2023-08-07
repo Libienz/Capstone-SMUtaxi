@@ -6,6 +6,8 @@ import com.capstone.smutaxi.dto.responses.chat.UserJoinedChatRoomResponse;
 import com.capstone.smutaxi.dto.responses.chat.LeaveChatParticipantResponse;
 import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.entity.Message;
+import com.capstone.smutaxi.entity.SystemMessage;
+import com.capstone.smutaxi.entity.UserMessage;
 import com.capstone.smutaxi.repository.MessageRepository;
 import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.service.MessageService;
@@ -16,6 +18,9 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/chat")
@@ -23,14 +28,21 @@ import org.springframework.web.bind.annotation.*;
 public class ChatController {
     private final ChatRoomService chatRoomService;
     private final MessageService messageService;
-    private final MessageRepository messageRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/send")
-    public void chat(Message message) {
-        Message msg = messageService.saveMessage(message);
-        System.out.println("msgid = " + msg.getId());
-        messagingTemplate.convertAndSend("/sub/channel/" + message.getChatRoom().getId(), msg);
+    public void chat(UserMessage message) {
+        Message sendUserMessage = messageService.saveMessage(message);
+        messagingTemplate.convertAndSend("/sub/channel/" + message.getChatRoom().getId(), sendUserMessage);
+    }
+
+    @MessageMapping("/exit")
+    public void chat(SystemMessage systemMessage) {
+        systemMessage.setMessage(systemMessage.getSenderName()+"님이 나갔습니다.");
+        systemMessage.setIsSystem(true);
+
+        Message sendExitMessage = messageService.saveMessage(systemMessage);
+        messagingTemplate.convertAndSend("/sub/channel/" + systemMessage.getChatRoom().getId(), sendExitMessage);
     }
     //채팅방 생성 API
     @PostMapping("/create-chatRoom")
