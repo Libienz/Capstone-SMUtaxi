@@ -16,4 +16,5 @@ public class MessageDto {
     private String senderProfileImageUrl;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime sentTime;
+    private Boolean isSystem;
 }
