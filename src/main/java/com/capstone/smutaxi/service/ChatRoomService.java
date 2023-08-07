@@ -4,6 +4,7 @@ import com.capstone.smutaxi.dto.MessageDto;
 import com.capstone.smutaxi.dto.UserDto;
 import com.capstone.smutaxi.dto.UserJoinedChatRoomDto;
 import com.capstone.smutaxi.dto.responses.chat.ChatRoomMessageResponse;
+import com.capstone.smutaxi.dto.responses.chat.UpdateChatParticipantResponse;
 import com.capstone.smutaxi.dto.responses.chat.UserJoinedChatRoomResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.ChatParticipant;
@@ -164,6 +165,13 @@ public class ChatRoomService {
         return chatRoom;
     }
 
+    @Transactional
+    public UpdateChatParticipantResponse updateChatParticipant(Long chatParticipnatId) {
+        ChatParticipant chatParticipant = chatParticipantRepository.findById(chatParticipnatId)
+                .orElseThrow(() -> new ChatParticipantNotFoundException(ErrorCode.CHATPARTICIPANT_NOT_FOUND));
+        chatParticipant.setLastLeaveTime(LocalDateTime.now());
+        return ResponseFactory.createUpdateChatParticipantResponse(Boolean.TRUE, null);
+    }
 
     // List<Message>에서 가장 최근의 메시지를 찾아 반환하는 메서드
     private Message getLastSentMessage(List<Message> messageList) {
