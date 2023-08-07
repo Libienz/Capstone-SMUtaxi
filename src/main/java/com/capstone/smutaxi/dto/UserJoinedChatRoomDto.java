@@ -17,7 +17,7 @@ public class UserJoinedChatRoomDto {
     private Long chatRoomId;
     private String chatRoomName;
     private String lastMessage;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime lastSentTime;
     private List<UserDto> participants;
     private Integer nonReadMessageCount;
