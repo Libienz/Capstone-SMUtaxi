@@ -1,9 +1,13 @@
 package com.capstone.smutaxi.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+
+import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.*;
 
@@ -16,6 +20,7 @@ import static javax.persistence.FetchType.*;
 @Setter
 @Entity
 @Table(name = "chat_participants")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatParticipant {
     @Id
     @Column(name = "chat_participant_id")
@@ -30,6 +35,16 @@ public class ChatParticipant {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private LocalDateTime lastLeaveTime;
+
+    //==생성 메서드==//
+    public static ChatParticipant createChatParticipant(ChatRoom chatRoom, User user, LocalDateTime lastLeaveTime) {
+        ChatParticipant chatParticipant = new ChatParticipant();
+        chatParticipant.setChatRoom(chatRoom);
+        chatParticipant.setUser(user);
+        chatParticipant.setLastLeaveTime(lastLeaveTime);
+        return chatParticipant;
+    }
     //==연관관계 메서드==//
     public void setChatRoomAndUser(ChatRoom chatRoom, User user){
         this.chatRoom = chatRoom;

@@ -7,6 +7,7 @@ import com.capstone.smutaxi.dto.responses.auth.EmailVerificationResponse;
 import com.capstone.smutaxi.dto.responses.auth.JoinResponse;
 import com.capstone.smutaxi.dto.responses.auth.LoginResponse;
 import com.capstone.smutaxi.dto.responses.chat.ChatRoomMessageResponse;
+import com.capstone.smutaxi.dto.responses.chat.UpdateChatParticipantResponse;
 import com.capstone.smutaxi.dto.responses.chat.UserJoinedChatRoomResponse;
 import com.capstone.smutaxi.dto.responses.match.MatchCancelResponse;
 import com.capstone.smutaxi.dto.responses.match.MatchingResponse;
@@ -106,5 +107,12 @@ public class ResponseFactory {
                 waitingRoomId(waitingRoomId).
                 waitingRoomUserId(waitingRoomUserId).
                 build();
+    }
+
+    public static UpdateChatParticipantResponse createUpdateChatParticipantResponse(Boolean success, String message) {
+        return UpdateChatParticipantResponse.builder()
+                .success(success)
+                .message(message)
+                .build();
     }
 }
