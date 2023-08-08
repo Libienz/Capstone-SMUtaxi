@@ -11,6 +11,7 @@ import com.capstone.smutaxi.entity.WaitingRoomUser;
 import com.capstone.smutaxi.exception.ErrorCode;
 import com.capstone.smutaxi.exception.matching.CannotJoinWaitingRoomException;
 import com.capstone.smutaxi.dto.requests.match.MatchingRequest;
+import com.capstone.smutaxi.repository.ChatRoomRepository;
 import com.capstone.smutaxi.repository.UserRepository;
 import com.capstone.smutaxi.repository.WaitingRoomRepository;
 import com.capstone.smutaxi.repository.WaitingRoomUserRepository;
@@ -18,17 +19,21 @@ import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.service.FcmService;
 import com.capstone.smutaxi.utils.Location;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
+@Slf4j
 public class MatchingService {
 
 
@@ -72,6 +77,10 @@ public class MatchingService {
                 if (waitingRoom.getWaiters().size() == 4) {
                     try {
                         processMatchSuccess(waitingRoom);
+                        for (WaitingRoomUser wru : waitingRoom.getWaiters()) {
+                            fcmService.sendMessageTo(wru.getDeviceToken(), "상명대행 택시팟 매칭 성공!", "매칭된 채팅방으로 얼른 이동하세요!");
+                        }
+                        waitingRoomRepository.delete(waitingRoom);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -128,19 +137,17 @@ public class MatchingService {
         return ResponseFactory.createMatchCancelResponse(Boolean.TRUE, null);
     }
 
-    private void processMatchSuccess(WaitingRoom waitingRoom) throws IOException {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    private Long processMatchSuccess(WaitingRoom waitingRoom) throws IOException {
         List<WaitingRoomUser> waiters = waitingRoom.getWaiters();
         //create Chat Room
         String chatRoomName = generateChatRoomName(waiters);
         ChatRoom chatRoom = chatRoomService.createChatRoom(chatRoomName);
-        //push match success notification & addUserToChatRoom
+        //add waiters to chatRoom
         for (WaitingRoomUser wru : waiters) {
-            String targetToken = wru.getDeviceToken();
             chatRoomService.addUserToChatRoom(chatRoom.getId(), wru.getUser().getEmail());
-            fcmService.sendMessageTo(targetToken, "상명대행 택시팟 매칭 성공!", "매칭된 채팅방으로 얼른 이동하세요!" + chatRoom.getId());
         }
-        waitingRoomRepository.delete(waitingRoom);
-
+        return chatRoom.getId();
     }
 
     private String generateChatRoomName(List<WaitingRoomUser> waiters) {
