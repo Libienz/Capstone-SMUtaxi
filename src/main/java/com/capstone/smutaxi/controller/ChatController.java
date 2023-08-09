@@ -2,48 +2,36 @@ package com.capstone.smutaxi.controller;
 
 
 import com.capstone.smutaxi.dto.responses.chat.ChatRoomMessageResponse;
+import com.capstone.smutaxi.dto.responses.chat.LeaveChatParticipantResponse;
 import com.capstone.smutaxi.dto.responses.chat.UpdateChatParticipantResponse;
 import com.capstone.smutaxi.dto.responses.chat.UserJoinedChatRoomResponse;
-import com.capstone.smutaxi.dto.responses.chat.LeaveChatParticipantResponse;
 import com.capstone.smutaxi.entity.ChatRoom;
 import com.capstone.smutaxi.entity.Message;
 import com.capstone.smutaxi.entity.SystemMessage;
 import com.capstone.smutaxi.entity.UserMessage;
-import com.capstone.smutaxi.repository.MessageRepository;
 import com.capstone.smutaxi.service.ChatRoomService;
 import com.capstone.smutaxi.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/chat")
-@CrossOrigin
 public class ChatController {
     private final ChatRoomService chatRoomService;
     private final MessageService messageService;
-    private final SimpMessagingTemplate messagingTemplate;
 
-    @MessageMapping("/send")
-    public void chat(UserMessage message) {
+    @PostMapping("/save-user")
+    public ResponseEntity<Message> saveUserMessage(@RequestBody UserMessage message) {
         Message sendUserMessage = messageService.saveMessage(message);
-        messagingTemplate.convertAndSend("/sub/channel/" + message.getChatRoom().getId(), sendUserMessage);
+        return ResponseEntity.ok(sendUserMessage);
     }
 
-    @MessageMapping("/exit")
-    public void chat(SystemMessage systemMessage) {
-        systemMessage.setMessage(systemMessage.getSenderName()+"님이 나갔습니다.");
-        systemMessage.setIsSystem(true);
-
-        Message sendExitMessage = messageService.saveMessage(systemMessage);
-        messagingTemplate.convertAndSend("/sub/channel/" + systemMessage.getChatRoom().getId(), sendExitMessage);
+    @PostMapping("/save-exit")
+    public ResponseEntity<Message> saveSystemMessage(@RequestBody SystemMessage message) {
+        Message sendUserMessage = messageService.saveMessage(message);
+        return ResponseEntity.ok(sendUserMessage);
     }
 
     //채팅방 생성 API
