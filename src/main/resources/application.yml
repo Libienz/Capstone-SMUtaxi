@@ -3,10 +3,15 @@ spring:
     console:
       enabled: true
   datasource:
-    url: jdbc:h2:tcp://localhost/~/smutaxi
+    url: jdbc:h2:tcp://localhost:18080/~/smutaxi
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
+  kafka:
+    consumer:
+      group-id: consumer-id
+      bootstrap-servers: localhost:9092
 
   jpa:
     hibernate:

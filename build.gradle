@@ -44,6 +44,8 @@ dependencies {
 	//fileNameUtils
 	implementation 'commons-io:commons-io:2.11.0'
 
+	//kafka
+	implementation 'org.springframework.kafka:spring-kafka'
 
 	runtimeOnly 'com.h2database:h2'
 	compileOnly 'org.projectlombok:lombok'
