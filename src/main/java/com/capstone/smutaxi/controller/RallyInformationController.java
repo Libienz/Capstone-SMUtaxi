@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api/rally-info")
+@RequestMapping("/api/rally-information")
 @RequiredArgsConstructor
 public class RallyInformationController {
 
@@ -25,7 +25,7 @@ public class RallyInformationController {
      */
 
     //집회 정보 생성 API
-    @PostMapping("/create")
+    @PostMapping("")
     public ResponseEntity<RallyResponse> createRallyInfo(HttpServletRequest request,@RequestBody RallyInformationDto rallyInformationDto) {
 
         //받은 정보를 저장
@@ -37,7 +37,7 @@ public class RallyInformationController {
     }
 
     //가장 최근 집회정보 1개 GET API
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<RallyResponse> getRallyInfo(){
 
         //가장 최근 집회정보 1개 (RallyInformation)
