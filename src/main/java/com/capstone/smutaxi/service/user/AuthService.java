@@ -39,9 +39,12 @@ public class AuthService {
         }
         //유저 초기화
         User user = User.createUser(joinDto.getEmail(),
-                                    passwordEncoder.encode(joinDto.getPassword()),
-                                    joinDto.getName(),
-                                    joinDto.getImgUrl());
+                passwordEncoder.encode(joinDto.getPassword()),
+                joinDto.getName(),
+                joinDto.getImgUrl());
+
+        //role 추가
+        user.getRoles().add(Role.USER.getRoleName());
         //회원가입
         userRepository.save(user);
 
