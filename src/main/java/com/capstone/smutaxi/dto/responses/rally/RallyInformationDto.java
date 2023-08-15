@@ -29,7 +29,7 @@ public class RallyInformationDto {
         private LocalDateTime endTime;
         private String location;
         private String rallyScale;
-        private String jurisdiction;
+        private String locationDetail;
 
         public RallyDetail toRallyDetail() {
             RallyDetail rallyDetail = new RallyDetail();
@@ -37,7 +37,7 @@ public class RallyInformationDto {
             rallyDetail.setEndTime(this.endTime);
             rallyDetail.setLocation(this.location);
             rallyDetail.setRallyScale(this.rallyScale);
-            rallyDetail.setJurisdiction(this.jurisdiction);
+            rallyDetail.setLocationDetail(this.locationDetail);
             return rallyDetail;
         }
     }
