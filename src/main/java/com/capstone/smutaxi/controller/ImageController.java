@@ -27,7 +27,7 @@ public class ImageController {
 
 
     //프로필 이미지 업로드 (재설정 포함) API
-    @PostMapping("/profile-image/upload")
+    @PostMapping("")
     public ResponseEntity<UploadImageResponse> uploadFile(@Part("imagePart") MultipartFile imagePart) throws IOException {
 
         String imageUrl = imageService.uploadUserProfileImage(imagePart);
@@ -37,7 +37,7 @@ public class ImageController {
     }
 
     //프로필 이미지 GET API
-    @GetMapping("/profile-image/{fileName}")
+    @GetMapping("/{fileName}")
     public ResponseEntity<Resource> getImage(@PathVariable String fileName) throws MalformedURLException, FileNotFoundException {
         Resource profileImage = imageService.getProfileImage(fileName);
         MediaType imageMediaType = imageService.getImageMediaType(fileName);
