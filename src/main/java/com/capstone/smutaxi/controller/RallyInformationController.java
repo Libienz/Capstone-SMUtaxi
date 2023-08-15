@@ -4,6 +4,7 @@ import com.capstone.smutaxi.dto.responses.rally.RallyInformationDto;
 import com.capstone.smutaxi.dto.responses.rally.RallyResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.RallyInformation;
+import com.capstone.smutaxi.service.FcmService;
 import com.capstone.smutaxi.service.RallyInformationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 public class RallyInformationController {
 
     private final RallyInformationService rallyInformationService;
+    private final FcmService fcmService;
 
     /**
      * @RALLY_INFO_IMGURL
@@ -30,9 +32,10 @@ public class RallyInformationController {
 
         //받은 정보를 저장
         RallyInformation rallyInformation = rallyInformationService.createRallyInfo(rallyInformationDto);
-
         //Response Dto 생성 -> {success, message, RallyInfoDto}
         RallyResponse rallyResponse = ResponseFactory.createRallyResponse(true, null, rallyInformationDto);
+        fcmService.notifyAllUser("오늘의 시위정보 도착!", "");
+
         return ResponseEntity.ok().body(rallyResponse);
     }
 

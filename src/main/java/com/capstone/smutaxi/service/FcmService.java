@@ -114,12 +114,16 @@ public class FcmService {
         }
     }
 
-    public void notifyAllUser(String title, String msg) throws IOException {
+    public void notifyAllUser(String title, String msg) {
         List<User> users = userRepository.findAll();
         for (User u : users) {
             Set<String> deviceTokens = u.getDeviceTokens();
             for (String deviceToken : deviceTokens) {
-                sendMessageTo(deviceToken, title, msg);
+                try {
+                    sendMessageTo(deviceToken, title, msg);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
