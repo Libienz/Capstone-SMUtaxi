@@ -9,9 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static javax.persistence.FetchType.*;
@@ -43,6 +41,8 @@ public class User implements UserDetails {
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
+    @ElementCollection(fetch = LAZY)
+    private Set<String> deviceTokens = new HashSet<>();
 
     //Spring Security Method
     @Override   //사용자의 권한 목록 리턴

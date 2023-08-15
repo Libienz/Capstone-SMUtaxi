@@ -45,6 +45,7 @@ public class AuthService {
 
         //role 추가
         user.getRoles().add(Role.USER.getRoleName());
+        user.getDeviceTokens().add(joinDto.getDeviceToken());
         //회원가입
         userRepository.save(user);
 
