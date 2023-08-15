@@ -17,46 +17,48 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/chat")
+@RequestMapping("/api/chatrooms")
 public class ChatController {
     private final ChatRoomService chatRoomService;
 
     //채팅방 생성 API
-    @PostMapping("/create-chatRoom")
+    @PostMapping("")
     public ResponseEntity<String> createChatRoom(@RequestParam String chatRoomName) {
         ChatRoom chatRoom = chatRoomService.createChatRoom(chatRoomName);
         return ResponseEntity.ok("create chatRoom successfully. chatRoomId: " + chatRoom.getId());
     }
 
     //채팅방에 유저추가 API
-    @PostMapping("/add-user")
-    public ResponseEntity<String> addChatRoomUser(@RequestParam String userEmail, @RequestParam Long chatRoomId) {
+    @PostMapping("{roomId}/add-user")
+    public ResponseEntity<String> addChatRoomUser(@PathVariable("roomId") Long chatRoomId, @RequestParam String userEmail) {
         Long chatParticipantId = chatRoomService.addUserToChatRoom(chatRoomId, userEmail);
         return ResponseEntity.ok("User added to the chat room successfully. chatParticipantId: " + chatParticipantId);
     }
 
-    @PostMapping("/leave")
-    public ResponseEntity<LeaveChatParticipantResponse> leaveChatParticipant(@RequestParam Long chatParticipantId) {
+    //채팅방에서 유저 나감 API
+    @DeleteMapping("{roomId}/participants/{participantId}")
+    public ResponseEntity<LeaveChatParticipantResponse> leaveChatParticipant(@PathVariable("roomId") Long chatRoomId, @PathVariable("participantId") Long chatParticipantId) {
         chatRoomService.leaveChatParticipant(chatParticipantId);
         LeaveChatParticipantResponse leaveChatParticipantResponse = LeaveChatParticipantResponse.builder().success(true).message("User leave to the chat room successfully.").build();
         return ResponseEntity.ok(leaveChatParticipantResponse);
     }
 
-    //유저가 참가한 ChatRoom의 이름과 Id 반환 API
-    @GetMapping("/user/chatRooms")
+    //유저가 참가한 ChatRooms 반환 API
+    @GetMapping("")
     public ResponseEntity<UserJoinedChatRoomResponse> getUserChatRooms(@RequestParam String email) {
         UserJoinedChatRoomResponse userJoinedChatRooms = chatRoomService.getUserJoinedChatRooms(email);
         return ResponseEntity.ok(userJoinedChatRooms);
     }
 
-    @GetMapping("/chatRoom/messages")
-    public ResponseEntity<ChatRoomMessageResponse> getChatRoomMessages(@RequestParam String userEmail, @RequestParam Long chatRoomId) {
+    //채팅방의 messages 반환 api
+    @GetMapping("/{roomId}/messages")
+    public ResponseEntity<ChatRoomMessageResponse> getChatRoomMessages(@PathVariable("roomId") Long chatRoomId, @RequestParam String userEmail) {
         ChatRoomMessageResponse chatRoomMessages = chatRoomService.getChatRoomMessages(userEmail, chatRoomId);
         return ResponseEntity.ok(chatRoomMessages);
     }
 
-    @PostMapping("update/room-exit-time")
-    public ResponseEntity<UpdateChatParticipantResponse> updateChatParticipant(@RequestParam Long chatParticipantId) {
+    @PutMapping("{roomId}/participants/{participantId}/room-exit-time")
+    public ResponseEntity<UpdateChatParticipantResponse> updateChatParticipant(@PathVariable("participantId") Long chatParticipantId) {
         UpdateChatParticipantResponse updateChatParticipantResponse = chatRoomService.updateChatParticipant(chatParticipantId);
         return ResponseEntity.ok(updateChatParticipantResponse);
     }
