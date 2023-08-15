@@ -23,13 +23,14 @@ public class RallyInformation {
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime date;
-
+    private String comment;
     @OneToMany(mappedBy = "rallyInformation", cascade = CascadeType.ALL)
     private List<RallyDetail> rallyDetailList = new ArrayList<>();
 
     public RallyInformationDto toRallyInformationDto() {
         RallyInformationDto rallyInformationDto = new RallyInformationDto();
         rallyInformationDto.setDate(this.date);
+        rallyInformationDto.setComment(this.comment);
 
         List<RallyInformationDto.RallyDetailsDto> rallyDetailsDtoList = new ArrayList<>();
         for (RallyDetail rallyDetail : this.rallyDetailList) {

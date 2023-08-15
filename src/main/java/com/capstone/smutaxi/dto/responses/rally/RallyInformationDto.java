@@ -16,7 +16,7 @@ import java.util.List;
 public class RallyInformationDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime date;
-
+    private String comment;
     private List<RallyDetailsDto> rallyDetailsDtoList;
 
     //dto 이름 수정 필요
