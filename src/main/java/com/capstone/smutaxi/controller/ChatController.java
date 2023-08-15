@@ -20,19 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/chat")
 public class ChatController {
     private final ChatRoomService chatRoomService;
-    private final MessageService messageService;
-
-    @PostMapping("/save-user")
-    public ResponseEntity<Message> saveUserMessage(@RequestBody UserMessage message) {
-        Message sendUserMessage = messageService.saveMessage(message);
-        return ResponseEntity.ok(sendUserMessage);
-    }
-
-    @PostMapping("/save-exit")
-    public ResponseEntity<Message> saveSystemMessage(@RequestBody SystemMessage message) {
-        Message sendUserMessage = messageService.saveMessage(message);
-        return ResponseEntity.ok(sendUserMessage);
-    }
 
     //채팅방 생성 API
     @PostMapping("/create-chatRoom")
