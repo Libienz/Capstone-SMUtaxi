@@ -1,5 +1,7 @@
 package com.capstone.smutaxi.service;
 
+import com.capstone.smutaxi.entity.User;
+import com.capstone.smutaxi.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +20,7 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +31,7 @@ public class FcmService {
     private String FCM_PRIVATE_KEY_PATH;
     private final ObjectMapper objectMapper;
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/spoot-taxi/messages:send";
+    private final UserRepository userRepository;
 
 
 
@@ -107,6 +111,20 @@ public class FcmService {
             }
         } catch (FirebaseMessagingException e) {
             log.error("cannot send to memberList push message. error info : {}", e.getMessage());
+        }
+    }
+
+    public void notifyAllUser(String title, String msg) {
+        List<User> users = userRepository.findAll();
+        for (User u : users) {
+            Set<String> deviceTokens = u.getDeviceTokens();
+            for (String deviceToken : deviceTokens) {
+                try {
+                    sendMessageTo(deviceToken, title, msg);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 }

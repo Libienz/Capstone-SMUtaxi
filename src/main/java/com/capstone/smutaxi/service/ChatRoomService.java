@@ -184,9 +184,8 @@ public class ChatRoomService {
 
         // 모든 메시지를 순회하며 최근 메시지를 찾음
         for (Message message : messageList) {
-            LocalDateTime messageTime = message.getSendTime();
-            LocalDateTime latestMessageTime = latestMessage.getSendTime();
-            if (messageTime.isAfter(latestMessageTime)) {
+            Long curId = message.getId();
+            if (latestMessage.getId() < curId) {
                 latestMessage = message;
             }
         }

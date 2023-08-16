@@ -4,6 +4,7 @@ import com.capstone.smutaxi.dto.responses.rally.RallyInformationDto;
 import com.capstone.smutaxi.dto.responses.rally.RallyResponse;
 import com.capstone.smutaxi.dto.responses.ResponseFactory;
 import com.capstone.smutaxi.entity.RallyInformation;
+import com.capstone.smutaxi.service.FcmService;
 import com.capstone.smutaxi.service.RallyInformationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api/rally-info")
+@RequestMapping("/api/rally-information")
 @RequiredArgsConstructor
 public class RallyInformationController {
 
     private final RallyInformationService rallyInformationService;
+    private final FcmService fcmService;
 
     /**
      * @RALLY_INFO_IMGURL
@@ -25,19 +27,20 @@ public class RallyInformationController {
      */
 
     //집회 정보 생성 API
-    @PostMapping("/create")
+    @PostMapping("")
     public ResponseEntity<RallyResponse> createRallyInfo(HttpServletRequest request,@RequestBody RallyInformationDto rallyInformationDto) {
 
         //받은 정보를 저장
         RallyInformation rallyInformation = rallyInformationService.createRallyInfo(rallyInformationDto);
-
         //Response Dto 생성 -> {success, message, RallyInfoDto}
         RallyResponse rallyResponse = ResponseFactory.createRallyResponse(true, null, rallyInformationDto);
+        fcmService.notifyAllUser("오늘의 시위정보 도착!", "");
+
         return ResponseEntity.ok().body(rallyResponse);
     }
 
     //가장 최근 집회정보 1개 GET API
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<RallyResponse> getRallyInfo(){
 
         //가장 최근 집회정보 1개 (RallyInformation)

@@ -24,6 +24,7 @@ public class RallyInformationService {
         //RallyInfoDto를 담을 RallyInformation 생성
         RallyInformation rallyInformation = new RallyInformation();
         rallyInformation.setDate(rallyInformationDto.getDate());
+        rallyInformation.setComment(rallyInformationDto.getComment());
 
         //RallyInfoDto에서rallyDetailsDtoList를 뽑아낸뒤 rallyDetailList로 변경
         List<RallyInformationDto.RallyDetailsDto> rallyDetailsDtoList = rallyInformationDto.getRallyDetailsDtoList();

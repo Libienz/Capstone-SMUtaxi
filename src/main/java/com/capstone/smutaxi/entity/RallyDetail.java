@@ -33,7 +33,7 @@ public class RallyDetail {
     private String rallyScale;
 
     //집회 관할군
-    private String jurisdiction;
+    private String locationDetail;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "rally_information_id" )
@@ -45,7 +45,7 @@ public class RallyDetail {
         rallyDetailsDto.setEndTime(this.endTime);
         rallyDetailsDto.setLocation(this.location);
         rallyDetailsDto.setRallyScale(this.rallyScale);
-        rallyDetailsDto.setJurisdiction(this.jurisdiction);
+        rallyDetailsDto.setLocationDetail(this.locationDetail);
         return rallyDetailsDto;
     }
 }
