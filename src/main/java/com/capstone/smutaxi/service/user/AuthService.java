@@ -41,7 +41,8 @@ public class AuthService {
         User user = User.createUser(joinDto.getEmail(),
                 passwordEncoder.encode(joinDto.getPassword()),
                 joinDto.getName(),
-                joinDto.getImgUrl());
+                joinDto.getImgUrl(),
+                joinDto.getGender());
 
         //role 추가
         user.getRoles().add(Role.USER.getRoleName());

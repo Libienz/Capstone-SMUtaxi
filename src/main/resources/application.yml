@@ -7,6 +7,10 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
 
   kafka:
     consumer:
@@ -48,7 +52,7 @@ matching:
   pool-size: 500
 
 server:
-  baseUrl: http://localhost:8080
+  baseUrl: http://192.168.219.110:8080
   upload:
     directory: C:\spoot-taxi-profile-imgs
 logging.level:

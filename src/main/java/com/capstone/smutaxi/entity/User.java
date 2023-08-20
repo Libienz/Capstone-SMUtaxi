@@ -53,13 +53,13 @@ public class User implements UserDetails {
     }
 
     //==생성 메서드==//
-    public static User createUser(String email, String password, String name, String imageUrl) {
+    public static User createUser(String email, String password, String name, String imageUrl, Gender gender) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
         user.setName(name);
         user.setImageUrl(imageUrl);
-//        user.setGender(gender);
+        user.setGender(gender);
 
         return user;
     }
