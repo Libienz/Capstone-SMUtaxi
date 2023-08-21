@@ -134,6 +134,9 @@ public class MatchingService {
             }
         }
         waitingRoomUserRepository.deleteById(waitingRoomUserId);
+        if (waitingRoom.getWaiters().size() == 0) {
+            waitingRoomRepository.deleteById(waitingRoom.getId());
+        }
         return ResponseFactory.createMatchCancelResponse(Boolean.TRUE, null);
     }
 
