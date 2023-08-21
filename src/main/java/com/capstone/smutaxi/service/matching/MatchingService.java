@@ -58,11 +58,14 @@ public class MatchingService {
         List<WaitingRoomUser> all = waitingRoomUserRepository.findAll();
         for (WaitingRoomUser wru : all) {
             //존재할 경우 기존의 매칭 요청 취소
-            MatchCancelRequest matchCancelRequest = new MatchCancelRequest();
-            matchCancelRequest.setEmail(requestorId);
-            matchCancelRequest.setWaitingRoomId(wru.getWaitingRoom().getId());
-            matchCancelRequest.setWaitingRoomUserId(wru.getId());
-            cancelMatchRequest(matchCancelRequest);
+            if (requestorId == wru.getUser().getEmail()) {
+                MatchCancelRequest matchCancelRequest = new MatchCancelRequest();
+                matchCancelRequest.setEmail(requestorId);
+                matchCancelRequest.setWaitingRoomId(wru.getWaitingRoom().getId());
+                matchCancelRequest.setWaitingRoomUserId(wru.getId());
+                cancelMatchRequest(matchCancelRequest);
+                break;
+            }
         }
         //유저 위치 정보
         double latitude = matchingRequest.getLatitude();
@@ -100,6 +103,8 @@ public class MatchingService {
         }
         //모두 거절 당한 경우 방만들고 들어가기
         WaitingRoom newWaitingRoom = WaitingRoom.createWaitingRoom();
+        newWaitingRoom.setLocation(userLocation);
+        waitingRoomRepository.save(newWaitingRoom);
         WaitingRoomUser entranceInformation = enterWaitingRoom(user, newWaitingRoom, deviceToken);
         return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, newWaitingRoom.getId(), entranceInformation.getId());
 
