@@ -98,7 +98,10 @@ public class MatchingService {
                 return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, waitingRoomId, waitingRoomUserId);
             }
         }
-        throw new CannotJoinWaitingRoomException(ErrorCode.INTERNAL_SERVER_ERROR); //flow가 여기로 오면 안됨 -> 무조건 waiting Room에 배치되어야 함
+        //모두 거절 당한 경우 방만들고 들어가기
+        WaitingRoom newWaitingRoom = WaitingRoom.createWaitingRoom();
+        WaitingRoomUser entranceInformation = enterWaitingRoom(user, newWaitingRoom, deviceToken);
+        return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, newWaitingRoom.getId(), entranceInformation.getId());
 
     }
 
