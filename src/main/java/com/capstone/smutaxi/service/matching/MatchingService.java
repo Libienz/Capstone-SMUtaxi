@@ -54,6 +54,19 @@ public class MatchingService {
         //유저 get
         String requestorId = matchingRequest.getEmail();
         User user = userRepository.findById(requestorId).get();
+        //유저 id로 된 요청이 이미 존재하는 지 확인
+        List<WaitingRoomUser> all = waitingRoomUserRepository.findAll();
+        for (WaitingRoomUser wru : all) {
+            //존재할 경우 기존의 매칭 요청 취소
+            if (requestorId == wru.getUser().getEmail()) {
+                MatchCancelRequest matchCancelRequest = new MatchCancelRequest();
+                matchCancelRequest.setEmail(requestorId);
+                matchCancelRequest.setWaitingRoomId(wru.getWaitingRoom().getId());
+                matchCancelRequest.setWaitingRoomUserId(wru.getId());
+                cancelMatchRequest(matchCancelRequest);
+                break;
+            }
+        }
         //유저 위치 정보
         double latitude = matchingRequest.getLatitude();
         double longitude = matchingRequest.getLongitude();
@@ -88,7 +101,12 @@ public class MatchingService {
                 return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, waitingRoomId, waitingRoomUserId);
             }
         }
-        throw new CannotJoinWaitingRoomException(ErrorCode.INTERNAL_SERVER_ERROR); //flow가 여기로 오면 안됨 -> 무조건 waiting Room에 배치되어야 함
+        //모두 거절 당한 경우 방만들고 들어가기
+        WaitingRoom newWaitingRoom = WaitingRoom.createWaitingRoom();
+        newWaitingRoom.setLocation(userLocation);
+        waitingRoomRepository.save(newWaitingRoom);
+        WaitingRoomUser entranceInformation = enterWaitingRoom(user, newWaitingRoom, deviceToken);
+        return ResponseFactory.createMatchingResponse(Boolean.TRUE, null, newWaitingRoom.getId(), entranceInformation.getId());
 
     }
 
@@ -134,6 +152,9 @@ public class MatchingService {
             }
         }
         waitingRoomUserRepository.deleteById(waitingRoomUserId);
+        if (waitingRoom.getWaiters().size() == 0) {
+            waitingRoomRepository.deleteById(waitingRoom.getId());
+        }
         return ResponseFactory.createMatchCancelResponse(Boolean.TRUE, null);
     }
 
