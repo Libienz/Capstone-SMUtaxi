@@ -59,33 +59,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //ADMIN 권한을 가지고 있어야 집회정보를 등록하는 api 자원 사용 가능
                 .antMatchers("/api/rally-info/create").hasRole(Role.ADMIN.name())
+                .antMatchers("/api/auth/grant-admin/{email}").hasRole(Role.ADMIN.name())
                 //인증 없이 접근 가능한 엔드포인트들
                 .antMatchers("/",
                         "/api/auth/join",
                         "/api/auth/login",
-                        "/api/update/users/{email}",
-                        "/api/update/users/{email}/password",
                         "/api/auth/send/verification-email",
-                        "/api/auth/update/email-verification",
                         "/api/auth/check-duplicate/{email}",
-                        "/api/auth/grant-admin/{email}",
-                        "/api/images/**",
-//                        "/api/images/profile-image/{fileName}",
-//                        "/demoImageURL",
-                        "/api/rally-info",
-//                        "/api/rally-info/create",
 
-//                        "/users/update",
-                        "/api/chat/add-user",
-                        "/api/chat/leave",
-                        "/api/chat/save-user",
-                        "/api/chat/save-exit",
-                        "/api/chat/user/chatRooms",
-                        "/api/chat/create-chatRoom",
-                        "/api/chat/chatRoom/messages",
-                        "/api/chat/update/room-exit-time",
+                        "/api/users/{email}/password",
+                        "/api/images/**",
+
+                        "/api/chatrooms/{roomId}/add-user",
+                        "/api/chatrooms",
+                        "/api/chatrooms/{roomId}/participants/{participantId}/room-exit-time",
                         "/h2-console/**"
-                        ).permitAll()
+                ).permitAll()
 
                 .anyRequest().authenticated()
                 .and()
