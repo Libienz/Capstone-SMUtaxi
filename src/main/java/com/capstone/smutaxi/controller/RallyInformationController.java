@@ -27,7 +27,7 @@ public class RallyInformationController {
      */
 
     //집회 정보 생성 API
-    @PostMapping("")
+    @PostMapping("/create")
     public ResponseEntity<RallyResponse> createRallyInfo(HttpServletRequest request,@RequestBody RallyInformationDto rallyInformationDto) {
 
         //받은 정보를 저장
