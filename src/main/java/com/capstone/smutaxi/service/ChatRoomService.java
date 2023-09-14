@@ -48,9 +48,8 @@ public class ChatRoomService {
     //유저가 참여하고있는 ChatRoom들의 Response 반환
     public UserJoinedChatRoomResponse getUserJoinedChatRooms(String userEmail) {
 
-        User user = userRepository.findById(userEmail)
+        User user = userRepository.findWithChatParticipantByEmail(userEmail)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-
         List<UserJoinedChatRoomDto> userJoinedChatRoomDtoList = new ArrayList<>();
 
         List<ChatParticipant> chatParticipantList = user.getChatParticipantList();
@@ -122,29 +121,24 @@ public class ChatRoomService {
     @Transactional
     public void leaveChatParticipant(Long chatParticipantId) {
         //ChatParticipant가 있는지 검증
-        Optional<ChatParticipant> findChatParticipant = chatParticipantRepository.findById(chatParticipantId);
+        Optional<ChatParticipant> findChatParticipant = chatParticipantRepository.findWithChatRoomAndUserById(chatParticipantId);
         if(findChatParticipant.isEmpty()){
             throw new ChatParticipantNotFoundException(ErrorCode.CHATPARTICIPANT_NOT_FOUND);
         }
+        findChatParticipant.get().remove();
         // ChatParticipant 엔티티를 삭제
         chatParticipantRepository.delete(findChatParticipant.get());
 
     }
     public ChatRoomMessageResponse getChatRoomMessages(String userId, Long chatRoomId){
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+        ChatRoom chatRoom = chatRoomRepository.findWithMessageById(chatRoomId)
                 .orElseThrow(() -> new ChatRoomNotFoundException(ErrorCode.CHATROOM_NOT_FOUND));
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        ChatParticipant chatParticipant = chatParticipantRepository.findByUserEmailAndChatRoomId(userId,chatRoomId)
+                .orElseThrow(()-> new ChatParticipantNotFoundException(ErrorCode.CHATPARTICIPANT_NOT_FOUND));
 
-        Long chatParticipantId = null;
+        Long chatParticipantId = chatParticipant.getId();
 
-        List<ChatParticipant> chatRoomParticipant = chatRoom.getChatRoomParticipant();
-        for (ChatParticipant chatParticipant : chatRoomParticipant) {
-            if(chatParticipant.getUser().equals(user)){
-                chatParticipantId=chatParticipant.getId();
-            }
-        }
         List<MessageDto> messageDtoList = new ArrayList<>();
         List<Message> messageList = chatRoom.getMessageList();
         for (Message message : messageList) {
