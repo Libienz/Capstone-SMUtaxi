@@ -131,20 +131,14 @@ public class ChatRoomService {
 
     }
     public ChatRoomMessageResponse getChatRoomMessages(String userId, Long chatRoomId){
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+        ChatRoom chatRoom = chatRoomRepository.findWithMessageQuerydslById(chatRoomId)
                 .orElseThrow(() -> new ChatRoomNotFoundException(ErrorCode.CHATROOM_NOT_FOUND));
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
+        ChatParticipant chatParticipant = chatParticipantRepository.findByUserEmailAndChatRoomId(userId,chatRoomId)
+                .orElseThrow(()-> new ChatParticipantNotFoundException(ErrorCode.CHATPARTICIPANT_NOT_FOUND));
 
-        Long chatParticipantId = null;
+        Long chatParticipantId = chatParticipant.getId();
 
-        List<ChatParticipant> chatRoomParticipant = chatRoom.getChatRoomParticipant();
-        for (ChatParticipant chatParticipant : chatRoomParticipant) {
-            if(chatParticipant.getUser().equals(user)){
-                chatParticipantId=chatParticipant.getId();
-            }
-        }
         List<MessageDto> messageDtoList = new ArrayList<>();
         List<Message> messageList = chatRoom.getMessageList();
         for (Message message : messageList) {
