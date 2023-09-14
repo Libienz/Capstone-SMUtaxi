@@ -48,9 +48,8 @@ public class ChatRoomService {
     //유저가 참여하고있는 ChatRoom들의 Response 반환
     public UserJoinedChatRoomResponse getUserJoinedChatRooms(String userEmail) {
 
-        User user = userRepository.findById(userEmail)
+        User user = userRepository.findWithChatParticipantQuerydslByEmail(userEmail)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
-
         List<UserJoinedChatRoomDto> userJoinedChatRoomDtoList = new ArrayList<>();
 
         List<ChatParticipant> chatParticipantList = user.getChatParticipantList();
@@ -126,9 +125,7 @@ public class ChatRoomService {
         if(findChatParticipant.isEmpty()){
             throw new ChatParticipantNotFoundException(ErrorCode.CHATPARTICIPANT_NOT_FOUND);
         }
-
         findChatParticipant.get().remove();
-
         // ChatParticipant 엔티티를 삭제
         chatParticipantRepository.delete(findChatParticipant.get());
 
