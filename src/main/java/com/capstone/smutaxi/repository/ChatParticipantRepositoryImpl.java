@@ -20,7 +20,7 @@ public class ChatParticipantRepositoryImpl implements ChatParticipantRepositoryC
     }
 
     @Override
-    public Optional<ChatParticipant> findQuerydslById(Long Id) {
+    public Optional<ChatParticipant> findWithChatRoomAndUserById(Long Id) {
         return Optional.ofNullable(
                 queryFactory
                         .selectFrom(chatParticipant)

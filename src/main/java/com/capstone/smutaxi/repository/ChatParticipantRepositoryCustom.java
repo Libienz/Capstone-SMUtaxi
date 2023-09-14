@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface ChatParticipantRepositoryCustom {
 
-    Optional<ChatParticipant> findQuerydslById(Long Id);
+    Optional<ChatParticipant> findWithChatRoomAndUserById(Long Id);
 }

@@ -19,7 +19,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     }
 
     @Override
-    public Optional<User> findWithChatParticipantQuerydslByEmail(String email) {
+    public Optional<User> findWithChatParticipantByEmail(String email) {
         return Optional.ofNullable(queryFactory.selectFrom(user)
                 .distinct()
                 .join(user.chatParticipantList, chatParticipant).fetchJoin()

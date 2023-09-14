@@ -19,7 +19,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom{
     }
 
     @Override
-    public Optional<ChatRoom> findWithMessageQuerydslById(Long Id) {
+    public Optional<ChatRoom> findWithMessageById(Long Id) {
         return Optional.ofNullable(queryFactory.selectFrom(chatRoom)
                 .leftJoin(chatRoom.messageList, message1).fetchJoin()
                 .where(chatRoom.id.eq(Id))

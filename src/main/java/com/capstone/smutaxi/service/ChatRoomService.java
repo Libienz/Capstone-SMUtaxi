@@ -48,7 +48,7 @@ public class ChatRoomService {
     //유저가 참여하고있는 ChatRoom들의 Response 반환
     public UserJoinedChatRoomResponse getUserJoinedChatRooms(String userEmail) {
 
-        User user = userRepository.findWithChatParticipantQuerydslByEmail(userEmail)
+        User user = userRepository.findWithChatParticipantByEmail(userEmail)
                 .orElseThrow(() -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND));
         List<UserJoinedChatRoomDto> userJoinedChatRoomDtoList = new ArrayList<>();
 
@@ -121,7 +121,7 @@ public class ChatRoomService {
     @Transactional
     public void leaveChatParticipant(Long chatParticipantId) {
         //ChatParticipant가 있는지 검증
-        Optional<ChatParticipant> findChatParticipant = chatParticipantRepository.findQuerydslById(chatParticipantId);
+        Optional<ChatParticipant> findChatParticipant = chatParticipantRepository.findWithChatRoomAndUserById(chatParticipantId);
         if(findChatParticipant.isEmpty()){
             throw new ChatParticipantNotFoundException(ErrorCode.CHATPARTICIPANT_NOT_FOUND);
         }
@@ -131,7 +131,7 @@ public class ChatRoomService {
 
     }
     public ChatRoomMessageResponse getChatRoomMessages(String userId, Long chatRoomId){
-        ChatRoom chatRoom = chatRoomRepository.findWithMessageQuerydslById(chatRoomId)
+        ChatRoom chatRoom = chatRoomRepository.findWithMessageById(chatRoomId)
                 .orElseThrow(() -> new ChatRoomNotFoundException(ErrorCode.CHATROOM_NOT_FOUND));
 
         ChatParticipant chatParticipant = chatParticipantRepository.findByUserEmailAndChatRoomId(userId,chatRoomId)
