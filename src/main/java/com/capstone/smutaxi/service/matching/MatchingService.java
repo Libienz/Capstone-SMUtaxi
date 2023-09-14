@@ -142,7 +142,7 @@ public class MatchingService {
         Long waitingRoomId = matchCancelRequest.getWaitingRoomId();
         Long waitingRoomUserId = matchCancelRequest.getWaitingRoomUserId();
 
-        WaitingRoom waitingRoom = waitingRoomRepository.findById(waitingRoomId).get();
+        WaitingRoom waitingRoom = waitingRoomRepository.findWithWaitingRoomUser(waitingRoomId).get();
         List<WaitingRoomUser> waiters = waitingRoom.getWaiters();
         for (int i = 0; i < waiters.size(); i++) {
             if (waiters.get(i).getId() == waitingRoomUserId) {

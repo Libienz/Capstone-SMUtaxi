@@ -31,4 +31,14 @@ public class WaitingRoomRepositoryImpl implements WaitingRoomRepositoryCustom {
                 .distinct()
                 .fetch();
     }
+
+    @Override
+    public Optional<WaitingRoom> findWithWaitingRoomUser(Long waitingRoomId) {
+        return Optional.ofNullable(
+                queryFactory
+                        .selectFrom(waitingRoom)
+                        .join(waitingRoom.waiters, waitingRoomUser).fetchJoin()
+                        .where(waitingRoom.id.eq(waitingRoomId))
+                        .fetchOne());
+    }
 }
