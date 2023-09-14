@@ -55,18 +55,16 @@ public class MatchingService {
         String requestorId = matchingRequest.getEmail();
         User user = userRepository.findById(requestorId).get();
         //유저 id로 된 요청이 이미 존재하는 지 확인
-        List<WaitingRoomUser> all = waitingRoomUserRepository.findAll();
-        for (WaitingRoomUser wru : all) {
-            //존재할 경우 기존의 매칭 요청 취소
-            if (requestorId == wru.getUser().getEmail()) {
-                MatchCancelRequest matchCancelRequest = new MatchCancelRequest();
-                matchCancelRequest.setEmail(requestorId);
-                matchCancelRequest.setWaitingRoomId(wru.getWaitingRoom().getId());
-                matchCancelRequest.setWaitingRoomUserId(wru.getId());
-                cancelMatchRequest(matchCancelRequest);
-                break;
-            }
+        Optional<WaitingRoomUser> userRequest = waitingRoomUserRepository.getUserRequest(requestorId);
+        if (userRequest.isPresent()) {
+            WaitingRoomUser wru = userRequest.get();
+            MatchCancelRequest matchCancelRequest = new MatchCancelRequest();
+            matchCancelRequest.setEmail(requestorId);
+            matchCancelRequest.setWaitingRoomId(wru.getWaitingRoom().getId());
+            matchCancelRequest.setWaitingRoomUserId(wru.getId());
+            cancelMatchRequest(matchCancelRequest);
         }
+
         //유저 위치 정보
         double latitude = matchingRequest.getLatitude();
         double longitude = matchingRequest.getLongitude();
