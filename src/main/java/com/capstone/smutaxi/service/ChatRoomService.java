@@ -122,10 +122,13 @@ public class ChatRoomService {
     @Transactional
     public void leaveChatParticipant(Long chatParticipantId) {
         //ChatParticipant가 있는지 검증
-        Optional<ChatParticipant> findChatParticipant = chatParticipantRepository.findById(chatParticipantId);
+        Optional<ChatParticipant> findChatParticipant = chatParticipantRepository.findQuerydslById(chatParticipantId);
         if(findChatParticipant.isEmpty()){
             throw new ChatParticipantNotFoundException(ErrorCode.CHATPARTICIPANT_NOT_FOUND);
         }
+
+        findChatParticipant.get().remove();
+
         // ChatParticipant 엔티티를 삭제
         chatParticipantRepository.delete(findChatParticipant.get());
 

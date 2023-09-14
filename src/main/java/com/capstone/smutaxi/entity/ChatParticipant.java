@@ -50,4 +50,18 @@ public class ChatParticipant {
         this.chatRoom = chatRoom;
         this.user = user;
     }
+    public void remove() {
+        User user = this.getUser();
+        ChatRoom room = this.getChatRoom();
+
+        if (user != null) {
+            user.getChatParticipantList().remove(this);
+            this.setUser(null);
+        }
+
+        if (room != null) {
+            room.getChatRoomParticipant().remove(this);
+            this.setChatRoom(null);
+        }
+    }
 }
