@@ -73,9 +73,10 @@ public class MatchingService {
         Location userLocation = new Location(latitude, longitude);
 
         //WaitingRoom list 받아오기
-        List<WaitingRoom> waitingRooms = waitingRoomRepository.findAll();
+//        List<WaitingRoom> waitingRooms = waitingRoomRepository.findAll();
+        List<WaitingRoom> waitingRooms = waitingRoomRepository.findAllWithWaitingRoomUser();
         //들어있는 인원수 내림차순 정렬
-        Collections.sort(waitingRooms);
+//        Collections.sort(waitingRooms);
 
         //모든 웨이팅 룸 돌면서 TMA
         for (WaitingRoom waitingRoom : waitingRooms) {
