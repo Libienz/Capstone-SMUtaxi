@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
-public interface WaitingRoomRepository extends JpaRepository<WaitingRoom, Long> {
+public interface WaitingRoomRepository extends JpaRepository<WaitingRoom, Long>, WaitingRoomRepositoryCustom {
 
 }
 

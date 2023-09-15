@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,18 +62,39 @@ public class MatchingServiceTest {
     }
 
     @Test
+    @Rollback(value = false)
     public void 대기방_인원_내림차순_정렬_확인() throws Exception {
         //given
-        User user = createUser("202010891@sangmyung.kr", "password123", "drake", Gender.MALE, null);
-        authService.join(user.userToUserDto());
-        MatchingRequest matchingRequest = createMatchingRequest(1.0, 1.0, "202010891@sangmyung.kr");
-        Long waitingRoomId = matchingService.handleMatchingRequest(matchingRequest).getWaitingRoomId();
+        User user0 = createUser("202010890@sangmyung.kr", "password123", "drake", Gender.MALE, null);
+        User user1 = createUser("202010891@sangmyung.kr", "password123", "nicki", Gender.FEMALE, null);
+        User user2 = createUser("202010892@sangmyung.kr", "password123", "drake", Gender.MALE, null);
+        User user3 = createUser("202010893@sangmyung.kr", "password123", "drake", Gender.MALE, null);
+        User user4 = createUser("202010894@sangmyung.kr", "password123", "nicki", Gender.FEMALE, null);
+
+        authService.join(user0.userToUserDto());
+        authService.join(user1.userToUserDto());
+        authService.join(user2.userToUserDto());
+        authService.join(user3.userToUserDto());
+        authService.join(user4.userToUserDto());
+
+        MatchingRequest matchingRequest0 = createMatchingRequest(1.0, 1.0, "202010890@sangmyung.kr");
+        MatchingRequest matchingRequest1 = createMatchingRequest(1.0, 1.0, "202010891@sangmyung.kr");
+        MatchingRequest matchingRequest2 = createMatchingRequest(1.0, 1.0, "202010892@sangmyung.kr");
+        MatchingRequest matchingRequest3 = createMatchingRequest(300.0, 1.0, "202010893@sangmyung.kr");
+        MatchingRequest matchingRequest4 = createMatchingRequest(300.0, 1.0, "202010894@sangmyung.kr");
+
+        Long waitingRoomId0 = matchingService.handleMatchingRequest(matchingRequest0).getWaitingRoomId();
+        Long waitingRoomId1 = matchingService.handleMatchingRequest(matchingRequest1).getWaitingRoomId();
+        Long waitingRoomId2 = matchingService.handleMatchingRequest(matchingRequest2).getWaitingRoomId();
+        Long waitingRoomId4 = matchingService.handleMatchingRequest(matchingRequest3).getWaitingRoomId();
+        Long waitingRoomId5 = matchingService.handleMatchingRequest(matchingRequest4).getWaitingRoomId();
+
         //when
-        List<WaitingRoom> waitingRooms = waitingRoomRepository.findAll();
-        Collections.sort(waitingRooms);
+        List<WaitingRoom> waitingRooms = waitingRoomRepository.findAllWithWaitingRoomUser();
         //then
         WaitingRoom waitingRoom = waitingRooms.get(0);
-        assertEquals(waitingRoom.getWaiters().size(), 1);
+        assertEquals(waitingRooms.size(), 2);
+        assertEquals(waitingRoom.getWaiters().size(), 3);
 
     }
 
