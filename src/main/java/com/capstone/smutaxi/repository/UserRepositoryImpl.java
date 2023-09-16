@@ -22,7 +22,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     public Optional<User> findWithChatParticipantByEmail(String email) {
         return Optional.ofNullable(queryFactory.selectFrom(user)
                 .distinct()
-                .join(user.chatParticipantList, chatParticipant).fetchJoin()
+                .leftJoin(user.chatParticipantList, chatParticipant).fetchJoin()
                 .where(user.email.eq(email))
                 .fetchOne());
     }
