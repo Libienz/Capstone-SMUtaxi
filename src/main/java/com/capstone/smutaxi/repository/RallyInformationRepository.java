@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RallyInformationRepository extends JpaRepository<RallyInformation, Long> {
-//    RallyInformation findRecentRallyInfo();
+    RallyInformation findTopByOrderByIdDesc();
 }

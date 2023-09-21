@@ -55,18 +55,16 @@ public class MatchingService {
         String requestorId = matchingRequest.getEmail();
         User user = userRepository.findById(requestorId).get();
         //유저 id로 된 요청이 이미 존재하는 지 확인
-        List<WaitingRoomUser> all = waitingRoomUserRepository.findAll();
-        for (WaitingRoomUser wru : all) {
-            //존재할 경우 기존의 매칭 요청 취소
-            if (requestorId == wru.getUser().getEmail()) {
-                MatchCancelRequest matchCancelRequest = new MatchCancelRequest();
-                matchCancelRequest.setEmail(requestorId);
-                matchCancelRequest.setWaitingRoomId(wru.getWaitingRoom().getId());
-                matchCancelRequest.setWaitingRoomUserId(wru.getId());
-                cancelMatchRequest(matchCancelRequest);
-                break;
-            }
+        Optional<WaitingRoomUser> userRequest = waitingRoomUserRepository.getUserRequest(requestorId);
+        if (userRequest.isPresent()) {
+            WaitingRoomUser wru = userRequest.get();
+            MatchCancelRequest matchCancelRequest = new MatchCancelRequest();
+            matchCancelRequest.setEmail(requestorId);
+            matchCancelRequest.setWaitingRoomId(wru.getWaitingRoom().getId());
+            matchCancelRequest.setWaitingRoomUserId(wru.getId());
+            cancelMatchRequest(matchCancelRequest);
         }
+
         //유저 위치 정보
         double latitude = matchingRequest.getLatitude();
         double longitude = matchingRequest.getLongitude();
@@ -75,9 +73,10 @@ public class MatchingService {
         Location userLocation = new Location(latitude, longitude);
 
         //WaitingRoom list 받아오기
-        List<WaitingRoom> waitingRooms = waitingRoomRepository.findAll();
+//        List<WaitingRoom> waitingRooms = waitingRoomRepository.findAll();
+        List<WaitingRoom> waitingRooms = waitingRoomRepository.findAllWithWaitingRoomUser();
         //들어있는 인원수 내림차순 정렬
-        Collections.sort(waitingRooms);
+//        Collections.sort(waitingRooms);
 
         //모든 웨이팅 룸 돌면서 TMA
         for (WaitingRoom waitingRoom : waitingRooms) {
@@ -143,7 +142,7 @@ public class MatchingService {
         Long waitingRoomId = matchCancelRequest.getWaitingRoomId();
         Long waitingRoomUserId = matchCancelRequest.getWaitingRoomUserId();
 
-        WaitingRoom waitingRoom = waitingRoomRepository.findById(waitingRoomId).get();
+        WaitingRoom waitingRoom = waitingRoomRepository.findWithWaitingRoomUser(waitingRoomId).get();
         List<WaitingRoomUser> waiters = waitingRoom.getWaiters();
         for (int i = 0; i < waiters.size(); i++) {
             if (waiters.get(i).getId() == waitingRoomUserId) {
